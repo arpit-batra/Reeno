@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:pin_code_fields/pin_code_fields.dart';
 
 class OtpScreen extends StatelessWidget {
   static const routeName = '/otp-screen';
@@ -10,6 +11,7 @@ class OtpScreen extends StatelessWidget {
     final _otpTextController = TextEditingController();
 
     void submitOtp() {
+      print(_otpTextController.text);
       Navigator.of(context).pop(_otpTextController.text);
     }
 
@@ -21,14 +23,7 @@ class OtpScreen extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
-                Expanded(
-                  flex: 4,
-                  child: IconButton(
-                    alignment: Alignment.centerLeft,
-                    onPressed: () {},
-                    icon: const Icon(Icons.arrow_back),
-                  ),
-                ),
+                const Expanded(flex: 4, child: SizedBox()),
                 Expanded(
                   flex: 3,
                   child: Text(
@@ -41,18 +36,31 @@ class OtpScreen extends StatelessWidget {
                 ),
                 const Expanded(
                   flex: 2,
-                  child: Text(
-                      'We’ll send an OTP to the given phone number for verification'),
+                  child: Text('Enter the OTP below'),
                 ),
                 Container(
                   margin: const EdgeInsets.symmetric(vertical: 16),
-                  child: TextField(
-                    keyboardType: TextInputType.number,
-                    obscureText: true,
+                  child: PinCodeTextField(
+                    appContext: context,
+                    length: 6,
+                    onChanged: (value) {},
                     controller: _otpTextController,
-                    decoration: const InputDecoration(
-                      labelText: 'Phone Number',
+                    obscureText: true,
+                    blinkWhenObscuring: true,
+                    pinTheme: PinTheme(
+                      activeColor: Theme.of(context).primaryColor,
+                      inactiveColor: Theme.of(context).primaryColor,
+                      selectedColor: Colors.black,
                     ),
+                  ),
+                ),
+                Expanded(
+                  flex: 2,
+                  child: Row(
+                    children: [
+                      const Text('Did not receive a message?'),
+                      TextButton(onPressed: () {}, child: const Text('Resend'))
+                    ],
                   ),
                 ),
                 Container(
@@ -61,7 +69,7 @@ class OtpScreen extends StatelessWidget {
                   height: 60,
                   child: ElevatedButton(
                     onPressed: submitOtp,
-                    child: const Text('Register'),
+                    child: const Text('Submit'),
                   ),
                 ),
                 const Expanded(flex: 20, child: SizedBox())
