@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'package:reeno/screens/sign_in_screen.dart';
+import 'package:reeno/screens/login_screen.dart';
+import 'package:reeno/screens/otp_screen.dart';
+import 'package:reeno/screens/phone_login_screen.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
@@ -14,19 +16,43 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
+    const Map<int, Color> themeColor = {
+      50: Color.fromRGBO(87, 93, 251, .1),
+      100: Color.fromRGBO(87, 93, 251, .2),
+      200: Color.fromRGBO(87, 93, 251, .3),
+      300: Color.fromRGBO(87, 93, 251, .4),
+      400: Color.fromRGBO(87, 93, 251, .5),
+      500: Color.fromRGBO(87, 93, 251, .6),
+      600: Color.fromRGBO(87, 93, 251, .7),
+      700: Color.fromRGBO(87, 93, 251, .8),
+      800: Color.fromRGBO(87, 93, 251, .9),
+      900: Color.fromRGBO(87, 93, 251, 1),
+    };
     return MaterialApp(
       title: 'Flutter Demo',
       theme: ThemeData(
-        // This is the theme of your application.
-        //
-        // Try running your application with "flutter run". You'll see the
-        // application has a blue toolbar. Then, without quitting the app, try
-        // changing the primarySwatch below to Colors.green and then invoke
-        // "hot reload" (press "r" in the console where you ran "flutter run",
-        // or simply save your changes to "hot reload" in a Flutter IDE).
-        // Notice that the counter didn't reset back to zero; the application
-        // is not restarted.
-        primarySwatch: Colors.blue,
+        primarySwatch: const MaterialColor(0xFF575DFB, themeColor),
+        elevatedButtonTheme: ElevatedButtonThemeData(
+          style: ButtonStyle(
+            padding: MaterialStateProperty.all(const EdgeInsets.all(10)),
+            shape: MaterialStateProperty.all(RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(16))),
+          ),
+        ),
+        inputDecorationTheme: InputDecorationTheme(
+          enabledBorder: OutlineInputBorder(
+              borderSide: const BorderSide(
+                width: 2,
+                color: Color.fromARGB(1023, 87, 93, 251),
+              ),
+              borderRadius: BorderRadius.circular(16)),
+          focusedBorder: OutlineInputBorder(
+              borderSide: const BorderSide(
+                width: 2,
+                color: Color.fromARGB(1023, 87, 93, 251),
+              ),
+              borderRadius: BorderRadius.circular(16)),
+        ),
       ),
       home: FutureBuilder(
         future: _fbApp,
@@ -43,6 +69,10 @@ class MyApp extends StatelessWidget {
           }
         },
       ),
+      routes: {
+        PhoneLoginScreen.routeName: (context) => PhoneLoginScreen(),
+        OtpScreen.routeName: (context) => OtpScreen(),
+      },
     );
   }
 }
