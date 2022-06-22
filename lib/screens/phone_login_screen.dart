@@ -13,11 +13,6 @@ class _PhoneLoginScreenState extends State<PhoneLoginScreen> {
   final _phoneTextController = TextEditingController();
   var _loadingState = false;
 
-  // @override
-  // void initState() {
-  //   super.initState();
-  // }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -33,7 +28,9 @@ class _PhoneLoginScreenState extends State<PhoneLoginScreen> {
                     flex: 4,
                     child: IconButton(
                       alignment: Alignment.centerLeft,
-                      onPressed: () {},
+                      onPressed: () {
+                        Navigator.of(context).pop();
+                      },
                       icon: const Icon(Icons.arrow_back),
                     ),
                   ),
@@ -79,6 +76,7 @@ class _PhoneLoginScreenState extends State<PhoneLoginScreen> {
                         ),
                         Expanded(
                           child: TextField(
+                            enabled: _loadingState ? false : true,
                             keyboardType: TextInputType.phone,
                             controller: _phoneTextController,
                             style: const TextStyle(fontSize: 16),
@@ -95,13 +93,15 @@ class _PhoneLoginScreenState extends State<PhoneLoginScreen> {
                     width: double.infinity,
                     height: 60,
                     child: ElevatedButton(
-                      onPressed: () {
-                        PhoneAuthentication.verifyPhone(
-                            '+91${_phoneTextController.text}', context);
-                        setState(() {
-                          _loadingState = true;
-                        });
-                      },
+                      onPressed: _loadingState
+                          ? null
+                          : () {
+                              PhoneAuthentication.verifyPhone(
+                                  '+91${_phoneTextController.text}', context);
+                              setState(() {
+                                _loadingState = true;
+                              });
+                            },
                       child: const Text('Register'),
                     ),
                   ),

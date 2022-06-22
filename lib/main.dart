@@ -9,6 +9,15 @@ void main() {
   runApp(MyApp());
 }
 
+OutlineInputBorder textFieldBorderTheme() {
+  return OutlineInputBorder(
+      borderSide: const BorderSide(
+        width: 2,
+        color: Color.fromARGB(1023, 87, 93, 251),
+      ),
+      borderRadius: BorderRadius.circular(16));
+}
+
 class MyApp extends StatelessWidget {
   final Future<FirebaseApp> _fbApp = Firebase.initializeApp();
   MyApp({Key? key}) : super(key: key);
@@ -40,18 +49,9 @@ class MyApp extends StatelessWidget {
           ),
         ),
         inputDecorationTheme: InputDecorationTheme(
-          enabledBorder: OutlineInputBorder(
-              borderSide: const BorderSide(
-                width: 2,
-                color: Color.fromARGB(1023, 87, 93, 251),
-              ),
-              borderRadius: BorderRadius.circular(16)),
-          focusedBorder: OutlineInputBorder(
-              borderSide: const BorderSide(
-                width: 2,
-                color: Color.fromARGB(1023, 87, 93, 251),
-              ),
-              borderRadius: BorderRadius.circular(16)),
+          enabledBorder: textFieldBorderTheme(),
+          focusedBorder: textFieldBorderTheme(),
+          disabledBorder: textFieldBorderTheme(),
         ),
       ),
       home: FutureBuilder(
