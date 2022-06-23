@@ -60,7 +60,6 @@ class PhoneAuthentication {
         },
         codeSent: (String verificationId, int? resendToken) async {
           print('VeroCodeSent');
-
           final String codeEntered =
               (await Navigator.of(context).pushNamed(OtpScreen.routeName))
                   .toString();
