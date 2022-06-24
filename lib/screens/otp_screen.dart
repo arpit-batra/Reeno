@@ -1,20 +1,39 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:pin_code_fields/pin_code_fields.dart';
+import 'package:reeno/widgets/login_widgets/resend_widget.dart';
 
-class OtpScreen extends StatelessWidget {
+class OtpScreen extends StatefulWidget {
   static const routeName = '/otp-screen';
 
   const OtpScreen({Key? key}) : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
-    final _otpTextController = TextEditingController();
+  State<OtpScreen> createState() => _OtpScreenState();
+}
 
-    void submitOtp() {
-      print(_otpTextController.text);
-      Navigator.of(context).pop(_otpTextController.text);
+class _OtpScreenState extends State<OtpScreen> {
+  var phoneNumber;
+  bool _firstLoad = true;
+  final _otpTextController = TextEditingController();
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    if (_firstLoad) {
+      phoneNumber = ModalRoute.of(context)!.settings.arguments;
     }
+    _firstLoad = false;
+  }
 
+  void submitOtp() {
+    print(_otpTextController.text);
+    Navigator.of(context).pop(_otpTextController.text);
+  }
+
+  @override
+  Widget build(BuildContext context) {
     return Scaffold(
         resizeToAvoidBottomInset: false,
         body: SafeArea(
@@ -59,7 +78,7 @@ class OtpScreen extends StatelessWidget {
                   child: Row(
                     children: [
                       const Text('Did not receive a message?'),
-                      TextButton(onPressed: () {}, child: const Text('Resend'))
+                      ResendWidget(phoneNumber),
                     ],
                   ),
                 ),

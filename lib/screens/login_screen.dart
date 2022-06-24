@@ -83,6 +83,8 @@ class SignInScreen extends StatelessWidget {
                   const SizedBox(
                     height: 20,
                   ),
+
+                  //Google Login Button
                   TextButton.icon(
                     key: const ValueKey('Continue with Google'),
                     onPressed: signInWithGoogle,
@@ -97,9 +99,12 @@ class SignInScreen extends StatelessWidget {
                     ),
                     style: loginScreenButtonStyle(),
                   ),
+
                   const SizedBox(
                     height: 20,
                   ),
+
+                  //Phone Login Button
                   TextButton.icon(
                     key: const ValueKey('Continue with Phone'),
                     onPressed: () {

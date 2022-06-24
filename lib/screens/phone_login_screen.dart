@@ -12,6 +12,23 @@ class PhoneLoginScreen extends StatefulWidget {
 class _PhoneLoginScreenState extends State<PhoneLoginScreen> {
   final _phoneTextController = TextEditingController();
   var _loadingState = false;
+  var _invalidPhoneNumber = false;
+
+  void _submitPhoneNumber() {
+    if (_phoneTextController.text.length != 10) {
+      setState(() {
+        _invalidPhoneNumber = true;
+      });
+      return;
+    }
+    setState(() {
+      _invalidPhoneNumber = false;
+    });
+    PhoneAuthentication.verifyPhone('+91${_phoneTextController.text}', context);
+    setState(() {
+      _loadingState = true;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -80,8 +97,11 @@ class _PhoneLoginScreenState extends State<PhoneLoginScreen> {
                             keyboardType: TextInputType.phone,
                             controller: _phoneTextController,
                             style: const TextStyle(fontSize: 16),
-                            decoration: const InputDecoration(
+                            decoration: InputDecoration(
                               labelText: 'Phone Number',
+                              errorText: _invalidPhoneNumber
+                                  ? 'Phone Number should have 10 digits'
+                                  : null,
                             ),
                           ),
                         ),
@@ -96,11 +116,7 @@ class _PhoneLoginScreenState extends State<PhoneLoginScreen> {
                       onPressed: _loadingState
                           ? null
                           : () {
-                              PhoneAuthentication.verifyPhone(
-                                  '+91${_phoneTextController.text}', context);
-                              setState(() {
-                                _loadingState = true;
-                              });
+                              _submitPhoneNumber();
                             },
                       child: const Text('Register'),
                     ),
