@@ -60,6 +60,7 @@ class _OtpScreenState extends State<OtpScreen> {
                 Container(
                   margin: const EdgeInsets.symmetric(vertical: 16),
                   child: PinCodeTextField(
+                    autoFocus: true,
                     appContext: context,
                     length: 6,
                     onChanged: (value) {},
@@ -71,6 +72,7 @@ class _OtpScreenState extends State<OtpScreen> {
                       inactiveColor: Theme.of(context).primaryColor,
                       selectedColor: Colors.black,
                     ),
+                    keyboardType: TextInputType.number,
                   ),
                 ),
                 Expanded(
