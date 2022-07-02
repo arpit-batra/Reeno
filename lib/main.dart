@@ -1,8 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'package:reeno/screens/login_screen.dart';
-import 'package:reeno/screens/otp_screen.dart';
-import 'package:reeno/screens/phone_login_screen.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:provider/provider.dart';
+import 'package:reeno/providers/phone_provider.dart';
+import 'package:reeno/screens/centre_list.dart';
+import 'package:reeno/screens/login/get_user_info_screen.dart';
+import 'package:reeno/screens/login/login_screen.dart';
+import 'package:reeno/screens/login/otp_screen.dart';
+import 'package:reeno/screens/login/phone_login_screen.dart';
+import 'package:reeno/screens/splash/splash_screen.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
@@ -37,42 +43,63 @@ class MyApp extends StatelessWidget {
       800: Color.fromRGBO(87, 93, 251, .9),
       900: Color.fromRGBO(87, 93, 251, 1),
     };
-    return MaterialApp(
-      title: 'Flutter Demo',
-      theme: ThemeData(
-        primarySwatch: const MaterialColor(0xFF575DFB, themeColor),
-        elevatedButtonTheme: ElevatedButtonThemeData(
-          style: ButtonStyle(
-            padding: MaterialStateProperty.all(const EdgeInsets.all(10)),
-            shape: MaterialStateProperty.all(RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(16))),
+    return ChangeNotifierProvider.value(
+      value: PhoneProvider(),
+      child: MaterialApp(
+        title: 'Flutter Demo',
+        theme: ThemeData(
+          primarySwatch: const MaterialColor(0xFF575DFB, themeColor),
+          elevatedButtonTheme: ElevatedButtonThemeData(
+            style: ButtonStyle(
+              padding: MaterialStateProperty.all(const EdgeInsets.all(10)),
+              shape: MaterialStateProperty.all(RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(16))),
+            ),
+          ),
+          inputDecorationTheme: InputDecorationTheme(
+            enabledBorder: textFieldBorderTheme(),
+            focusedBorder: textFieldBorderTheme(),
+            disabledBorder: textFieldBorderTheme(),
           ),
         ),
-        inputDecorationTheme: InputDecorationTheme(
-          enabledBorder: textFieldBorderTheme(),
-          focusedBorder: textFieldBorderTheme(),
-          disabledBorder: textFieldBorderTheme(),
+        home: FutureBuilder(
+          future: _fbApp,
+          builder: (context, snapshot) {
+            if (snapshot.hasError) {
+              print('Unable to initialize firebaseApp');
+              return const Text('Unable to initialize firebaseApp');
+            } else if (snapshot.hasData) {
+              return StreamBuilder(
+                stream: FirebaseAuth.instance.authStateChanges(),
+                builder: (context, snapshot) {
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    print('POPO Loading Splash Screen');
+                    return SplashScreen();
+                  }
+                  if (snapshot.hasData) {
+                    while (Navigator.of(context).canPop()) {
+                      Navigator.of(context).pop();
+                    }
+                    print("POPO Loading Centre List");
+                    return CentreList();
+                  }
+                  print("POPO Loding Sign in");
+                  return SignInScreen();
+                },
+              );
+            } else {
+              return const Center(
+                child: CircularProgressIndicator(),
+              );
+            }
+          },
         ),
-      ),
-      home: FutureBuilder(
-        future: _fbApp,
-        builder: (context, snapshot) {
-          if (snapshot.hasError) {
-            print('Unable to initialize firebaseApp');
-            return const Text('Unable to initialize firebaseApp');
-          } else if (snapshot.hasData) {
-            return SignInScreen();
-          } else {
-            return const Center(
-              child: CircularProgressIndicator(),
-            );
-          }
+        routes: {
+          PhoneLoginScreen.routeName: (context) => PhoneLoginScreen(),
+          OtpScreen.routeName: (context) => OtpScreen(),
+          GetUserInfoScreen.routeName: (context) => GetUserInfoScreen(),
         },
       ),
-      routes: {
-        PhoneLoginScreen.routeName: (context) => PhoneLoginScreen(),
-        OtpScreen.routeName: (context) => OtpScreen(),
-      },
     );
   }
 }

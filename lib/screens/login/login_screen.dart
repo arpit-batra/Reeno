@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:reeno/helpers/google_authentication.dart';
 
-import './../screens/phone_login_screen.dart';
+import 'phone_login_screen.dart';
 
 class SignInScreen extends StatelessWidget {
   const SignInScreen({Key? key}) : super(key: key);
@@ -60,7 +60,9 @@ class SignInScreen extends StatelessWidget {
         //Google Login Button
         TextButton.icon(
           key: const ValueKey('Continue with Google'),
-          onPressed: GoogleAuthentication.signInWithGoogle,
+          onPressed: () {
+            GoogleAuthentication.signInWithGoogle(context);
+          },
           label: const Text(
             'Continue with Google',
             style: TextStyle(color: Colors.black),

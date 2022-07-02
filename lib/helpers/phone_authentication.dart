@@ -1,8 +1,10 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:reeno/screens/phone_login_screen.dart';
+import 'package:reeno/providers/phone_provider.dart';
+import 'package:reeno/screens/login/phone_login_screen.dart';
+import 'package:provider/provider.dart';
 
-import './../screens/otp_screen.dart';
+import '../screens/login/otp_screen.dart';
 
 class PhoneAuthentication {
   static final auth = FirebaseAuth.instance;
@@ -37,10 +39,6 @@ class PhoneAuthentication {
       },
       verificationFailed: (FirebaseAuthException err) {
         _showErrorDialog(context, err);
-        // ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-        //   content: Text(e.message!),
-        //   backgroundColor: Theme.of(context).errorColor,
-        // ));
       },
       timeout: const Duration(seconds: 60),
       codeSent: (String verificationId, int? resendToken) async {
@@ -54,6 +52,8 @@ class PhoneAuthentication {
 
         try {
           await auth.signInWithCredential(credential);
+          Provider.of<PhoneProvider>(context, listen: false)
+              .setPhoneNumber(phoneNumber);
         } on FirebaseAuthException catch (err) {
           _showErrorDialog(context, err);
         }
