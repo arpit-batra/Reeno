@@ -1,9 +1,11 @@
 import 'dart:io';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:reeno/pickers/user_image_picker.dart';
 import 'package:provider/provider.dart';
 import 'package:reeno/providers/phone_provider.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 
 import '../../models/user.dart' as CustomUser;
 
@@ -25,19 +27,40 @@ class _GetUserInfoScreenState extends State<GetUserInfoScreen> {
     _userImageFile = image;
   }
 
+  Future<String> _uploadProfImage() async {
+    //Link of default image
+    var url = await FirebaseStorage.instance
+        .refFromURL("gs://reeno-5dce8.appspot.com/default_prof_pic.jpeg")
+        .getDownloadURL();
+    print(url);
+    if (_userImageFile != null) {
+      final currUserUid = FirebaseAuth.instance.currentUser!.uid;
+      final ref = FirebaseStorage.instance
+          .ref()
+          .child('user_image')
+          .child('$currUserUid.jpg');
+
+      await ref.putFile(_userImageFile!);
+
+      url = await ref.getDownloadURL();
+    }
+    return url;
+  }
+
   Future<void> _submitInfo(BuildContext context, VoidCallback onSuccess) async {
     final isValid = _formKey.currentState!.validate();
-    //TODO Upload image
-    FocusScope.of(context).unfocus();
     if (isValid) {
+      FocusScope.of(context).unfocus();
       setState(() {
         _loadingState = true;
       });
       _formKey.currentState!.save();
+
+      final imageUrl = await _uploadProfImage();
       final currentUser = CustomUser.User(
         phone: Provider.of<PhoneProvider>(context, listen: false).phoneNumber,
         name: _userFullName,
-        imageUrl: "Sample for now",
+        imageUrl: imageUrl,
       );
       print(currentUser.phone);
       final docRef = FirebaseFirestore.instance
@@ -53,8 +76,6 @@ class _GetUserInfoScreenState extends State<GetUserInfoScreen> {
       });
       print("Reached Here");
       onSuccess.call();
-      // if (mounted)
-      // Navigator.of(context).pop();
     }
   }
 
@@ -72,6 +93,9 @@ class _GetUserInfoScreenState extends State<GetUserInfoScreen> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     UserImagePicker(_pickedImage),
+                    const SizedBox(
+                      height: 30,
+                    ),
                     TextFormField(
                       autocorrect: false,
                       textCapitalization: TextCapitalization.words,

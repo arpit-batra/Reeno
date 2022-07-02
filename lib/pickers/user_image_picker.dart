@@ -4,6 +4,11 @@ import 'package:flutter/material.dart';
 
 import 'package:image_picker/image_picker.dart';
 
+enum ImageType {
+  camera,
+  gallery,
+}
+
 class UserImagePicker extends StatefulWidget {
   final void Function(File pickedImage) imagePickFn;
   const UserImagePicker(this.imagePickFn, {Key? key}) : super(key: key);
@@ -14,10 +19,16 @@ class UserImagePicker extends StatefulWidget {
 
 class _UserImagePickerState extends State<UserImagePicker> {
   File? _pickedImageFile;
-  Future<void> _pickImage() async {
+  Future<void> _pickImage(imageType) async {
     final _imagePicker = ImagePicker();
-    final _pickedImageXFile = await _imagePicker.pickImage(
-        source: ImageSource.camera, imageQuality: 90, maxWidth: 150);
+    var _pickedImageXFile;
+    if (imageType == ImageType.camera) {
+      _pickedImageXFile = await _imagePicker.pickImage(
+          source: ImageSource.camera, imageQuality: 90, maxWidth: 150);
+    } else {
+      _pickedImageXFile = await _imagePicker.pickImage(
+          source: ImageSource.gallery, imageQuality: 90, maxWidth: 150);
+    }
     setState(() {
       _pickedImageFile = File(_pickedImageXFile!.path);
     });
@@ -29,15 +40,33 @@ class _UserImagePickerState extends State<UserImagePicker> {
     return Column(
       children: [
         CircleAvatar(
-          radius: 40,
-          backgroundImage:
-              _pickedImageFile != null ? FileImage(_pickedImageFile!) : null,
+          radius: 70,
+          backgroundImage: _pickedImageFile != null
+              ? FileImage(_pickedImageFile!)
+              : Image.asset('./assets/default_prof_pic.jpeg').image,
           backgroundColor: Colors.grey,
         ),
-        TextButton.icon(
-            onPressed: _pickImage,
-            icon: const Icon(Icons.image),
-            label: const Text('Add profile pic')),
+        const SizedBox(
+          height: 10,
+        ),
+        Row(
+          children: [
+            TextButton.icon(
+              onPressed: (() {
+                _pickImage(ImageType.camera);
+              }),
+              icon: const Icon(Icons.camera_alt),
+              label: const Text('Capture Profile Pic'),
+            ),
+            TextButton.icon(
+              onPressed: (() {
+                _pickImage(ImageType.gallery);
+              }),
+              icon: const Icon(Icons.image),
+              label: const Text('Pick from Gallery'),
+            ),
+          ],
+        ),
       ],
     );
   }

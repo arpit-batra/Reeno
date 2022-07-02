@@ -67,6 +67,7 @@ class MyApp extends StatelessWidget {
           builder: (context, snapshot) {
             if (snapshot.hasError) {
               print('Unable to initialize firebaseApp');
+              print(snapshot.error);
               return const Text('Unable to initialize firebaseApp');
             } else if (snapshot.hasData) {
               return StreamBuilder(
