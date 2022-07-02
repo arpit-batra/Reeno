@@ -23,6 +23,8 @@ class _GetUserInfoScreenState extends State<GetUserInfoScreen> {
   File? _userImageFile;
   bool _loadingState = false;
   String? _userFullName;
+  final currUserUid = FirebaseAuth.instance.currentUser!.uid;
+
   void _pickedImage(File image) {
     _userImageFile = image;
   }
@@ -34,7 +36,6 @@ class _GetUserInfoScreenState extends State<GetUserInfoScreen> {
         .getDownloadURL();
     print(url);
     if (_userImageFile != null) {
-      final currUserUid = FirebaseAuth.instance.currentUser!.uid;
       final ref = FirebaseStorage.instance
           .ref()
           .child('user_image')
@@ -70,7 +71,7 @@ class _GetUserInfoScreenState extends State<GetUserInfoScreen> {
               toFirestore: (CustomUser.User user, options) =>
                   user.toFirestore());
       //TODO add try catch
-      await docRef.add(currentUser);
+      await docRef.doc(currUserUid).set(currentUser);
       setState(() {
         _loadingState = false;
       });

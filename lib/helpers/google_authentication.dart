@@ -15,7 +15,7 @@ class GoogleAuthentication {
     final docRef = FirebaseFirestore.instance.collection('users').withConverter(
         fromFirestore: User.User.fromFirestore,
         toFirestore: (User.User user, options) => user.toFirestore());
-    await docRef.add(currentUser);
+    await docRef.doc(googleUser?.id).set(currentUser);
   }
 
   static void signInWithGoogle(context) async {
