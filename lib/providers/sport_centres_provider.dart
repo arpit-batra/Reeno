@@ -5,9 +5,14 @@ import 'package:reeno/models/sport_centre_meta.dart';
 
 class SportCentresProvider with ChangeNotifier {
   List<SportCentre> _sportCentres = [];
+  List<SportCentreMeta> _sportCentreMetas = [];
 
   List<SportCentre> get sportCentres {
     return [..._sportCentres];
+  }
+
+  List<SportCentreMeta> get sportCentreMetas {
+    return [..._sportCentreMetas];
   }
 
   Future<void> fetchSportCentres() async {
@@ -21,7 +26,7 @@ class SportCentresProvider with ChangeNotifier {
     print("PROVV3 ${centres.docs.first.data().address.coordinates}");
   }
 
-  Future<void> fetchSortCentresMetas() async {
+  Future<void> fetchSportCentresMetas() async {
     final docRef = FirebaseFirestore.instance
         .collection('sport_centres_meta')
         .withConverter(
@@ -29,6 +34,11 @@ class SportCentresProvider with ChangeNotifier {
             toFirestore: (SportCentreMeta sportCentre, _) =>
                 sportCentre.toFirestore());
     final centres = await docRef.get();
-    print("PROVV3 ${centres.docs.first.data().title}");
+    final List<SportCentreMeta> metaList = [];
+    for (final element in centres.docs) {
+      metaList.add(element.data());
+    }
+    _sportCentreMetas = metaList;
+    notifyListeners();
   }
 }

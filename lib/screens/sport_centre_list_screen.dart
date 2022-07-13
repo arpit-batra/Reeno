@@ -4,15 +4,16 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:reeno/providers/sport_centres_provider.dart';
 import 'package:reeno/screens/login/get_user_info_screen.dart';
+import 'package:reeno/widgets/sport_centre_list_widgets/sport_centre_list_tile.dart';
 
-class SportCentreList extends StatefulWidget {
-  const SportCentreList({Key? key}) : super(key: key);
+class SportCentreListScreen extends StatefulWidget {
+  const SportCentreListScreen({Key? key}) : super(key: key);
 
   @override
-  State<SportCentreList> createState() => _SportCentreListState();
+  State<SportCentreListScreen> createState() => _SportCentreListScreenState();
 }
 
-class _SportCentreListState extends State<SportCentreList> {
+class _SportCentreListScreenState extends State<SportCentreListScreen> {
   bool _isFirstRun = true;
 
   @override
@@ -35,28 +36,31 @@ class _SportCentreListState extends State<SportCentreList> {
       }
       print("PROVV0");
       await Provider.of<SportCentresProvider>(context, listen: false)
-          .fetchSortCentresMetas();
+          .fetchSportCentresMetas();
       _isFirstRun = false;
     }
   }
 
-  // @override
-  // void didUpdateWidget(covariant SportCentreList oldWidget) async {
-  //   super.didUpdateWidget(oldWidget);
-
-  // }
-
   @override
   Widget build(BuildContext context) {
+    final metas = Provider.of<SportCentresProvider>(context).sportCentreMetas;
+    print("meta lenght -> ${metas.length}");
     return Scaffold(
-        body: GridView.builder(
-            gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
-                maxCrossAxisExtent: 300,
-                childAspectRatio: 3 / 2,
-                crossAxisSpacing: 10,
-                mainAxisSpacing: 10),
-            itemBuilder: (context, index) {
-              return const Text('hi');
-            }));
+        body: Padding(
+      padding: const EdgeInsets.all(10.0),
+      child: GridView.builder(
+        gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
+          maxCrossAxisExtent: 300,
+          childAspectRatio: 3 / 2,
+          crossAxisSpacing: 10,
+          mainAxisSpacing: 10,
+        ),
+        itemBuilder: (context, index) {
+          return SportCentreListTile(
+              title: metas[index].title, imageUrl: metas[index].imageUrl);
+        },
+        itemCount: metas.length,
+      ),
+    ));
   }
 }

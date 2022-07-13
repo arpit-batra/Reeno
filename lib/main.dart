@@ -4,7 +4,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:provider/provider.dart';
 import 'package:reeno/providers/phone_provider.dart';
 import 'package:reeno/providers/sport_centres_provider.dart';
-import 'package:reeno/screens/sport_centre_list.dart';
+import 'package:reeno/screens/sport_centre_list_screen.dart';
 import 'package:reeno/screens/login/get_user_info_screen.dart';
 import 'package:reeno/screens/login/login_screen.dart';
 import 'package:reeno/screens/login/otp_screen.dart';
@@ -85,7 +85,7 @@ class MyApp extends StatelessWidget {
                     print("POPO Loading Centre List");
                     return ChangeNotifierProvider(
                       create: ((context) => SportCentresProvider()),
-                      child: SportCentreList(),
+                      child: SportCentreListScreen(),
                     );
                   }
                   print("POPO Loding Sign in");
