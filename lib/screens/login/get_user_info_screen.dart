@@ -4,10 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:reeno/pickers/user_image_picker.dart';
 import 'package:provider/provider.dart';
 import 'package:reeno/providers/phone_provider.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
-
-import '../../models/user.dart' as CustomUser;
+import 'package:reeno/providers/user_provider.dart';
 
 class GetUserInfoScreen extends StatefulWidget {
   const GetUserInfoScreen({Key? key}) : super(key: key);
@@ -58,20 +56,23 @@ class _GetUserInfoScreenState extends State<GetUserInfoScreen> {
       _formKey.currentState!.save();
 
       final imageUrl = await _uploadProfImage();
-      final currentUser = CustomUser.User(
-        phone: Provider.of<PhoneProvider>(context, listen: false).phoneNumber,
-        name: _userFullName,
-        imageUrl: imageUrl,
-      );
-      print(currentUser.phone);
-      final docRef = FirebaseFirestore.instance
-          .collection('users')
-          .withConverter(
-              fromFirestore: CustomUser.User.fromFirestore,
-              toFirestore: (CustomUser.User user, options) =>
-                  user.toFirestore());
-      //TODO add try catch
-      await docRef.doc(currUserUid).set(currentUser);
+      final phone =
+          Provider.of<PhoneProvider>(context, listen: false).phoneNumber;
+      // final currentUser = CustomUser.User(
+      //   phone: Provider.of<PhoneProvider>(context, listen: false).phoneNumber,
+      //   name: _userFullName,
+      //   imageUrl: imageUrl,
+      // );
+      // final docRef = FirebaseFirestore.instance
+      //     .collection('users')
+      //     .withConverter(
+      //         fromFirestore: CustomUser.User.fromFirestore,
+      //         toFirestore: (CustomUser.User user, options) =>
+      //             user.toFirestore());
+      // //TODO add try catch
+      // await docRef.doc(currUserUid).set(currentUser);
+      await Provider.of<UserProvider>(context, listen: false)
+          .addUser(currUserUid, null, phone, imageUrl, _userFullName);
       setState(() {
         _loadingState = false;
       });

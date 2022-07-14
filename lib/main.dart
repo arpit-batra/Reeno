@@ -4,6 +4,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:provider/provider.dart';
 import 'package:reeno/providers/phone_provider.dart';
 import 'package:reeno/providers/sport_centres_provider.dart';
+import 'package:reeno/providers/user_provider.dart';
 import 'package:reeno/screens/sport_centre_list_screen.dart';
 import 'package:reeno/screens/login/get_user_info_screen.dart';
 import 'package:reeno/screens/login/login_screen.dart';
@@ -44,8 +45,12 @@ class MyApp extends StatelessWidget {
       800: Color.fromRGBO(87, 93, 251, .9),
       900: Color.fromRGBO(87, 93, 251, 1),
     };
-    return ChangeNotifierProvider.value(
-      value: PhoneProvider(),
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider.value(value: PhoneProvider()),
+        ChangeNotifierProvider.value(value: UserProvider()),
+        ChangeNotifierProvider.value(value: SportCentresProvider())
+      ],
       child: MaterialApp(
         title: 'Flutter Demo',
         theme: ThemeData(
@@ -83,13 +88,16 @@ class MyApp extends StatelessWidget {
                       Navigator.of(context).pop();
                     }
                     print("POPO Loading Centre List");
-                    return ChangeNotifierProvider(
-                      create: ((context) => SportCentresProvider()),
-                      child: SportCentreListScreen(),
-                    );
+
+                    return SportCentreListScreen();
+                    // return ChangeNotifierProvider(
+                    //   create: ((context) => SportCentresProvider()),
+                    //   child: SportCentreListScreen(),
+                    // );
                   }
                   print("POPO Loding Sign in");
                   return SignInScreen();
+                  // SignInScreen();
                 },
               );
             } else {
