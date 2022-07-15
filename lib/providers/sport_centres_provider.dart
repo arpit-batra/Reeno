@@ -6,6 +6,7 @@ import 'package:reeno/models/sport_centre_meta.dart';
 class SportCentresProvider with ChangeNotifier {
   List<SportCentre> _sportCentres = [];
   List<SportCentreMeta> _sportCentreMetas = [];
+  String _selectedCentreId = "";
 
   List<SportCentre> get sportCentres {
     return [..._sportCentres];
@@ -13,6 +14,30 @@ class SportCentresProvider with ChangeNotifier {
 
   List<SportCentreMeta> get sportCentreMetas {
     return [..._sportCentreMetas];
+  }
+
+  Future<SportCentre?> getsportCentreById(String id) async {
+    final docRef = FirebaseFirestore.instance
+        .collection('sport_centres')
+        .withConverter(
+            fromFirestore: SportCentre.fromFirestore,
+            toFirestore: (SportCentre sportCentre, _) =>
+                sportCentre.toFirestore());
+    final centre = await docRef.doc(id).get();
+    if (centre.data() == null) {
+      return null;
+    } else {
+      return centre.data();
+    }
+  }
+
+  void setSelectCentre(String id) {
+    _selectedCentreId = id;
+  }
+
+  SportCentre get selectedSportCentre {
+    return _sportCentres
+        .firstWhere((element) => element.id == _selectedCentreId);
   }
 
   Future<void> fetchSportCentres() async {

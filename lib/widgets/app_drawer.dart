@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+
+import 'package:reeno/providers/user_provider.dart';
 
 class AppDrawer extends StatelessWidget {
   const AppDrawer({Key? key}) : super(key: key);
@@ -11,23 +14,29 @@ class AppDrawer extends StatelessWidget {
           color: Color.fromARGB(1023, 232, 232, 232),
           padding: EdgeInsets.symmetric(vertical: 32),
           width: double.infinity,
-          child: Column(
-            children: [
-              CircleAvatar(radius: 50),
-              SizedBox(
-                height: 20,
-              ),
-              Padding(
-                padding: const EdgeInsets.all(16.0),
-                child: Text(
-                  "Someting",
-                  style: TextStyle(
-                    fontSize: 24,
-                  ),
-                  textAlign: TextAlign.center,
-                ),
-              ),
-            ],
+          child: Consumer<UserProvider>(
+            builder: ((context, value, child) => Column(
+                  children: [
+                    CircleAvatar(
+                      radius: 50,
+                      backgroundImage: NetworkImage(value.user!.imageUrl!),
+                      // child: Image.network(value.user!.imageUrl!),
+                    ),
+                    const SizedBox(
+                      height: 20,
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.all(16.0),
+                      child: Text(
+                        value.user!.name!,
+                        style: const TextStyle(
+                          fontSize: 24,
+                        ),
+                        textAlign: TextAlign.center,
+                      ),
+                    ),
+                  ],
+                )),
           ),
         ),
         ListTile(

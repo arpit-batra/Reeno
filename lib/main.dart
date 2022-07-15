@@ -5,6 +5,7 @@ import 'package:provider/provider.dart';
 import 'package:reeno/providers/phone_provider.dart';
 import 'package:reeno/providers/sport_centres_provider.dart';
 import 'package:reeno/providers/user_provider.dart';
+import 'package:reeno/screens/centre_info_screen.dart';
 import 'package:reeno/screens/sport_centre_list_screen.dart';
 import 'package:reeno/screens/login/get_user_info_screen.dart';
 import 'package:reeno/screens/login/login_screen.dart';
@@ -111,6 +112,7 @@ class MyApp extends StatelessWidget {
           PhoneLoginScreen.routeName: (context) => PhoneLoginScreen(),
           OtpScreen.routeName: (context) => OtpScreen(),
           GetUserInfoScreen.routeName: (context) => GetUserInfoScreen(),
+          CentreInfoScreen.routeName: (context) => CentreInfoScreen(),
         },
       ),
     );

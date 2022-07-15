@@ -4,10 +4,10 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import 'package:reeno/providers/sport_centres_provider.dart';
+import 'package:reeno/screens/centre_info_screen.dart';
 import 'package:reeno/screens/login/get_user_info_screen.dart';
 import 'package:reeno/widgets/app_drawer.dart';
 import 'package:reeno/widgets/sport_centre_list_widgets/sport_centre_list_tile.dart';
-import 'package:reeno/models/user.dart' as CustomUser;
 import 'package:reeno/providers/user_provider.dart';
 
 class SportCentreListScreen extends StatefulWidget {
@@ -19,7 +19,6 @@ class SportCentreListScreen extends StatefulWidget {
 
 class _SportCentreListScreenState extends State<SportCentreListScreen> {
   bool _isFirstRun = true;
-  String _userDisplayName = "";
 
   @override
   void didChangeDependencies() async {
@@ -29,7 +28,9 @@ class _SportCentreListScreenState extends State<SportCentreListScreen> {
       final currUser = FirebaseAuth.instance.currentUser;
       final enteredPhoneNumber = currUser?.phoneNumber;
       final enteredEmail = currUser?.email;
-      if (enteredPhoneNumber != null) {
+      print("Phone Number $enteredPhoneNumber");
+      print("Email $enteredEmail");
+      if (enteredPhoneNumber != null && enteredPhoneNumber != "") {
         FirebaseFirestore.instance
             .collection('users')
             .where("phone", isEqualTo: enteredPhoneNumber)
@@ -42,7 +43,7 @@ class _SportCentreListScreenState extends State<SportCentreListScreen> {
           }
         });
       }
-      if (enteredEmail != null) {
+      if (enteredEmail != null && enteredEmail != "") {
         FirebaseFirestore.instance
             .collection('users')
             .where("email", isEqualTo: enteredEmail)
@@ -59,6 +60,8 @@ class _SportCentreListScreenState extends State<SportCentreListScreen> {
           }
         });
       }
+
+      await Provider.of<UserProvider>(context, listen: false).fetchUser();
 
       // print("PROVV0");
       await Provider.of<SportCentresProvider>(context, listen: false)
@@ -85,6 +88,13 @@ class _SportCentreListScreenState extends State<SportCentreListScreen> {
         title: Consumer<UserProvider>(
             builder: ((context, value, child) =>
                 Text('Welcome ${value.user?.name ?? ''}'))),
+        actions: [
+          IconButton(
+              onPressed: (() {
+                FirebaseAuth.instance.signOut();
+              }),
+              icon: Icon(Icons.logout))
+        ],
       ),
       drawer: const AppDrawer(),
       body: Padding(
@@ -97,8 +107,16 @@ class _SportCentreListScreenState extends State<SportCentreListScreen> {
             mainAxisSpacing: 10,
           ),
           itemBuilder: (context, index) {
-            return SportCentreListTile(
-                title: metas[index].title, imageUrl: metas[index].imageUrl);
+            return GestureDetector(
+              onTap: (() {
+                // Provider.of<SportCentresProvider>(context, listen: false)
+                //     .setSelectCentre(metas[index].detailsId);
+                Navigator.of(context).pushNamed(CentreInfoScreen.routeName,
+                    arguments: metas[index].detailsId);
+              }),
+              child: SportCentreListTile(
+                  title: metas[index].title, imageUrl: metas[index].imageUrl),
+            );
           },
           itemCount: metas.length,
         ),
