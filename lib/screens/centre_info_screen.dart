@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:card_loading/card_loading.dart';
+import 'package:reeno/screens/schedule_screen.dart';
+import 'package:scroll_snap_list/scroll_snap_list.dart';
 import 'package:reeno/providers/sport_centres_provider.dart';
 import 'package:reeno/models/sport_centre.dart';
 import 'package:reeno/screens/loading_screen.dart';
@@ -15,20 +16,9 @@ class CentreInfoScreen extends StatefulWidget {
 }
 
 class _CentreInfoScreenState extends State<CentreInfoScreen> {
-  bool _isFirstRun = true;
-
-  // @override
-  // void didChangeDependencies() {
-  //   super.didChangeDependencies();
-  //   if (_isFirstRun) {
-  //     _isFirstRun = false;
-  //   }
-  // }
-
   @override
   Widget build(BuildContext context) {
     final centreId = ModalRoute.of(context)!.settings.arguments as String;
-    print("Centre ID -> $centreId");
     Provider.of<SportCentresProvider>(context, listen: false)
         .setSelectCentre(centreId);
 
@@ -42,31 +32,43 @@ class _CentreInfoScreenState extends State<CentreInfoScreen> {
         } else if (snapshot.hasData) {
           final centre = snapshot.data as SportCentre;
           return Scaffold(
-            appBar: AppBar(title: Text(centre.title)),
-            body: Center(
-              child: Text(centre.description),
-            ),
-          );
+              appBar: AppBar(title: Text(centre.title)),
+              body: Column(
+                children: <Widget>[
+                  SizedBox(
+                    height: 250,
+                    child: ScrollSnapList(
+                        itemBuilder: (context, index) {
+                          return Container(
+                              width: MediaQuery.of(context).size.width,
+                              child: Image.network(
+                                centre.images![index],
+                                fit: BoxFit.cover,
+                              ));
+                        },
+                        itemCount: centre.images?.length ?? 0,
+                        itemSize: MediaQuery.of(context).size.width,
+                        onItemFocus: (index) {}),
+                  ),
+                  Container(
+                    padding: const EdgeInsets.all(16),
+                    width: double.infinity,
+                    child: ElevatedButton(
+                        onPressed: (() {
+                          Navigator.of(context)
+                              .pushNamed(ScheduleScreen.routeName);
+                        }),
+                        child: const Text(
+                          'Book a slot',
+                          style: TextStyle(fontSize: 18),
+                        )),
+                  )
+                ],
+              ));
         } else {
           return const LoadingScreen();
         }
       }),
     );
-
-    // Scaffold(
-    //   appBar: AppBar(
-    //       title: FutureBuilder(
-    //           future: _selectedCentre,
-    //           builder: ((context, snapshot) {
-    //             if (snapshot.hasData) {
-    //               final centre = snapshot.data as SportCentre;
-    //               return (Text(centre.title));
-    //             } else if (snapshot.hasError) {
-    //               return const Text("Something went wrong");
-    //             } else {
-    //               return (const CircularProgressIndicator());
-    //             }
-    //           }))),
-    // );
   }
 }
