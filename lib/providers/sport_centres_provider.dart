@@ -16,6 +16,11 @@ class SportCentresProvider with ChangeNotifier {
     return [..._sportCentreMetas];
   }
 
+  SportCentreMeta get selectedCentreMeta {
+    return _sportCentreMetas
+        .firstWhere((element) => element.detailsId == _selectedCentreId);
+  }
+
   Future<SportCentre?> getsportCentreById(String id) async {
     final docRef = FirebaseFirestore.instance
         .collection('sport_centres')
@@ -29,6 +34,10 @@ class SportCentresProvider with ChangeNotifier {
     } else {
       return centre.data();
     }
+  }
+
+  SportCentreMeta getCentreMetaByDetailId(String id) {
+    return _sportCentreMetas.firstWhere((element) => element.detailsId == id);
   }
 
   void setSelectCentre(String id) {

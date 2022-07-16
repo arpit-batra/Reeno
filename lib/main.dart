@@ -86,6 +86,7 @@ class MyApp extends StatelessWidget {
                     return SplashScreen();
                   }
                   if (snapshot.hasData) {
+                    //TODO
                     while (Navigator.of(context).canPop()) {
                       Navigator.of(context).pop();
                     }
