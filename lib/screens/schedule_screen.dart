@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:reeno/providers/selected_date_provider.dart';
 import 'package:reeno/providers/sport_centres_provider.dart';
 import 'package:reeno/widgets/app_drawer.dart';
-import 'package:reeno/widgets/schedule_widgets/date_picker.dart';
 import 'package:reeno/widgets/schedule_widgets/dates_strip.dart';
+import 'package:reeno/widgets/schedule_widgets/day_schedule.dart';
 
 class ScheduleScreen extends StatelessWidget {
   const ScheduleScreen({Key? key}) : super(key: key);
@@ -11,11 +12,13 @@ class ScheduleScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final centreMeta = Provider.of<SportCentresProvider>(context, listen: false)
-        .selectedCentreMeta;
+    // final centreMeta = Provider.of<SportCentresProvider>(context, listen: false)
+    //     .selectedCentreMeta;
+    // final selectedDateProvider =
+    //     Provider.of<SelectedDateProvider>(context).selectedDate;
     return Scaffold(
-      appBar: AppBar(title: Text(centreMeta.title)),
-      // appBar: AppBar(title: Text("shdfksjhdf")),
+      // appBar: AppBar(title: Text(centreMeta.title)),
+      appBar: AppBar(title: Text("dfgf")),
       drawer: const AppDrawer(),
       body: Column(children: <Widget>[
         const SizedBox(
@@ -23,11 +26,23 @@ class ScheduleScreen extends StatelessWidget {
           width: double.infinity,
           child: DatesStrip(),
         ),
-        Container(
-          height: 300,
-          color: Colors.blue,
+        const Expanded(
+          child: DaySchedule(),
         ),
-        ElevatedButton(onPressed: () {}, child: Text('continue'))
+        Container(
+          padding: const EdgeInsets.only(left: 16, right: 16, bottom: 16),
+          width: double.infinity,
+          height: 64,
+          child: ElevatedButton(
+              onPressed: (() {}),
+              child: const Text(
+                'Book my slot',
+                style: TextStyle(
+                  fontSize: 18,
+                ),
+                textAlign: TextAlign.center,
+              )),
+        )
       ]),
     );
   }

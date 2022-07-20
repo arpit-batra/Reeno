@@ -5,6 +5,7 @@ import 'package:provider/provider.dart';
 import 'package:reeno/providers/phone_provider.dart';
 import 'package:reeno/providers/sport_centres_provider.dart';
 import 'package:reeno/providers/user_provider.dart';
+import 'package:reeno/providers/selected_date_provider.dart';
 import 'package:reeno/screens/centre_info_screen.dart';
 import 'package:reeno/screens/schedule_screen.dart';
 import 'package:reeno/screens/sport_centre_list_screen.dart';
@@ -87,9 +88,9 @@ class MyApp extends StatelessWidget {
                   }
                   if (snapshot.hasData) {
                     //TODO
-                    while (Navigator.of(context).canPop()) {
-                      Navigator.of(context).pop();
-                    }
+                    // while (Navigator.of(context).canPop()) {
+                    //   Navigator.of(context).pop();
+                    // }
                     print("POPO Loading Centre List");
 
                     return SportCentreListScreen();
@@ -115,7 +116,8 @@ class MyApp extends StatelessWidget {
           OtpScreen.routeName: (context) => OtpScreen(),
           GetUserInfoScreen.routeName: (context) => GetUserInfoScreen(),
           CentreInfoScreen.routeName: (context) => CentreInfoScreen(),
-          ScheduleScreen.routeName: (context) => ScheduleScreen(),
+          ScheduleScreen.routeName: (context) => ChangeNotifierProvider.value(
+              value: SelectedDateProvider(), child: ScheduleScreen()),
         },
       ),
     );

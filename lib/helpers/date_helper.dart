@@ -88,4 +88,8 @@ class DateHelper {
         return "NAN";
     }
   }
+
+  static String getReadableTime(int index) {
+    return ("${index % 12 != 0 ? index % 12 : 12} ${index / 12 < 1 ? "am" : "pm"}");
+  }
 }
