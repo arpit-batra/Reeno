@@ -21,21 +21,6 @@ class SportCentresProvider with ChangeNotifier {
         .firstWhere((element) => element.detailsId == _selectedCentreId);
   }
 
-  Future<SportCentre?> getsportCentreById(String id) async {
-    final docRef = FirebaseFirestore.instance
-        .collection('sport_centres')
-        .withConverter(
-            fromFirestore: SportCentre.fromFirestore,
-            toFirestore: (SportCentre sportCentre, _) =>
-                sportCentre.toFirestore());
-    final centre = await docRef.doc(id).get();
-    if (centre.data() == null) {
-      return null;
-    } else {
-      return centre.data();
-    }
-  }
-
   SportCentreMeta getCentreMetaByDetailId(String id) {
     return _sportCentreMetas.firstWhere((element) => element.detailsId == id);
   }
@@ -49,15 +34,19 @@ class SportCentresProvider with ChangeNotifier {
         .firstWhere((element) => element.id == _selectedCentreId);
   }
 
-  Future<void> fetchSportCentres() async {
+  Future<SportCentre?> getsportCentreById(String id) async {
     final docRef = FirebaseFirestore.instance
         .collection('sport_centres')
         .withConverter(
             fromFirestore: SportCentre.fromFirestore,
             toFirestore: (SportCentre sportCentre, _) =>
                 sportCentre.toFirestore());
-    final centres = await docRef.get();
-    print("PROVV3 ${centres.docs.first.data().address.coordinates}");
+    final centre = await docRef.doc(id).get();
+    if (centre.data() == null) {
+      return null;
+    } else {
+      return centre.data();
+    }
   }
 
   Future<void> fetchSportCentresMetas() async {
@@ -75,4 +64,15 @@ class SportCentresProvider with ChangeNotifier {
     _sportCentreMetas = metaList;
     notifyListeners();
   }
+
+  // Future<void> fetchSportCentres() async {
+  //   final docRef = FirebaseFirestore.instance
+  //       .collection('sport_centres')
+  //       .withConverter(
+  //           fromFirestore: SportCentre.fromFirestore,
+  //           toFirestore: (SportCentre sportCentre, _) =>
+  //               sportCentre.toFirestore());
+  //   final centres = await docRef.get();
+  //   print("PROVV3 ${centres.docs.first.data().address.coordinates}");
+  // }
 }
