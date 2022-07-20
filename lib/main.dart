@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:provider/provider.dart';
+import 'package:reeno/providers/bookings_provider.dart';
 import 'package:reeno/providers/phone_provider.dart';
 import 'package:reeno/providers/sport_centres_provider.dart';
 import 'package:reeno/providers/user_provider.dart';
@@ -116,8 +117,13 @@ class MyApp extends StatelessWidget {
           OtpScreen.routeName: (context) => OtpScreen(),
           GetUserInfoScreen.routeName: (context) => GetUserInfoScreen(),
           CentreInfoScreen.routeName: (context) => CentreInfoScreen(),
-          ScheduleScreen.routeName: (context) => ChangeNotifierProvider.value(
-              value: SelectedDateProvider(), child: ScheduleScreen()),
+          ScheduleScreen.routeName: (context) => MultiProvider(
+                providers: [
+                  ChangeNotifierProvider.value(value: SelectedDateProvider()),
+                  ChangeNotifierProvider.value(value: BookingsProvider()),
+                ],
+                child: ScheduleScreen(),
+              )
         },
       ),
     );

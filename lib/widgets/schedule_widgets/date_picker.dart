@@ -1,11 +1,10 @@
-import 'package:card_loading/card_loading.dart';
+import 'package:provider/provider.dart';
 import 'package:flutter/material.dart';
-import 'package:ntp/ntp.dart';
+import 'package:reeno/providers/selected_date_provider.dart';
 import 'package:reeno/widgets/schedule_widgets/date_box.dart';
 
 class DatePicker extends StatefulWidget {
-  final DateTime currDate;
-  const DatePicker({required this.currDate, Key? key}) : super(key: key);
+  const DatePicker({Key? key}) : super(key: key);
 
   @override
   _DatePickerState createState() => _DatePickerState();
@@ -16,21 +15,32 @@ class _DatePickerState extends State<DatePicker> {
   DateTime? lastDate;
   DateTime? firstDate;
   int? listLength;
+  var _isFirst = true;
+
+  // @override
+  // void initState() {
+  //   super.initState();
+  // }
 
   @override
-  void initState() {
-    super.initState();
-    lastDate = widget.currDate.add(Duration(days: 30));
-    firstDate = DateTime(2022, 7, 1);
-    listLength = lastDate!.difference(firstDate!).inDays;
-    setState(() {
-      _selectedIndex = listLength! - 30;
-    });
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    if (_isFirst) {
+      _isFirst = false;
+      final currDate =
+          Provider.of<SelectedDateProvider>(context).selectedDateInDateTime;
+      lastDate = currDate.add(const Duration(days: 30));
+      firstDate = DateTime(2022, 7, 1);
+      listLength = lastDate!.difference(firstDate!).inDays;
+      setState(() {
+        _selectedIndex = listLength! - 30;
+      });
+    }
   }
 
   void onDateBoxTap(index) {
-    print('Tap detected $index');
-
+    Provider.of<SelectedDateProvider>(context, listen: false)
+        .setSelectedDate(firstDate!.add(Duration(days: index)));
     setState(() {
       _selectedIndex = index;
     });
