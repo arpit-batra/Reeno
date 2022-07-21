@@ -90,6 +90,17 @@ class DateHelper {
   }
 
   static String getReadableTime(int index) {
+    if (index == 24) return "0 am";
     return ("${index % 12 != 0 ? index % 12 : 12} ${index / 12 < 1 ? "am" : "pm"}");
+  }
+
+  static double getDurationHeight(
+      DateTime startTime, DateTime endTime, double heightPerHour) {
+    return (endTime.difference(startTime).inSeconds * heightPerHour) / 3600;
+  }
+
+  static double getPlacementFromTop(DateTime startTime, double heightPerHour) {
+    final startOfDay = DateTime(startTime.year, startTime.month, startTime.day);
+    return (startTime.difference(startOfDay).inSeconds * heightPerHour) / 3600;
   }
 }

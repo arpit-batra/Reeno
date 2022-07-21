@@ -2,24 +2,30 @@ import 'package:flutter/material.dart';
 
 class HourWidget extends StatelessWidget {
   final String time;
-  const HourWidget(this.time, {Key? key}) : super(key: key);
-  static const double heightOfHourWidget = 100;
+  final double heightOfHourWidget;
+  const HourWidget(this.time, this.heightOfHourWidget, {Key? key})
+      : super(key: key);
+  static const double borderWidth = 2;
 
   @override
   Widget build(BuildContext context) {
     return Stack(
       children: [
         Container(
+          height: heightOfHourWidget,
           decoration: const BoxDecoration(
-              border:
-                  Border(bottom: BorderSide(color: Colors.black, width: 2))),
+              border: Border(
+                  bottom: BorderSide(
+            color: Colors.black,
+            width: borderWidth,
+          ))),
           child: Row(
             children: [
               Expanded(
                 flex: 1,
                 child: Container(
                   color: const Color.fromRGBO(196, 196, 196, 1),
-                  height: heightOfHourWidget,
+                  height: heightOfHourWidget - borderWidth,
                 ),
               ),
               Expanded(
@@ -27,7 +33,7 @@ class HourWidget extends StatelessWidget {
                 child: Column(
                   children: [
                     Container(
-                      height: heightOfHourWidget / 2,
+                      height: (heightOfHourWidget - borderWidth) / 2,
                       decoration: BoxDecoration(
                         color: const Color.fromRGBO(241, 241, 241, 1),
                         border: Border.all(
@@ -37,7 +43,7 @@ class HourWidget extends StatelessWidget {
                       ),
                     ),
                     Container(
-                      height: heightOfHourWidget / 2,
+                      height: (heightOfHourWidget - borderWidth) / 2,
                       decoration: BoxDecoration(
                         color: const Color.fromRGBO(229, 229, 229, 1),
                         border: Border.all(

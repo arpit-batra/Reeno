@@ -19,11 +19,6 @@ class BookingsProvider with ChangeNotifier {
     final List<Booking> todaysBookings = [];
     for (final element in bookings.docs) {
       todaysBookings.add(element.data());
-      print("startTime -> ${element.data().startTime}");
-      print("endTime -> ${element.data().endTime}");
-      print("date -> ${element.data().date}");
-      print("userId -> ${element.data().userId}");
-      print("sportCentreId -> ${element.data().sportCentreId}");
     }
 
     _oneDateBookings = todaysBookings;
