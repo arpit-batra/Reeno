@@ -1,26 +1,33 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+
 import 'package:reeno/providers/selected_date_provider.dart';
 import 'package:reeno/providers/sport_centres_provider.dart';
 import 'package:reeno/widgets/app_drawer.dart';
 import 'package:reeno/widgets/loading_widget.dart';
 import 'package:reeno/widgets/schedule_widgets/date_picker.dart';
-import 'package:reeno/widgets/schedule_widgets/dates_strip.dart';
 import 'package:reeno/widgets/schedule_widgets/day_schedule.dart';
+import 'package:reeno/widgets/schedule_widgets/time_selector.dart';
 
 class ScheduleScreen extends StatelessWidget {
   const ScheduleScreen({Key? key}) : super(key: key);
   static const routeName = "/schedule-screen";
 
+  void showTimePickerDialog(BuildContext context) {
+    showDialog(
+        context: context,
+        builder: (context) {
+          return TimeSelector();
+        });
+  }
+
   @override
   Widget build(BuildContext context) {
-    // final centreMeta = Provider.of<SportCentresProvider>(context, listen: false)
-    //     .selectedCentreMeta;
-    // final selectedDateProvider =
-    //     Provider.of<SelectedDateProvider>(context).selectedDate;
+    final centreMeta =
+        Provider.of<SportCentresProvider>(context).selectedCentreMeta;
     return Scaffold(
-      // appBar: AppBar(title: Text(centreMeta.title)),
-      appBar: AppBar(title: Text("dfgf")),
+      appBar: AppBar(title: Text(centreMeta.title)),
+      // appBar: AppBar(title: Text("dfgf")),
       drawer: const AppDrawer(),
       body: FutureBuilder(
         future: Provider.of<SelectedDateProvider>(context, listen: false)
@@ -43,7 +50,9 @@ class ScheduleScreen extends StatelessWidget {
                 width: double.infinity,
                 height: 64,
                 child: ElevatedButton(
-                    onPressed: (() {}),
+                    onPressed: (() {
+                      showTimePickerDialog(context);
+                    }),
                     child: const Text(
                       'Book my slot',
                       style: TextStyle(

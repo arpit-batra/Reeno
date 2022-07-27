@@ -3,26 +3,36 @@ import 'package:flutter/material.dart';
 import 'package:reeno/models/booking.dart';
 
 class BookingsProvider with ChangeNotifier {
-  List<Booking> _oneDateBookings = [];
+  final String selectedSportCentreId;
+  final String selectedDate;
 
-  Future<List<Booking>> fetchTodaysBookingsForCentre(
-      String date, String sportCentreId) async {
+  BookingsProvider(this.selectedSportCentreId, this.selectedDate);
+
+  List<Booking> _selectedDateSelectedCentreBookings = [];
+
+  List<Booking> get selectedDateSelectedCentreBookings {
+    return [..._selectedDateSelectedCentreBookings];
+  }
+
+  Future<void> fetchSelectedDateSelectedCentreBookings() async {
+    print("Sport Centre Id ${selectedSportCentreId}");
+    print(" Selected Date ${selectedDate}");
+    // print("Bookings Provider");
     final docRef = FirebaseFirestore.instance
         .collection('bookings')
         .withConverter(
             fromFirestore: Booking.fromFirestore,
             toFirestore: (Booking booking, _) => booking.toFirestore());
     final bookings = await docRef
-        .where("sportCentreId", isEqualTo: sportCentreId)
-        .where("date", isEqualTo: date)
+        .where("sportCentreId", isEqualTo: selectedSportCentreId)
+        .where("date", isEqualTo: selectedDate)
         .get();
     final List<Booking> todaysBookings = [];
     for (final element in bookings.docs) {
       todaysBookings.add(element.data());
     }
 
-    _oneDateBookings = todaysBookings;
-    notifyListeners();
-    return todaysBookings;
+    _selectedDateSelectedCentreBookings = todaysBookings;
+    // notifyListeners();
   }
 }

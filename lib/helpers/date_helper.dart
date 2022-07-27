@@ -1,3 +1,6 @@
+import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
+
 class DateHelper {
   static String getDayOfWeek(DateTime date) {
     final day = date.weekday;
@@ -102,5 +105,49 @@ class DateHelper {
   static double getPlacementFromTop(DateTime startTime, double heightPerHour) {
     final startOfDay = DateTime(startTime.year, startTime.month, startTime.day);
     return (startTime.difference(startOfDay).inSeconds * heightPerHour) / 3600;
+  }
+
+  static int _convertTimeOfDayInMinutesOfDay(TimeOfDay tod) {
+    return (tod.hour * 60) + tod.minute;
+  }
+
+  static Duration convertMinutesToDuration(int mins) {
+    return Duration(hours: (mins / 60).floor(), minutes: mins.remainder(60));
+  }
+
+  static bool isOverlapping(
+      TimeOfDay s1, TimeOfDay e1, TimeOfDay s2, TimeOfDay e2) {
+    final s1InMinutes = _convertTimeOfDayInMinutesOfDay(s1);
+    final e1InMinutes = _convertTimeOfDayInMinutesOfDay(e1);
+    final s2InMinutes = _convertTimeOfDayInMinutesOfDay(s2);
+    final e2InMinutes = _convertTimeOfDayInMinutesOfDay(e2);
+    if (s2InMinutes > e1InMinutes || s1InMinutes > e2InMinutes) {
+      print(
+          "s1->$s1InMinutes e1->$e1InMinutes s2->$s2InMinutes e2->$e2InMinutes");
+      return false;
+    } else {
+      return true;
+    }
+  }
+
+  static Duration differenceBetween(TimeOfDay startTime, TimeOfDay endTime) {
+    return convertMinutesToDuration(_convertTimeOfDayInMinutesOfDay(endTime) -
+        _convertTimeOfDayInMinutesOfDay(startTime));
+  }
+
+  static String durationInString(Duration duration) {
+    return "${duration.inHours}hrs ${duration.inMinutes - (duration.inHours * 60)}mins";
+  }
+
+  static double costForDuration(Duration duration, double hourlyRate) {
+    return (duration.inHours +
+            ((duration.inMinutes - (duration.inHours * 60)) / 60)) *
+        hourlyRate;
+  }
+
+  static String DateTimeToTimeOfDayInString(DateTime dateTime) {
+    var formatter = DateFormat("jm");
+    // return "${dateTime.}:${dateTime.minute.}";
+    return formatter.format(dateTime);
   }
 }

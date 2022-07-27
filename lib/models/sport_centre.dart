@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 enum Sport { badminton, futsal, cricket, none }
@@ -38,21 +39,26 @@ class SportCentre {
   final double? rating;
   final List<Review>? reviews;
   final double hourlyRate;
-  final Duration? minimumTime;
-  final Duration? leastInterval;
+  final Duration minimumTime;
+  final Duration leastInterval;
+  final TimeOfDay openingTime;
+  final TimeOfDay closingTime;
 
-  SportCentre(
-      {required this.id,
-      required this.title,
-      required this.address,
-      required this.sport,
-      required this.images,
-      required this.description,
-      this.rating,
-      this.reviews,
-      required this.hourlyRate,
-      this.leastInterval,
-      this.minimumTime});
+  SportCentre({
+    required this.id,
+    required this.title,
+    required this.address,
+    required this.sport,
+    required this.images,
+    required this.description,
+    this.rating,
+    this.reviews,
+    required this.hourlyRate,
+    required this.leastInterval,
+    required this.minimumTime,
+    required this.openingTime,
+    required this.closingTime,
+  });
 
   factory SportCentre.fromFirestore(
     DocumentSnapshot<Map<String, dynamic>> snapshot,
@@ -86,7 +92,9 @@ class SportCentre {
                 .toList()
             : null, //
         leastInterval: Duration(minutes: data?['leastInterval']),
-        minimumTime: Duration(minutes: data?['minimumTime']));
+        minimumTime: Duration(minutes: data?['minimumTime']),
+        openingTime: TimeOfDay(hour: data?['openingTime'], minute: 0),
+        closingTime: TimeOfDay(hour: data?['closingTime'], minute: 0));
   }
 
 // Not used but was required for the converter attribute. Obvio, doesnt function as reqd

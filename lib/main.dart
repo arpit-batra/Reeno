@@ -4,9 +4,11 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:provider/provider.dart';
 import 'package:reeno/providers/bookings_provider.dart';
 import 'package:reeno/providers/phone_provider.dart';
+import 'package:reeno/providers/selected_booking_provider.dart';
 import 'package:reeno/providers/sport_centres_provider.dart';
 import 'package:reeno/providers/user_provider.dart';
 import 'package:reeno/providers/selected_date_provider.dart';
+import 'package:reeno/screens/booking_summary.dart';
 import 'package:reeno/screens/centre_info_screen.dart';
 import 'package:reeno/screens/schedule_screen.dart';
 import 'package:reeno/screens/sport_centre_list_screen.dart';
@@ -53,10 +55,48 @@ class MyApp extends StatelessWidget {
       providers: [
         ChangeNotifierProvider.value(value: PhoneProvider()),
         ChangeNotifierProvider.value(value: UserProvider()),
-        ChangeNotifierProvider.value(value: SportCentresProvider())
+        ChangeNotifierProvider.value(value: SportCentresProvider()),
+        ChangeNotifierProvider.value(value: SelectedDateProvider()),
+        ChangeNotifierProxyProvider2<SportCentresProvider, SelectedDateProvider,
+                BookingsProvider>(
+            create: ((context) => BookingsProvider("", "")),
+            update: (BuildContext context, sportCentresProvider,
+                selectedDateProvider, prevBookingProvider) {
+              return BookingsProvider(sportCentresProvider.selectedCentreId,
+                  selectedDateProvider.selectedDateInString);
+            }),
+        ChangeNotifierProxyProvider3<UserProvider, SportCentresProvider,
+                SelectedDateProvider, SelectedBookingProvider>(
+            create: ((context) => SelectedBookingProvider(
+                selectedCentreId: "",
+                selectedCentreTitle: "",
+                selectedCentreAddress: "",
+                selectedDateAsString: "",
+                selectedDate: DateTime.now(),
+                myUserId: "",
+                myUserName: "",
+                selectedStartTime: DateTime.now(),
+                selectedEndTime: DateTime.now(),
+                amount: 0.0)),
+            update: (ctx, userProvider, selectedSport, selectedDate,
+                selectedBooking) {
+              return SelectedBookingProvider(
+                  selectedCentreId: selectedSport.selectedCentreId,
+                  selectedCentreTitle: selectedSport.selectedSportCentre.title,
+                  selectedCentreAddress:
+                      selectedSport.selectedSportCentre.address.displayAddress,
+                  selectedDateAsString: selectedDate.selectedDateInString,
+                  selectedDate: selectedDate.selectedDateInDateTime,
+                  myUserId: userProvider.user!.id,
+                  myUserName: userProvider.user!.name,
+                  selectedStartTime: selectedBooking!.selectedStartTime,
+                  selectedEndTime: selectedBooking.selectedEndTime,
+                  amount: selectedBooking.amount);
+            })
       ],
       child: MaterialApp(
         title: 'Flutter Demo',
+        debugShowCheckedModeBanner: false,
         theme: ThemeData(
           primarySwatch: const MaterialColor(0xFF575DFB, themeColor),
           elevatedButtonTheme: ElevatedButtonThemeData(
@@ -117,13 +157,8 @@ class MyApp extends StatelessWidget {
           OtpScreen.routeName: (context) => OtpScreen(),
           GetUserInfoScreen.routeName: (context) => GetUserInfoScreen(),
           CentreInfoScreen.routeName: (context) => CentreInfoScreen(),
-          ScheduleScreen.routeName: (context) => MultiProvider(
-                providers: [
-                  ChangeNotifierProvider.value(value: SelectedDateProvider()),
-                  ChangeNotifierProvider.value(value: BookingsProvider()),
-                ],
-                child: ScheduleScreen(),
-              )
+          ScheduleScreen.routeName: (context) => ScheduleScreen(),
+          BookingSummary.routeName: (context) => BookingSummary(),
         },
       ),
     );

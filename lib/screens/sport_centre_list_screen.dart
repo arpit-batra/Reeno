@@ -41,6 +41,9 @@ class _SportCentreListScreenState extends State<SportCentreListScreen> {
             Future((() =>
                 Navigator.of(context).pushNamed(GetUserInfoScreen.routeName)));
           }
+        }).catchError((error) {
+          print(error);
+          print(error.toString());
         });
       }
       if (enteredEmail != null && enteredEmail != "") {
@@ -82,7 +85,7 @@ class _SportCentreListScreenState extends State<SportCentreListScreen> {
   @override
   Widget build(BuildContext context) {
     final metas = Provider.of<SportCentresProvider>(context).sportCentreMetas;
-    print("meta lenght -> ${metas.length}");
+    // print("metas 0 ${metas.length}");
     return Scaffold(
       appBar: AppBar(
         title: Consumer<UserProvider>(
@@ -109,8 +112,8 @@ class _SportCentreListScreenState extends State<SportCentreListScreen> {
           itemBuilder: (context, index) {
             return GestureDetector(
               onTap: (() {
-                // Provider.of<SportCentresProvider>(context, listen: false)
-                //     .setSelectCentre(metas[index].detailsId);
+                Provider.of<SportCentresProvider>(context, listen: false)
+                    .setSelectCentre(metas[index].detailsId);
                 Navigator.of(context).pushNamed(CentreInfoScreen.routeName,
                     arguments: metas[index].detailsId);
               }),

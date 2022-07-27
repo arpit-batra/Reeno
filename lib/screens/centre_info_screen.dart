@@ -16,21 +16,34 @@ class CentreInfoScreen extends StatefulWidget {
 }
 
 class _CentreInfoScreenState extends State<CentreInfoScreen> {
+  bool _isFirstRun = true;
+  var centreId;
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    if (_isFirstRun) {
+      _isFirstRun = false;
+      centreId = ModalRoute.of(context)!.settings.arguments as String;
+      // Provider.of<SportCentresProvider>(context, listen: false)
+      //     .setSelectCentre(centreId);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
-    final centreId = ModalRoute.of(context)!.settings.arguments as String;
-    Provider.of<SportCentresProvider>(context, listen: false)
-        .setSelectCentre(centreId);
-
     return FutureBuilder(
-      future: Provider.of<SportCentresProvider>(context)
-          .getsportCentreById(centreId),
+      future: Provider.of<SportCentresProvider>(context, listen: false)
+          .fetchSelectedSportCentre(),
       builder: ((context, snapshot) {
-        if (snapshot.hasError) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return const LoadingScreen();
+        } else if (snapshot.hasError) {
           //TODO create error screen if data is not fetched from firebase
           return const Scaffold();
-        } else if (snapshot.hasData) {
-          final centre = snapshot.data as SportCentre;
+        } else {
+          // final centre = snapshot.data as SportCentre;
+          final centre =
+              Provider.of<SportCentresProvider>(context).selectedSportCentre;
           return Scaffold(
               appBar: AppBar(title: Text(centre.title)),
               body: Column(
@@ -39,7 +52,7 @@ class _CentreInfoScreenState extends State<CentreInfoScreen> {
                     height: 250,
                     child: ScrollSnapList(
                         itemBuilder: (context, index) {
-                          return Container(
+                          return SizedBox(
                               width: MediaQuery.of(context).size.width,
                               child: Image.network(
                                 centre.images![index],
@@ -65,8 +78,6 @@ class _CentreInfoScreenState extends State<CentreInfoScreen> {
                   )
                 ],
               ));
-        } else {
-          return const LoadingScreen();
         }
       }),
     );

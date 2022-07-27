@@ -11,7 +11,8 @@ class SelectedDateProvider with ChangeNotifier {
     //   notifyListeners();
     // }
 
-    var formatter = DateFormat("yyyy-MM-dd");
+    var formatter = DateFormat("dd-MM-yyyy");
+    if (_selectedDate == null) return "";
     return formatter.format(_selectedDate!);
     // return DateTime.parse(_selectedDate!.toIso8601String());
   }

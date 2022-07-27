@@ -4,13 +4,9 @@ import 'package:reeno/models/sport_centre.dart';
 import 'package:reeno/models/sport_centre_meta.dart';
 
 class SportCentresProvider with ChangeNotifier {
-  List<SportCentre> _sportCentres = [];
   List<SportCentreMeta> _sportCentreMetas = [];
   String _selectedCentreId = "";
-
-  List<SportCentre> get sportCentres {
-    return [..._sportCentres];
-  }
+  SportCentre? _selectedSportCentre;
 
   List<SportCentreMeta> get sportCentreMetas {
     return [..._sportCentreMetas];
@@ -25,13 +21,22 @@ class SportCentresProvider with ChangeNotifier {
     return _sportCentreMetas.firstWhere((element) => element.detailsId == id);
   }
 
-  void setSelectCentre(String id) {
-    _selectedCentreId = id;
+  String get selectedCentreId {
+    return _selectedCentreId;
   }
 
+  // SportCentre get selectedSportCentre {
+  //   return _sportCentres
+  //       .firstWhere((element) => element.id == _selectedCentreId);
+  // }
+
   SportCentre get selectedSportCentre {
-    return _sportCentres
-        .firstWhere((element) => element.id == _selectedCentreId);
+    return _selectedSportCentre!;
+  }
+
+  void setSelectCentre(String id) {
+    _selectedCentreId = id;
+    notifyListeners();
   }
 
   Future<SportCentre?> getsportCentreById(String id) async {
@@ -49,7 +54,22 @@ class SportCentresProvider with ChangeNotifier {
     }
   }
 
+  Future<void> fetchSelectedSportCentre() async {
+    final docRef = FirebaseFirestore.instance
+        .collection('sport_centres')
+        .withConverter(
+            fromFirestore: SportCentre.fromFirestore,
+            toFirestore: (SportCentre sportCentre, _) =>
+                sportCentre.toFirestore());
+    final centre = await docRef.doc(_selectedCentreId).get();
+    if (centre.data() != null) {
+      _selectedSportCentre = centre.data();
+      notifyListeners();
+    }
+  }
+
   Future<void> fetchSportCentresMetas() async {
+    print("Fetching Sport Centre Metas");
     final docRef = FirebaseFirestore.instance
         .collection('sport_centres_meta')
         .withConverter(
@@ -57,22 +77,15 @@ class SportCentresProvider with ChangeNotifier {
             toFirestore: (SportCentreMeta sportCentre, _) =>
                 sportCentre.toFirestore());
     final centres = await docRef.get();
-    final List<SportCentreMeta> metaList = [];
+    // final List<SportCentreMeta> metaList = [];
+    // for (final element in centres.docs) {
+    //   metaList.add(element.data());
+    // }
+    // _sportCentreMetas = metaList;
+    _sportCentreMetas = [];
     for (final element in centres.docs) {
-      metaList.add(element.data());
+      _sportCentreMetas.add(element.data());
     }
-    _sportCentreMetas = metaList;
     notifyListeners();
   }
-
-  // Future<void> fetchSportCentres() async {
-  //   final docRef = FirebaseFirestore.instance
-  //       .collection('sport_centres')
-  //       .withConverter(
-  //           fromFirestore: SportCentre.fromFirestore,
-  //           toFirestore: (SportCentre sportCentre, _) =>
-  //               sportCentre.toFirestore());
-  //   final centres = await docRef.get();
-  //   print("PROVV3 ${centres.docs.first.data().address.coordinates}");
-  // }
 }
