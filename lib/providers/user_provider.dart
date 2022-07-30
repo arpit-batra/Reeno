@@ -8,11 +8,12 @@ class UserProvider with ChangeNotifier {
 
   CustomUser.User? get user {
     return CustomUser.User(
-        id: _user?.id,
-        email: _user?.email,
-        phone: _user?.phone,
-        imageUrl: _user?.imageUrl,
-        name: _user?.name);
+      id: _user?.id ?? "",
+      email: _user?.email ?? "",
+      phone: _user?.phone ?? "",
+      imageUrl: _user?.imageUrl ?? "",
+      name: _user?.name ?? "",
+    );
   }
 
   Future<void> fetchUser() async {

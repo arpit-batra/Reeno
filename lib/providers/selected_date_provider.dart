@@ -18,6 +18,9 @@ class SelectedDateProvider with ChangeNotifier {
   }
 
   DateTime get selectedDateInDateTime {
+    ////////////////////////////////////////////////
+    if (_selectedDate == null) return DateTime.now();
+    ////////////////////////////////////////////////
     return DateTime.parse(_selectedDate!.toIso8601String());
   }
 

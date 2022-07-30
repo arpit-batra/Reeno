@@ -2,7 +2,7 @@ import 'dart:math' as math;
 import 'package:flutter/material.dart';
 import 'package:reeno/providers/selected_booking_provider.dart';
 import 'package:reeno/screens/booking_summary.dart';
-import 'package:reeno/widgets/customized_card.dart';
+import 'package:reeno/widgets/card_ui/customized_card.dart';
 import 'package:time_range_picker/time_range_picker.dart';
 import 'package:provider/provider.dart';
 import 'package:reeno/helpers/date_helper.dart';

@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:reeno/models/sport_centre.dart';
 import 'package:reeno/models/sport_centre_meta.dart';
 
@@ -31,6 +32,23 @@ class SportCentresProvider with ChangeNotifier {
   // }
 
   SportCentre get selectedSportCentre {
+    ////////////////////////////////////////////////
+    if (_selectedSportCentre == null) {
+      return SportCentre(
+        id: "",
+        title: "",
+        address: Address(displayAddress: "", coordinates: LatLng(0, 0)),
+        sport: Sport.none,
+        images: [],
+        description: "",
+        hourlyRate: 0,
+        leastInterval: Duration(),
+        minimumTime: Duration(),
+        openingTime: TimeOfDay(hour: 0, minute: 0),
+        closingTime: TimeOfDay(hour: 0, minute: 0),
+      );
+      ////////////////////////////////////////////////
+    }
     return _selectedSportCentre!;
   }
 

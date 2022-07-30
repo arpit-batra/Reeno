@@ -12,6 +12,7 @@ import 'package:reeno/providers/user_provider.dart';
 
 class SportCentreListScreen extends StatefulWidget {
   const SportCentreListScreen({Key? key}) : super(key: key);
+  static const routeName = 'sport-centre-list';
 
   @override
   State<SportCentreListScreen> createState() => _SportCentreListScreenState();

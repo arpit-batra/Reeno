@@ -10,6 +10,7 @@ import 'package:reeno/providers/user_provider.dart';
 import 'package:reeno/providers/selected_date_provider.dart';
 import 'package:reeno/screens/booking_summary.dart';
 import 'package:reeno/screens/centre_info_screen.dart';
+import 'package:reeno/screens/payment_results/after_payment_screen.dart';
 import 'package:reeno/screens/schedule_screen.dart';
 import 'package:reeno/screens/sport_centre_list_screen.dart';
 import 'package:reeno/screens/login/get_user_info_screen.dart';
@@ -153,12 +154,14 @@ class MyApp extends StatelessWidget {
           },
         ),
         routes: {
+          SportCentreListScreen.routeName: (context) => SportCentreListScreen(),
           PhoneLoginScreen.routeName: (context) => PhoneLoginScreen(),
           OtpScreen.routeName: (context) => OtpScreen(),
           GetUserInfoScreen.routeName: (context) => GetUserInfoScreen(),
           CentreInfoScreen.routeName: (context) => CentreInfoScreen(),
           ScheduleScreen.routeName: (context) => ScheduleScreen(),
           BookingSummary.routeName: (context) => BookingSummary(),
+          AfterPaymentScreen.routeName: (context) => AfterPaymentScreen(),
         },
       ),
     );
