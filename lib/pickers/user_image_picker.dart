@@ -24,10 +24,10 @@ class _UserImagePickerState extends State<UserImagePicker> {
     var _pickedImageXFile;
     if (imageType == ImageType.camera) {
       _pickedImageXFile = await _imagePicker.pickImage(
-          source: ImageSource.camera, imageQuality: 90, maxWidth: 150);
+          source: ImageSource.camera, imageQuality: 85, maxWidth: 150);
     } else {
       _pickedImageXFile = await _imagePicker.pickImage(
-          source: ImageSource.gallery, imageQuality: 90, maxWidth: 150);
+          source: ImageSource.gallery, imageQuality: 85, maxWidth: 150);
     }
     setState(() {
       _pickedImageFile = File(_pickedImageXFile!.path);

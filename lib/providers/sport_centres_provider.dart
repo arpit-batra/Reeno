@@ -33,22 +33,28 @@ class SportCentresProvider with ChangeNotifier {
 
   SportCentre get selectedSportCentre {
     ////////////////////////////////////////////////
-    if (_selectedSportCentre == null) {
-      return SportCentre(
-        id: "",
-        title: "",
-        address: Address(displayAddress: "", coordinates: LatLng(0, 0)),
-        sport: Sport.none,
-        images: [],
-        description: "",
-        hourlyRate: 0,
-        leastInterval: Duration(),
-        minimumTime: Duration(),
-        openingTime: TimeOfDay(hour: 0, minute: 0),
-        closingTime: TimeOfDay(hour: 0, minute: 0),
-      );
-      ////////////////////////////////////////////////
-    }
+    // if (_selectedSportCentre == null) {
+    //   print("HE HE HE");
+    //   return SportCentre(
+    //       id: "sadfdsfsdf",
+    //       title: "sdfsdf",
+    //       address:
+    //           Address(displayAddress: "sdgsfhnfga", coordinates: LatLng(0, 0)),
+    //       sport: Sport.badminton,
+    //       images: [
+    //         "https://media.istockphoto.com/photos/line-on-green-badminton-court-picture-id1040174714?k=20&m=1040174714&s=612x612&w=0&h=euM1AD1Qtqbwfkp2hpI12X9-HEwj7wylp1HXXVQkQKA=",
+    //         "https://t3.ftcdn.net/jpg/02/23/27/28/360_F_223272802_WitEnJSzsXNKaqESPFSdfmuR0KeDjbV6.jpg"
+    //       ],
+    //       description: "This is a sample",
+    //       hourlyRate: 200,
+    //       leastInterval: Duration(seconds: 1),
+    //       minimumTime: Duration(seconds: 1),
+    //       openingTime: TimeOfDay(hour: 0, minute: 0),
+    //       closingTime: TimeOfDay(hour: 0, minute: 0),
+    //       numberOfCourts: 2,
+    //       amenities: ["sdff", "sdfsdf", "ehdfgh"]);
+    // }
+    ////////////////////////////////////////////////
     return _selectedSportCentre!;
   }
 

@@ -25,51 +25,58 @@ class DateBox extends StatelessWidget {
             BoxShadow(
                 color: Color.fromRGBO(147, 147, 147, 1),
                 blurRadius: 3,
-                // blurStyle: BlurStyle.solid,
                 offset: Offset.fromDirection(0, 1)),
           ],
           color: isSelected
               ? const Color.fromARGB(1023, 255, 0, 61)
               : const Color.fromARGB(1023, 241, 241, 241),
-          // border: Border.all(
-          //   width: 2,
-          //   color: const Color.fromRGBO(147, 147, 147, 1),
-          // ),
         ),
         height: 80,
         width: MediaQuery.of(context).size.width / 6,
         padding: const EdgeInsets.all(8.0),
         child: Column(
           children: <Widget>[
-            Text(
-              DateHelper.getDayOfWeek(date),
-              style: TextStyle(
-                color: isSelected
-                    ? Colors.white
-                    : Color.fromRGBO(147, 147, 147, 1),
-                fontSize: 14,
+            Expanded(
+              flex: 1,
+              child: Text(
+                DateHelper.getDayOfWeek(date),
+                style: TextStyle(
+                  color: isSelected
+                      ? Colors.white
+                      : Color.fromRGBO(147, 147, 147, 1),
+                  fontSize: 14,
+                ),
               ),
             ),
-            const SizedBox(
-              height: 4,
-            ),
-            Text(
-              "${DateHelper.getdayOfMonth(date)}",
-              style: TextStyle(
-                color: isSelected ? Colors.white : Color.fromRGBO(0, 0, 0, 1),
-                fontSize: 32,
+            // const SizedBox(
+            //   height: 4,
+            // ),
+            Expanded(
+              flex: 3,
+              child: Center(
+                child: Text(
+                  "${DateHelper.getdayOfMonth(date)}",
+                  style: TextStyle(
+                    color:
+                        isSelected ? Colors.white : Color.fromRGBO(0, 0, 0, 1),
+                    fontSize: 32,
+                  ),
+                ),
               ),
             ),
-            const SizedBox(
-              height: 4,
-            ),
-            Text(
-              DateHelper.getMonthShort(date),
-              style: TextStyle(
-                color: isSelected
-                    ? Colors.white
-                    : Color.fromRGBO(147, 147, 147, 1),
-                fontSize: 14,
+            // const SizedBox(
+            //   height: 4,
+            // ),
+            Expanded(
+              flex: 1,
+              child: Text(
+                DateHelper.getMonthShort(date),
+                style: TextStyle(
+                  color: isSelected
+                      ? Colors.white
+                      : Color.fromRGBO(147, 147, 147, 1),
+                  fontSize: 14,
+                ),
               ),
             )
           ],

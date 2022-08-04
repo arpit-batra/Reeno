@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:reeno/widgets/loading_widget.dart';
 
 class SportCentreListTile extends StatelessWidget {
   final String title;
@@ -19,7 +20,10 @@ class SportCentreListTile extends StatelessWidget {
           child: Stack(
             fit: StackFit.expand,
             children: [
-              Image.network(imageUrl, fit: BoxFit.cover),
+              Image.network(
+                imageUrl,
+                fit: BoxFit.cover,
+              ),
               Container(
                 decoration: const BoxDecoration(
                   gradient: LinearGradient(

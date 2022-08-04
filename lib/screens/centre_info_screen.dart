@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:maps_launcher/maps_launcher.dart';
 import 'package:reeno/screens/schedule_screen.dart';
-import 'package:scroll_snap_list/scroll_snap_list.dart';
+
 import 'package:reeno/providers/sport_centres_provider.dart';
 import 'package:reeno/models/sport_centre.dart';
 import 'package:reeno/screens/loading_screen.dart';
+import 'package:reeno/widgets/centre_info_screen_widgets/centre_images_widget.dart';
 
 class CentreInfoScreen extends StatefulWidget {
   const CentreInfoScreen({Key? key}) : super(key: key);
@@ -24,9 +26,157 @@ class _CentreInfoScreenState extends State<CentreInfoScreen> {
     if (_isFirstRun) {
       _isFirstRun = false;
       centreId = ModalRoute.of(context)!.settings.arguments as String;
-      // Provider.of<SportCentresProvider>(context, listen: false)
-      //     .setSelectCentre(centreId);
+      print("Centre ID -> $centreId");
     }
+  }
+
+  Widget _bookingButtons(SportCentre centre) {
+    return Column(
+      children: List<Widget>.generate(centre.numberOfCourts, (index) {
+        return Container(
+          padding: const EdgeInsets.fromLTRB(16, 16, 16, 0),
+          width: double.infinity,
+          child: ElevatedButton(
+              onPressed: (() {
+                Navigator.of(context)
+                    .pushNamed(ScheduleScreen.routeName, arguments: index);
+              }),
+              child: Text(
+                centre.numberOfCourts == 1
+                    ? 'Book Court'
+                    : 'Book Court ${index + 1}',
+                style: const TextStyle(fontSize: 18),
+              )),
+        );
+      }),
+    );
+  }
+
+  Widget _bullet() {
+    return Container(
+      height: 10.0,
+      width: 10.0,
+      decoration: const BoxDecoration(
+        color: Color.fromRGBO(24, 28, 123, 1),
+        shape: BoxShape.circle,
+      ),
+    );
+  }
+
+  TextStyle _headingStyle() {
+    return TextStyle(
+        fontSize: 24,
+        fontWeight: FontWeight.bold,
+        color: Theme.of(context).primaryColor);
+  }
+
+  TextStyle _contentStyle() {
+    return const TextStyle(fontSize: 16);
+  }
+
+  Widget _amenities(SportCentre centre) {
+    final amenities = centre.amenities;
+    return Padding(
+      padding: const EdgeInsets.all(16.0),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            "Amenities",
+            style: _headingStyle(),
+          ),
+          const SizedBox(
+            height: 16,
+          ),
+          GridView.builder(
+            shrinkWrap: true,
+            gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
+              maxCrossAxisExtent: 300,
+              childAspectRatio: 8 / 1,
+              crossAxisSpacing: 10,
+              mainAxisSpacing: 10,
+            ),
+            itemBuilder: (context, index) {
+              return Row(
+                children: [
+                  _bullet(),
+                  const SizedBox(
+                    width: 8,
+                  ),
+                  Text(
+                    amenities![index],
+                    style: _contentStyle(),
+                  ),
+                ],
+              );
+            },
+            itemCount: amenities == null ? 0 : amenities.length,
+          )
+        ],
+      ),
+    );
+  }
+
+  Widget _description(SportCentre centre) {
+    final description = centre.description;
+    return Container(
+      padding: const EdgeInsets.all(16.0),
+      width: double.infinity,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            "Description",
+            style: _headingStyle(),
+          ),
+          const SizedBox(
+            height: 16,
+          ),
+          Text(
+            description,
+            style: _contentStyle(),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _address(SportCentre centre) {
+    final address = centre.address;
+    return Container(
+      padding: const EdgeInsets.all(16),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            "Address",
+            style: _headingStyle(),
+          ),
+          const SizedBox(
+            height: 16,
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(
+                address.displayAddress,
+                style: _contentStyle(),
+              ),
+              IconButton(
+                onPressed: () {
+                  MapsLauncher.launchCoordinates(address.coordinates.latitude,
+                      address.coordinates.longitude);
+                },
+                icon: const Icon(
+                  Icons.directions,
+                  color: Color.fromRGBO(24, 28, 123, 1),
+                ),
+              )
+            ],
+          ),
+        ],
+      ),
+    );
   }
 
   @override
@@ -41,43 +191,22 @@ class _CentreInfoScreenState extends State<CentreInfoScreen> {
           //TODO create error screen if data is not fetched from firebase
           return const Scaffold();
         } else {
-          // final centre = snapshot.data as SportCentre;
           final centre =
               Provider.of<SportCentresProvider>(context).selectedSportCentre;
           return Scaffold(
-              appBar: AppBar(title: Text(centre.title)),
-              body: Column(
+            appBar: AppBar(title: Text(centre.title)),
+            body: SingleChildScrollView(
+              child: Column(
                 children: <Widget>[
-                  SizedBox(
-                    height: 250,
-                    child: ScrollSnapList(
-                        itemBuilder: (context, index) {
-                          return SizedBox(
-                              width: MediaQuery.of(context).size.width,
-                              child: Image.network(
-                                centre.images![index],
-                                fit: BoxFit.cover,
-                              ));
-                        },
-                        itemCount: centre.images?.length ?? 0,
-                        itemSize: MediaQuery.of(context).size.width,
-                        onItemFocus: (index) {}),
-                  ),
-                  Container(
-                    padding: const EdgeInsets.all(16),
-                    width: double.infinity,
-                    child: ElevatedButton(
-                        onPressed: (() {
-                          Navigator.of(context)
-                              .pushNamed(ScheduleScreen.routeName);
-                        }),
-                        child: const Text(
-                          'Book a slot',
-                          style: TextStyle(fontSize: 18),
-                        )),
-                  )
+                  CentreImagesWidget(centre),
+                  _bookingButtons(centre),
+                  _amenities(centre),
+                  _description(centre),
+                  _address(centre),
                 ],
-              ));
+              ),
+            ),
+          );
         }
       }),
     );

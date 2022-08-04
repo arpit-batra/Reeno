@@ -83,71 +83,75 @@ class _GetUserInfoScreenState extends State<GetUserInfoScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Stack(
-        children: [
-          Center(
-            child: Padding(
-              padding: const EdgeInsets.all(32.0),
-              child: Form(
-                key: _formKey,
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    UserImagePicker(_pickedImage),
-                    const SizedBox(
-                      height: 30,
-                    ),
-                    TextFormField(
-                      autocorrect: false,
-                      textCapitalization: TextCapitalization.words,
-                      decoration: const InputDecoration(labelText: 'Full Name'),
-                      validator: (value) {
-                        if (value == null || value.isEmpty) {
-                          return "Enter a valid name";
-                        }
-                        return null;
-                      },
-                      onSaved: (value) {
-                        _userFullName = value;
-                      },
-                    ),
-                    Container(
-                      margin: const EdgeInsets.symmetric(vertical: 16),
-                      width: double.infinity,
-                      height: 60,
-                      child: ElevatedButton(
-                        onPressed: _loadingState
-                            ? null
-                            : () {
-                                _submitInfo(context, () {
-                                  print("onSuccess call initiated");
-                                  if (!mounted) {
-                                    return;
-                                  }
-
-                                  print("Mounted, this should not run");
-                                  Navigator.of(context).pop();
-                                  print(Navigator.of(context).toString());
-                                });
-                              },
-                        child: const Text('Submit'),
+    return WillPopScope(
+      onWillPop: (() async => false),
+      child: Scaffold(
+        body: Stack(
+          children: [
+            Center(
+              child: Padding(
+                padding: const EdgeInsets.all(32.0),
+                child: Form(
+                  key: _formKey,
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      UserImagePicker(_pickedImage),
+                      const SizedBox(
+                        height: 30,
                       ),
-                    ),
-                  ],
+                      TextFormField(
+                        autocorrect: false,
+                        textCapitalization: TextCapitalization.words,
+                        decoration:
+                            const InputDecoration(labelText: 'Full Name'),
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return "Enter a valid name";
+                          }
+                          return null;
+                        },
+                        onSaved: (value) {
+                          _userFullName = value;
+                        },
+                      ),
+                      Container(
+                        margin: const EdgeInsets.symmetric(vertical: 16),
+                        width: double.infinity,
+                        height: 60,
+                        child: ElevatedButton(
+                          onPressed: _loadingState
+                              ? null
+                              : () {
+                                  _submitInfo(context, () {
+                                    print("onSuccess call initiated");
+                                    if (!mounted) {
+                                      return;
+                                    }
+
+                                    print("Mounted, this should not run");
+                                    Navigator.of(context).pop();
+                                    print(Navigator.of(context).toString());
+                                  });
+                                },
+                          child: const Text('Submit'),
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
               ),
             ),
-          ),
-          if (_loadingState)
-            Container(
-              color: const Color.fromARGB(100, 255, 255, 255),
-            ),
-          if (_loadingState)
-            const Center(
-              child: CircularProgressIndicator(),
-            ),
-        ],
+            if (_loadingState)
+              Container(
+                color: const Color.fromARGB(100, 255, 255, 255),
+              ),
+            if (_loadingState)
+              const Center(
+                child: CircularProgressIndicator(),
+              ),
+          ],
+        ),
       ),
     );
   }

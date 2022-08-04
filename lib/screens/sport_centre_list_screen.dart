@@ -5,6 +5,7 @@ import 'package:provider/provider.dart';
 
 import 'package:reeno/providers/sport_centres_provider.dart';
 import 'package:reeno/screens/centre_info_screen.dart';
+import 'package:reeno/screens/loading_screen.dart';
 import 'package:reeno/screens/login/get_user_info_screen.dart';
 import 'package:reeno/widgets/app_drawer.dart';
 import 'package:reeno/widgets/sport_centre_list_widgets/sport_centre_list_tile.dart';
@@ -20,6 +21,7 @@ class SportCentreListScreen extends StatefulWidget {
 
 class _SportCentreListScreenState extends State<SportCentreListScreen> {
   bool _isFirstRun = true;
+  late Future<void> sportMetaFuture;
 
   @override
   void didChangeDependencies() async {
@@ -66,26 +68,18 @@ class _SportCentreListScreenState extends State<SportCentreListScreen> {
       }
 
       await Provider.of<UserProvider>(context, listen: false).fetchUser();
-
-      // print("PROVV0");
-      await Provider.of<SportCentresProvider>(context, listen: false)
-          .fetchSportCentresMetas();
-
-      // final user = await FirebaseFirestore.instance
-      //     .collection('users')
-      //     .doc(FirebaseAuth.instance.currentUser?.uid)
-      //     .withConverter(
-      //         fromFirestore: CustomUser.User.fromFirestore,
-      //         toFirestore: (CustomUser.User user, options) =>
-      //             user.toFirestore())
-      //     .get();
-      // _userDisplayName = user.data()?.name ?? '';
     }
   }
 
   @override
+  void initState() {
+    super.initState();
+    sportMetaFuture = Provider.of<SportCentresProvider>(context, listen: false)
+        .fetchSportCentresMetas();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    final metas = Provider.of<SportCentresProvider>(context).sportCentreMetas;
     // print("metas 0 ${metas.length}");
     return Scaffold(
       appBar: AppBar(
@@ -103,26 +97,44 @@ class _SportCentreListScreenState extends State<SportCentreListScreen> {
       drawer: const AppDrawer(),
       body: Padding(
         padding: const EdgeInsets.all(10.0),
-        child: GridView.builder(
-          gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
-            maxCrossAxisExtent: 300,
-            childAspectRatio: 3 / 2,
-            crossAxisSpacing: 10,
-            mainAxisSpacing: 10,
-          ),
-          itemBuilder: (context, index) {
-            return GestureDetector(
-              onTap: (() {
-                Provider.of<SportCentresProvider>(context, listen: false)
-                    .setSelectCentre(metas[index].detailsId);
-                Navigator.of(context).pushNamed(CentreInfoScreen.routeName,
-                    arguments: metas[index].detailsId);
-              }),
-              child: SportCentreListTile(
-                  title: metas[index].title, imageUrl: metas[index].imageUrl),
-            );
-          },
-          itemCount: metas.length,
+        child: FutureBuilder(
+          future: sportMetaFuture,
+          builder: ((context, snapshot) {
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return const LoadingScreen();
+            } else if (snapshot.hasError) {
+              //TODO create a null screen
+              return const Center(
+                child: Text("Some error occurred"),
+              );
+            } else {
+              final metas =
+                  Provider.of<SportCentresProvider>(context).sportCentreMetas;
+              return GridView.builder(
+                gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
+                  maxCrossAxisExtent: 300,
+                  childAspectRatio: 3 / 2,
+                  crossAxisSpacing: 10,
+                  mainAxisSpacing: 10,
+                ),
+                itemBuilder: (context, index) {
+                  return GestureDetector(
+                    onTap: (() {
+                      Provider.of<SportCentresProvider>(context, listen: false)
+                          .setSelectCentre(metas[index].detailsId);
+                      Navigator.of(context).pushNamed(
+                          CentreInfoScreen.routeName,
+                          arguments: metas[index].detailsId);
+                    }),
+                    child: SportCentreListTile(
+                        title: metas[index].title,
+                        imageUrl: metas[index].imageUrl),
+                  );
+                },
+                itemCount: metas.length,
+              );
+            }
+          }),
         ),
       ),
     );
