@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:provider/provider.dart';
+import 'package:flutter/services.dart';
 import 'package:reeno/providers/bookings_provider.dart';
 import 'package:reeno/providers/phone_provider.dart';
 import 'package:reeno/providers/selected_booking_provider.dart';
@@ -21,6 +22,7 @@ import 'package:reeno/screens/splash/splash_screen.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
+  SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
   runApp(MyApp());
 }
 

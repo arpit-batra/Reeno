@@ -19,12 +19,13 @@ class BookingSummary extends StatefulWidget {
 }
 
 class _BookingSummaryState extends State<BookingSummary> {
+  bool _loadingState = false;
   final _razorpay = Razorpay();
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
+    print("Booking Summary -> init");
     _razorpay.on(Razorpay.EVENT_PAYMENT_SUCCESS, _handlePaymentSuccess);
     _razorpay.on(Razorpay.EVENT_PAYMENT_ERROR, _handlePaymentError);
     _razorpay.on(Razorpay.EVENT_EXTERNAL_WALLET, _handleExternalWallet);
@@ -32,7 +33,6 @@ class _BookingSummaryState extends State<BookingSummary> {
 
   @override
   void dispose() {
-    // TODO: implement dispose
     super.dispose();
     _razorpay.clear();
   }
@@ -46,8 +46,12 @@ class _BookingSummaryState extends State<BookingSummary> {
   void _handlePaymentError(PaymentFailureResponse response) {
     print("failure");
     Navigator.of(context)
-        .pushNamed(AfterPaymentScreen.routeName, arguments: false);
-    // Do something when payment fails
+        .pushNamed(AfterPaymentScreen.routeName, arguments: false)
+        .then((value) {
+      setState(() {
+        _loadingState = false;
+      });
+    });
   }
 
   void _handleExternalWallet(ExternalWalletResponse response) {
@@ -55,15 +59,6 @@ class _BookingSummaryState extends State<BookingSummary> {
   }
 
   Future<void> _createOrder(double amount) async {
-    //    String username = 'test';
-    // String password = '123£';
-    // String basicAuth =
-    //     'Basic ' + base64.encode(utf8.encode('$username:$password'));
-    // print(basicAuth);
-
-    // Response r = await get(Uri.parse('https://api.somewhere.io'),
-    //     headers: <String, String>{'authorization': basicAuth});
-    // print(r.statusCode);
     const userName = "rzp_test_rUytAswPqSZROv";
     const secret = "hWBWWJ9Jd1zSHbxm6AVcf62d";
     String basicAuth =
@@ -83,13 +78,14 @@ class _BookingSummaryState extends State<BookingSummary> {
     final orderId = json.decode(response.body)['id'];
     var options = {
       'key': userName,
-      'amount': amount, //in the smallest currency sub-unit.
+      'amount': amount,
       'name': 'Reeno',
       'order_id': orderId,
       'description': 'Slot Booking',
       'timeout': 120,
     };
     _razorpay.open(options);
+    print("Booking Summary -> completed");
   }
 
   @override
@@ -98,41 +94,56 @@ class _BookingSummaryState extends State<BookingSummary> {
         Provider.of<SelectedBookingProvider>(context).currBooking;
     return Scaffold(
       appBar: AppBar(title: const Text("Booking Summary")),
-      body: Padding(
-        padding: const EdgeInsets.all(24.0),
-        child: Column(
-          children: [
-            Expanded(
-              child: Column(
-                children: [
-                  CentreAddressWidget(selectedBooking),
-                  const SizedBox(
-                    height: 24,
+      body: Stack(
+        children: [
+          Padding(
+            padding: const EdgeInsets.all(24.0),
+            child: Column(
+              children: [
+                Expanded(
+                  child: Column(
+                    children: [
+                      CentreAddressWidget(selectedBooking),
+                      const SizedBox(
+                        height: 24,
+                      ),
+                      BookingTimeWidget(selectedBooking),
+                      const SizedBox(
+                        height: 24,
+                      ),
+                      PaymentWidget(selectedBooking),
+                    ],
                   ),
-                  BookingTimeWidget(selectedBooking),
-                  const SizedBox(
-                    height: 24,
-                  ),
-                  PaymentWidget(selectedBooking),
-                ],
-              ),
+                ),
+                SizedBox(
+                  width: double.infinity,
+                  height: 48,
+                  child: ElevatedButton(
+                      onPressed: () {
+                        setState(() {
+                          _loadingState = true;
+                        });
+                        _createOrder(selectedBooking.amount);
+                      },
+                      child: const Text(
+                        "Proceed",
+                        style: TextStyle(
+                          fontSize: 18,
+                        ),
+                      )),
+                )
+              ],
             ),
-            SizedBox(
-              width: double.infinity,
-              height: 48,
-              child: ElevatedButton(
-                  onPressed: () {
-                    _createOrder(selectedBooking.amount);
-                  },
-                  child: const Text(
-                    "Proceed",
-                    style: TextStyle(
-                      fontSize: 18,
-                    ),
-                  )),
-            )
-          ],
-        ),
+          ),
+          if (_loadingState)
+            Container(
+              color: const Color.fromARGB(100, 255, 255, 255),
+            ),
+          if (_loadingState)
+            const Center(
+              child: CircularProgressIndicator(),
+            ),
+        ],
       ),
     );
   }

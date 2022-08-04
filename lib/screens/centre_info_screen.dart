@@ -69,7 +69,6 @@ class _CentreInfoScreenState extends State<CentreInfoScreen> {
         fontSize: 24,
         fontWeight: FontWeight.bold,
         color: Theme.of(context).primaryColor);
-    // color: Color.fromRGBO(24, 28, 123, 1));
   }
 
   TextStyle _contentStyle() {

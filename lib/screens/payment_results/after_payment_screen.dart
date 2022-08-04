@@ -53,104 +53,107 @@ class AfterPaymentScreen extends StatelessWidget {
         ? "You have successfully confirmed your slot"
         : "We were unable to authenticate your transaction";
     final mainIcon = _isPaymentSuccessful ? Icons.check_circle : Icons.error;
-    return Scaffold(
-      body: Column(
-        children: [
-          Flexible(
-            flex: 5,
-            child: Container(
-              color: _isPaymentSuccessful
-                  ? const Color.fromRGBO(29, 185, 84, 1)
-                  : const Color.fromRGBO(191, 60, 18, 1),
-              width: double.infinity,
-              child: Column(
-                children: [
-                  Expanded(
-                    flex: 6,
-                    child: Center(
-                      child: Icon(
-                        mainIcon,
-                        color: Colors.white,
-                        size: 128,
+    return WillPopScope(
+      onWillPop: (() async => false),
+      child: Scaffold(
+        body: Column(
+          children: [
+            Flexible(
+              flex: 5,
+              child: Container(
+                color: _isPaymentSuccessful
+                    ? const Color.fromRGBO(29, 185, 84, 1)
+                    : const Color.fromRGBO(191, 60, 18, 1),
+                width: double.infinity,
+                child: Column(
+                  children: [
+                    Expanded(
+                      flex: 6,
+                      child: Center(
+                        child: Icon(
+                          mainIcon,
+                          color: Colors.white,
+                          size: 128,
+                        ),
                       ),
                     ),
-                  ),
-                  Expanded(
-                    flex: 1,
-                    child: Center(
-                      child: Text(
-                        primaryTitleMsg,
-                        style: const TextStyle(
-                            color: Colors.white,
-                            fontSize: 32,
-                            fontWeight: FontWeight.w600),
-                        textAlign: TextAlign.center,
-                      ),
-                    ),
-                  ),
-                  Expanded(
-                    flex: 3,
-                    child: Center(
-                      child: Padding(
-                        padding: const EdgeInsets.all(32.0),
+                    Expanded(
+                      flex: 1,
+                      child: Center(
                         child: Text(
-                          secondaryTitleMsg,
-                          textAlign: TextAlign.center,
+                          primaryTitleMsg,
                           style: const TextStyle(
-                            color: Colors.white,
+                              color: Colors.white,
+                              fontSize: 32,
+                              fontWeight: FontWeight.w600),
+                          textAlign: TextAlign.center,
+                        ),
+                      ),
+                    ),
+                    Expanded(
+                      flex: 3,
+                      child: Center(
+                        child: Padding(
+                          padding: const EdgeInsets.all(32.0),
+                          child: Text(
+                            secondaryTitleMsg,
+                            textAlign: TextAlign.center,
+                            style: const TextStyle(
+                              color: Colors.white,
+                            ),
                           ),
                         ),
                       ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
             ),
-          ),
-          Expanded(
-            flex: 4,
-            child: SingleChildScrollView(
-                child: Column(
-              children: [
-                if (_isPaymentSuccessful)
-                  Padding(
-                    padding: const EdgeInsets.fromLTRB(8, 8, 8, 0),
-                    child: CentreAddressWidget(
-                      selectedBooking,
-                      dark: false,
+            Expanded(
+              flex: 4,
+              child: SingleChildScrollView(
+                  child: Column(
+                children: [
+                  if (_isPaymentSuccessful)
+                    Padding(
+                      padding: const EdgeInsets.fromLTRB(8, 8, 8, 0),
+                      child: CentreAddressWidget(
+                        selectedBooking,
+                        dark: false,
+                      ),
                     ),
-                  ),
-                if (_isPaymentSuccessful)
-                  Padding(
-                    padding: const EdgeInsets.fromLTRB(8, 8, 8, 0),
-                    child: BookingTimeWidget(selectedBooking, dark: false),
-                  ),
-                if (!_isPaymentSuccessful)
-                  const Padding(
-                    padding: EdgeInsets.fromLTRB(10, 10, 10, 0),
-                    child: RefundCard(),
-                  ),
-                if (!_isPaymentSuccessful)
-                  const Padding(
-                    padding: EdgeInsets.fromLTRB(10, 10, 10, 0),
-                    child: SupportCard(),
-                  ),
+                  if (_isPaymentSuccessful)
+                    Padding(
+                      padding: const EdgeInsets.fromLTRB(8, 8, 8, 0),
+                      child: BookingTimeWidget(selectedBooking, dark: false),
+                    ),
+                  if (!_isPaymentSuccessful)
+                    const Padding(
+                      padding: EdgeInsets.fromLTRB(10, 10, 10, 0),
+                      child: RefundCard(),
+                    ),
+                  if (!_isPaymentSuccessful)
+                    const Padding(
+                      padding: EdgeInsets.fromLTRB(10, 10, 10, 0),
+                      child: SupportCard(),
+                    ),
+                ],
+              )),
+            ),
+            Row(
+              children: [
+                _isPaymentSuccessful
+                    ? _getActionButton("My Bookings", 0, () {})
+                    : _getActionButton("Try Again", 0, () {
+                        _tryAgain(context);
+                      }),
+                _getActionButton("Home", 1, () {
+                  _goToHome(context);
+                }),
               ],
-            )),
-          ),
-          Row(
-            children: [
-              _isPaymentSuccessful
-                  ? _getActionButton("My Bookings", 0, () {})
-                  : _getActionButton("Try Again", 0, () {
-                      _tryAgain(context);
-                    }),
-              _getActionButton("Home", 1, () {
-                _goToHome(context);
-              }),
-            ],
-          ),
-        ],
+            ),
+          ],
+        ),
       ),
     );
   }
