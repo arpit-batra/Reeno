@@ -33,6 +33,13 @@ class CentreAddressWidget extends StatelessWidget {
               height: 6,
             ),
             Text(
+              "Court Number ${selectedBooking.courtNo + 1}",
+              style: CardTextStyles.secondaryInfoStyle(),
+            ),
+            const SizedBox(
+              height: 6,
+            ),
+            Text(
               selectedBooking.sportCentreAddress,
               style: CardTextStyles.secondaryInfoStyle(),
             ),

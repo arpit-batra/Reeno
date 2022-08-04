@@ -8,6 +8,7 @@ class Booking {
   final String userId;
   final String userName;
   final String date;
+  final int courtNo;
   DateTime startTime;
   DateTime endTime;
   double amount;
@@ -20,6 +21,7 @@ class Booking {
     required this.userId,
     required this.userName,
     required this.date,
+    required this.courtNo,
     required this.startTime,
     required this.endTime,
     required this.amount,
@@ -38,6 +40,7 @@ class Booking {
         userId: data?['userId'],
         userName: data?['userName'],
         date: data?['date'],
+        courtNo: data?['courtNo'],
         startTime: DateTime.parse(data?['startTime']),
         endTime: DateTime.parse(data?['endTime']),
         amount: data?['amount']);

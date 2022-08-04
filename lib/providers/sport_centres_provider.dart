@@ -8,6 +8,7 @@ class SportCentresProvider with ChangeNotifier {
   List<SportCentreMeta> _sportCentreMetas = [];
   String _selectedCentreId = "";
   SportCentre? _selectedSportCentre;
+  int _selectedCourtNo = 0;
 
   List<SportCentreMeta> get sportCentreMetas {
     return [..._sportCentreMetas];
@@ -16,6 +17,10 @@ class SportCentresProvider with ChangeNotifier {
   SportCentreMeta get selectedCentreMeta {
     return _sportCentreMetas
         .firstWhere((element) => element.detailsId == _selectedCentreId);
+  }
+
+  int get selectedCourtNo {
+    return _selectedCourtNo;
   }
 
   SportCentreMeta getCentreMetaByDetailId(String id) {
@@ -33,33 +38,38 @@ class SportCentresProvider with ChangeNotifier {
 
   SportCentre get selectedSportCentre {
     ////////////////////////////////////////////////
-    // if (_selectedSportCentre == null) {
-    //   print("HE HE HE");
-    //   return SportCentre(
-    //       id: "sadfdsfsdf",
-    //       title: "sdfsdf",
-    //       address:
-    //           Address(displayAddress: "sdgsfhnfga", coordinates: LatLng(0, 0)),
-    //       sport: Sport.badminton,
-    //       images: [
-    //         "https://media.istockphoto.com/photos/line-on-green-badminton-court-picture-id1040174714?k=20&m=1040174714&s=612x612&w=0&h=euM1AD1Qtqbwfkp2hpI12X9-HEwj7wylp1HXXVQkQKA=",
-    //         "https://t3.ftcdn.net/jpg/02/23/27/28/360_F_223272802_WitEnJSzsXNKaqESPFSdfmuR0KeDjbV6.jpg"
-    //       ],
-    //       description: "This is a sample",
-    //       hourlyRate: 200,
-    //       leastInterval: Duration(seconds: 1),
-    //       minimumTime: Duration(seconds: 1),
-    //       openingTime: TimeOfDay(hour: 0, minute: 0),
-    //       closingTime: TimeOfDay(hour: 0, minute: 0),
-    //       numberOfCourts: 2,
-    //       amenities: ["sdff", "sdfsdf", "ehdfgh"]);
-    // }
+    if (_selectedSportCentre == null) {
+      print("HE HE HE");
+      return SportCentre(
+          id: "sadfdsfsdf",
+          title: "sdfsdf",
+          address:
+              Address(displayAddress: "sdgsfhnfga", coordinates: LatLng(0, 0)),
+          sport: Sport.badminton,
+          images: [
+            "https://media.istockphoto.com/photos/line-on-green-badminton-court-picture-id1040174714?k=20&m=1040174714&s=612x612&w=0&h=euM1AD1Qtqbwfkp2hpI12X9-HEwj7wylp1HXXVQkQKA=",
+            "https://t3.ftcdn.net/jpg/02/23/27/28/360_F_223272802_WitEnJSzsXNKaqESPFSdfmuR0KeDjbV6.jpg"
+          ],
+          description: "This is a sample",
+          hourlyRate: 200,
+          leastInterval: Duration(seconds: 1),
+          minimumTime: Duration(seconds: 1),
+          openingTime: TimeOfDay(hour: 0, minute: 0),
+          closingTime: TimeOfDay(hour: 0, minute: 0),
+          numberOfCourts: 2,
+          amenities: ["sdff", "sdfsdf", "ehdfgh"]);
+    }
     ////////////////////////////////////////////////
     return _selectedSportCentre!;
   }
 
   void setSelectCentre(String id) {
     _selectedCentreId = id;
+    notifyListeners();
+  }
+
+  void setSelectedCourtNo(int courtNo) {
+    _selectedCourtNo = courtNo;
     notifyListeners();
   }
 

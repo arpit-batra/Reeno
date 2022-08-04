@@ -9,6 +9,7 @@ class SelectedBookingProvider with ChangeNotifier {
   final DateTime selectedDate;
   final myUserId;
   final myUserName;
+  final int selectedCourtNo;
   DateTime selectedStartTime;
   DateTime selectedEndTime;
   double amount;
@@ -20,6 +21,7 @@ class SelectedBookingProvider with ChangeNotifier {
       required this.selectedCentreAddress,
       required this.selectedDateAsString,
       required this.selectedDate,
+      required this.selectedCourtNo,
       required this.myUserId,
       required this.myUserName,
       required this.selectedStartTime,
@@ -30,6 +32,7 @@ class SelectedBookingProvider with ChangeNotifier {
             sportCentreTitle: selectedCentreTitle,
             sportCentreAddress: selectedCentreAddress,
             date: selectedDateAsString,
+            courtNo: selectedCourtNo,
             userId: myUserId,
             userName: myUserName,
             startTime: selectedStartTime,
@@ -44,6 +47,7 @@ class SelectedBookingProvider with ChangeNotifier {
         userId: _createdBooking.userId,
         userName: _createdBooking.userName,
         date: _createdBooking.date,
+        courtNo: _createdBooking.courtNo,
         startTime: _createdBooking.startTime,
         endTime: _createdBooking.endTime,
         amount: _createdBooking.amount);

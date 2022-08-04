@@ -9,9 +9,26 @@ import 'package:reeno/widgets/schedule_widgets/date_picker.dart';
 import 'package:reeno/widgets/schedule_widgets/day_schedule.dart';
 import 'package:reeno/widgets/schedule_widgets/time_selector.dart';
 
-class ScheduleScreen extends StatelessWidget {
+class ScheduleScreen extends StatefulWidget {
   const ScheduleScreen({Key? key}) : super(key: key);
   static const routeName = "/schedule-screen";
+
+  @override
+  State<ScheduleScreen> createState() => _ScheduleScreenState();
+}
+
+class _ScheduleScreenState extends State<ScheduleScreen> {
+  bool _isFirstRun = true;
+  int courtNo = 0;
+
+  // @override
+  // void didChangeDependencies() {
+  //   super.didChangeDependencies();
+  //   if (_isFirstRun) {
+  //     _isFirstRun = false;
+  //     courtNo = ModalRoute.of(context)!.settings.arguments as int;
+  //   }
+  // }
 
   void showTimePickerDialog(BuildContext context) {
     showDialog(

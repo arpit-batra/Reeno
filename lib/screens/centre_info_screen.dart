@@ -38,8 +38,9 @@ class _CentreInfoScreenState extends State<CentreInfoScreen> {
           width: double.infinity,
           child: ElevatedButton(
               onPressed: (() {
-                Navigator.of(context)
-                    .pushNamed(ScheduleScreen.routeName, arguments: index);
+                Provider.of<SportCentresProvider>(context, listen: false)
+                    .setSelectedCourtNo(index);
+                Navigator.of(context).pushNamed(ScheduleScreen.routeName);
               }),
               child: Text(
                 centre.numberOfCourts == 1
@@ -68,6 +69,7 @@ class _CentreInfoScreenState extends State<CentreInfoScreen> {
         fontSize: 24,
         fontWeight: FontWeight.bold,
         color: Theme.of(context).primaryColor);
+    // color: Color.fromRGBO(24, 28, 123, 1));
   }
 
   TextStyle _contentStyle() {

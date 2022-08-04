@@ -60,11 +60,13 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider.value(value: SelectedDateProvider()),
         ChangeNotifierProxyProvider2<SportCentresProvider, SelectedDateProvider,
                 BookingsProvider>(
-            create: ((context) => BookingsProvider("", "")),
+            create: ((context) => BookingsProvider("", "", 0)),
             update: (BuildContext context, sportCentresProvider,
                 selectedDateProvider, prevBookingProvider) {
-              return BookingsProvider(sportCentresProvider.selectedCentreId,
-                  selectedDateProvider.selectedDateInString);
+              return BookingsProvider(
+                  sportCentresProvider.selectedCentreId,
+                  selectedDateProvider.selectedDateInString,
+                  sportCentresProvider.selectedCourtNo);
             }),
         ChangeNotifierProxyProvider3<UserProvider, SportCentresProvider,
                 SelectedDateProvider, SelectedBookingProvider>(
@@ -74,6 +76,7 @@ class MyApp extends StatelessWidget {
                 selectedCentreAddress: "",
                 selectedDateAsString: "",
                 selectedDate: DateTime.now(),
+                selectedCourtNo: 0,
                 myUserId: "",
                 myUserName: "",
                 selectedStartTime: DateTime.now(),
@@ -88,6 +91,7 @@ class MyApp extends StatelessWidget {
                       selectedSport.selectedSportCentre.address.displayAddress,
                   selectedDateAsString: selectedDate.selectedDateInString,
                   selectedDate: selectedDate.selectedDateInDateTime,
+                  selectedCourtNo: selectedSport.selectedCourtNo,
                   myUserId: userProvider.user!.id,
                   myUserName: userProvider.user!.name,
                   selectedStartTime: selectedBooking!.selectedStartTime,

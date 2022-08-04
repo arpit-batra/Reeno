@@ -30,7 +30,8 @@ class _DayScheduleState extends State<DaySchedule> {
     final bookingsProvider = Provider.of<BookingsProvider>(context);
     print("rebuilding day schedule");
     return FutureBuilder(
-      future: bookingsProvider.fetchSelectedDateSelectedCentreBookings(),
+      future: bookingsProvider
+          .fetchSelectedDateSelectedCentreSelectedCourtBookings(),
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
           return const LoadingWidget();
