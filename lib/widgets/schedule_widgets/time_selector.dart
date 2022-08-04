@@ -1,6 +1,7 @@
 import 'dart:math' as math;
 import 'package:flutter/material.dart';
 import 'package:reeno/providers/selected_booking_provider.dart';
+import 'package:reeno/providers/selected_date_provider.dart';
 import 'package:reeno/screens/booking_summary.dart';
 import 'package:reeno/widgets/card_ui/customized_card.dart';
 import 'package:time_range_picker/time_range_picker.dart';
@@ -9,7 +10,6 @@ import 'package:reeno/helpers/date_helper.dart';
 import 'package:reeno/providers/bookings_provider.dart';
 import 'package:reeno/providers/sport_centres_provider.dart';
 import 'package:reeno/models/booking.dart';
-import 'package:reeno/helpers/date_helper.dart';
 
 class TimeSelector extends StatefulWidget {
   const TimeSelector({Key? key}) : super(key: key);
@@ -24,6 +24,16 @@ class _TimeSelectorState extends State<TimeSelector> {
   static const Color darkPrimary = Color.fromRGBO(24, 28, 123, 1);
 
   bool _validTimeRange() {
+    final selectedDateProvider = Provider.of<SelectedDateProvider>(context);
+
+    final currDate = selectedDateProvider.currDateInDateTime;
+    final selectedDate = selectedDateProvider.selectedDateInDateTime;
+
+    if (DateHelper.compareDayOfDateTimes(selectedDate, currDate) &&
+        DateHelper.isT1BeforeT2(_startTime, TimeOfDay.fromDateTime(currDate))) {
+      return false;
+    }
+
     List<Booking> bookings = Provider.of<BookingsProvider>(context)
         .selectedDateSelectedCentreBookings;
     for (var element in bookings) {
@@ -41,15 +51,15 @@ class _TimeSelectorState extends State<TimeSelector> {
         Text(
           label,
           textAlign: TextAlign.center,
-          style: TextStyle(color: darkPrimary, fontSize: 20),
+          style: const TextStyle(color: darkPrimary, fontSize: 20),
         ),
-        SizedBox(
+        const SizedBox(
           height: 10,
         ),
         Text(
           time.format(context),
           textAlign: TextAlign.center,
-          style: TextStyle(color: darkPrimary, fontSize: 32),
+          style: const TextStyle(color: darkPrimary, fontSize: 32),
         )
       ],
     );

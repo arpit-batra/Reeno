@@ -150,4 +150,43 @@ class DateHelper {
     // return "${dateTime.}:${dateTime.minute.}";
     return formatter.format(dateTime);
   }
+
+  static bool firstDateBeforeSecond(DateTime d1, DateTime d2) {
+    if (d1.year < d2.year) {
+      return true;
+    }
+    if (d1.year > d2.year) {
+      return false;
+    }
+    if (d1.month < d2.month) {
+      return true;
+    }
+    if (d1.month > d2.month) {
+      return false;
+    }
+    if (d1.day < d2.day) {
+      return true;
+    }
+    return false;
+  }
+
+  static bool isT1BeforeT2(TimeOfDay t1, TimeOfDay t2) {
+    if (t1.hour < t2.hour) {
+      return true;
+    }
+    if (t1.hour > t2.hour) {
+      return false;
+    }
+    if (t1.minute < t2.minute) {
+      return true;
+    }
+    return false;
+  }
+
+  static bool compareDayOfDateTimes(DateTime t1, DateTime t2) {
+    if (t1.year == t2.year && t1.month == t2.month && t1.day == t2.day) {
+      return true;
+    }
+    return false;
+  }
 }

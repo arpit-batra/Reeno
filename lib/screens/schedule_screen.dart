@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:reeno/helpers/date_helper.dart';
 
 import 'package:reeno/providers/selected_date_provider.dart';
 import 'package:reeno/providers/sport_centres_provider.dart';
@@ -66,17 +67,38 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
                 padding: const EdgeInsets.only(left: 16, right: 16, bottom: 16),
                 width: double.infinity,
                 height: 64,
-                child: ElevatedButton(
-                    onPressed: (() {
-                      showTimePickerDialog(context);
-                    }),
-                    child: const Text(
-                      'Book my slot',
-                      style: TextStyle(
-                        fontSize: 18,
-                      ),
-                      textAlign: TextAlign.center,
-                    )),
+                child: Consumer<SelectedDateProvider>(
+                  builder: ((context, selectedDateProvider, child) {
+                    print(selectedDateProvider.selectedDateInDateTime);
+                    print(snapshot.data as DateTime);
+
+                    if (DateHelper.firstDateBeforeSecond(
+                        selectedDateProvider.selectedDateInDateTime,
+                        snapshot.data as DateTime)) {
+                      return const ElevatedButton(
+                          onPressed: null,
+                          child: Text(
+                            'Book my slot',
+                            style: TextStyle(
+                              fontSize: 18,
+                            ),
+                            textAlign: TextAlign.center,
+                          ));
+                    } else {
+                      return ElevatedButton(
+                          onPressed: (() {
+                            showTimePickerDialog(context);
+                          }),
+                          child: const Text(
+                            'Book my slot',
+                            style: TextStyle(
+                              fontSize: 18,
+                            ),
+                            textAlign: TextAlign.center,
+                          ));
+                    }
+                  }),
+                ),
               )
             ]);
           }

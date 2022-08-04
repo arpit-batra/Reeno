@@ -4,6 +4,7 @@ import 'package:ntp/ntp.dart';
 
 class SelectedDateProvider with ChangeNotifier {
   DateTime? _selectedDate;
+  DateTime? _currDate;
 
   String get selectedDateInString {
     // if (_selectedDate == null) {
@@ -24,8 +25,17 @@ class SelectedDateProvider with ChangeNotifier {
     return DateTime.parse(_selectedDate!.toIso8601String());
   }
 
-  Future<void> setSelectedDateAsCurrDate() async {
+  DateTime get currDateInDateTime {
+    ////////////////////////////////////////////////
+    if (_currDate == null) return DateTime.now();
+    ////////////////////////////////////////////////
+    return DateTime.parse(_currDate!.toIso8601String());
+  }
+
+  Future<DateTime> setSelectedDateAsCurrDate() async {
     _selectedDate = await NTP.now();
+    _currDate = _selectedDate;
+    return _selectedDate!;
   }
 
   void setSelectedDate(DateTime date) {
