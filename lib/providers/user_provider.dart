@@ -41,4 +41,34 @@ class UserProvider with ChangeNotifier {
     _user = currentUser;
     notifyListeners();
   }
+
+  Future<void> updateName(String name) async {
+    final currentUser = CustomUser.User(
+      phone: _user!.phone,
+      email: _user!.email,
+      name: name,
+      imageUrl: _user!.imageUrl,
+    );
+    final docRef = FirebaseFirestore.instance.collection('users').withConverter(
+        fromFirestore: CustomUser.User.fromFirestore,
+        toFirestore: (CustomUser.User user, options) => user.toFirestore());
+    await docRef.doc(_user!.id).set(currentUser);
+    _user = currentUser;
+    notifyListeners();
+  }
+
+  Future<void> updateImageUrl(String imageUrl) async {
+    final currentUser = CustomUser.User(
+      phone: _user!.phone,
+      email: _user!.email,
+      name: _user!.name,
+      imageUrl: imageUrl,
+    );
+    final docRef = FirebaseFirestore.instance.collection('users').withConverter(
+        fromFirestore: CustomUser.User.fromFirestore,
+        toFirestore: (CustomUser.User user, options) => user.toFirestore());
+    await docRef.doc(_user!.id).set(currentUser);
+    _user = currentUser;
+    notifyListeners();
+  }
 }

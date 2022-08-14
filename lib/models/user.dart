@@ -6,8 +6,9 @@ class User {
   final String? phone;
   final String? imageUrl;
   final String? name;
+  final bool? admin;
 
-  User({this.id, this.email, this.phone, this.imageUrl, this.name});
+  User({this.id, this.email, this.phone, this.imageUrl, this.name, this.admin});
 
   factory User.fromFirestore(
     DocumentSnapshot<Map<String, dynamic>> snapshot,
@@ -19,7 +20,8 @@ class User {
         email: data?['email'],
         phone: data?['phone'],
         imageUrl: data?['imageUrl'],
-        name: data?['name']);
+        name: data?['name'],
+        admin: data?['admin']);
   }
 
   Map<String, dynamic> toFirestore() {
@@ -29,6 +31,7 @@ class User {
       if (phone != null) "phone": phone,
       if (imageUrl != null) "imageUrl": imageUrl,
       if (name != null) "name": name,
+      if (admin != null) "admin": admin,
     };
   }
 }
