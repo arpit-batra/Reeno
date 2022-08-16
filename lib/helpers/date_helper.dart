@@ -191,8 +191,8 @@ class DateHelper {
   }
 
   static String getReadableDate(String date) {
-    final dateInDateTime = DateTime(int.parse(date.substring(0, 4)),
-        int.parse(date.substring(5, 7)), int.parse(date.substring(8)));
+    final dateInDateTime = DateTime(int.parse(date.substring(6)),
+        int.parse(date.substring(3, 5)), int.parse(date.substring(0, 2)));
     return "${dateInDateTime.day} ${getMonth(dateInDateTime)}, ${dateInDateTime.year}";
   }
 }

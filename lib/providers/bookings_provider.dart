@@ -35,7 +35,7 @@ class BookingsProvider with ChangeNotifier {
     final bookings = await docRef
         .where("sportCentreId", isEqualTo: selectedSportCentreId)
         .where("date", isEqualTo: selectedDate)
-        .where("courtNo", isEqualTo: selectedCourtNo)
+        .where("courtNo", isEqualTo: selectedCourtNo.toString())
         .get();
     final List<Booking> todaysBookings = [];
     for (final element in bookings.docs) {
@@ -53,10 +53,7 @@ class BookingsProvider with ChangeNotifier {
         .withConverter(
             fromFirestore: Booking.fromFirestore,
             toFirestore: (Booking booking, _) => booking.toFirestore());
-    final bookings = await docRef
-        .where("userId", isEqualTo: userId)
-        .orderBy("date", descending: true)
-        .get();
+    final bookings = await docRef.where("userId", isEqualTo: userId).get();
     print("bookings ${bookings.docs}");
     final List<Booking> curUserBookings = [];
     for (final element in bookings.docs) {
