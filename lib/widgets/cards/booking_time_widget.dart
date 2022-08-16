@@ -34,7 +34,7 @@ class BookingTimeWidget extends StatelessWidget {
               height: 6,
             ),
             Text(
-              "${DateHelper.DateTimeToTimeOfDayInString(selectedBooking.startTime)} - ${DateHelper.DateTimeToTimeOfDayInString(selectedBooking.endTime)}",
+              "${DateHelper.dateTimeToTimeOfDayInString(selectedBooking.startTime)} - ${DateHelper.dateTimeToTimeOfDayInString(selectedBooking.endTime)}",
               style: CardTextStyles.secondaryInfoStyle(),
             ),
           ],

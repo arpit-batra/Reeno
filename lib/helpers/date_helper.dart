@@ -145,7 +145,7 @@ class DateHelper {
         hourlyRate;
   }
 
-  static String DateTimeToTimeOfDayInString(DateTime dateTime) {
+  static String dateTimeToTimeOfDayInString(DateTime dateTime) {
     var formatter = DateFormat("jm");
     // return "${dateTime.}:${dateTime.minute.}";
     return formatter.format(dateTime);
@@ -188,5 +188,11 @@ class DateHelper {
       return true;
     }
     return false;
+  }
+
+  static String getReadableDate(String date) {
+    final dateInDateTime = DateTime(int.parse(date.substring(0, 4)),
+        int.parse(date.substring(5, 7)), int.parse(date.substring(8)));
+    return "${dateInDateTime.day} ${getMonth(dateInDateTime)}, ${dateInDateTime.year}";
   }
 }

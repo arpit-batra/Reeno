@@ -6,14 +6,20 @@ class BookingsProvider with ChangeNotifier {
   final String selectedSportCentreId;
   final String selectedDate;
   final int selectedCourtNo;
+  final String userId;
 
-  BookingsProvider(
-      this.selectedSportCentreId, this.selectedDate, this.selectedCourtNo);
+  BookingsProvider(this.selectedSportCentreId, this.selectedDate,
+      this.selectedCourtNo, this.userId);
 
   List<Booking> _selectedDateSelectedCentreBookings = [];
+  List<Booking> _currentUserBookings = [];
 
   List<Booking> get selectedDateSelectedCentreBookings {
     return [..._selectedDateSelectedCentreBookings];
+  }
+
+  List<Booking> get currentUserBookings {
+    return [..._currentUserBookings];
   }
 
   Future<void> fetchSelectedDateSelectedCentreSelectedCourtBookings() async {
@@ -38,5 +44,26 @@ class BookingsProvider with ChangeNotifier {
 
     _selectedDateSelectedCentreBookings = todaysBookings;
     // notifyListeners();
+  }
+
+  Future<void> fetchCurrentUserBookings() async {
+    print("userId $userId");
+    final docRef = FirebaseFirestore.instance
+        .collection('bookings')
+        .withConverter(
+            fromFirestore: Booking.fromFirestore,
+            toFirestore: (Booking booking, _) => booking.toFirestore());
+    final bookings = await docRef
+        .where("userId", isEqualTo: userId)
+        .orderBy("date", descending: true)
+        .get();
+    print("bookings ${bookings.docs}");
+    final List<Booking> curUserBookings = [];
+    for (final element in bookings.docs) {
+      print(element.toString());
+      curUserBookings.add(element.data());
+    }
+    print("Curr bookings $curUserBookings");
+    _currentUserBookings = curUserBookings;
   }
 }

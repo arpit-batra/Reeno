@@ -40,10 +40,10 @@ class Booking {
         userId: data?['userId'],
         userName: data?['userName'],
         date: data?['date'],
-        courtNo: data?['courtNo'],
+        courtNo: int.parse(data?['courtNo']),
         startTime: DateTime.parse(data?['startTime']),
         endTime: DateTime.parse(data?['endTime']),
-        amount: data?['amount']);
+        amount: double.parse(data?['amount']));
   }
 
   Map<String, dynamic> toFirestore() {

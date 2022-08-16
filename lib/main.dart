@@ -11,6 +11,7 @@ import 'package:reeno/providers/user_provider.dart';
 import 'package:reeno/providers/selected_date_provider.dart';
 import 'package:reeno/screens/booking_summary.dart';
 import 'package:reeno/screens/centre_info_screen.dart';
+import 'package:reeno/screens/my_bookings_screen.dart';
 import 'package:reeno/screens/payment_results/after_payment_screen.dart';
 import 'package:reeno/screens/schedule_screen.dart';
 import 'package:reeno/screens/sport_centre_list_screen.dart';
@@ -60,15 +61,17 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider.value(value: UserProvider()),
         ChangeNotifierProvider.value(value: SportCentresProvider()),
         ChangeNotifierProvider.value(value: SelectedDateProvider()),
-        ChangeNotifierProxyProvider2<SportCentresProvider, SelectedDateProvider,
-                BookingsProvider>(
-            create: ((context) => BookingsProvider("", "", 0)),
+        ChangeNotifierProxyProvider3<SportCentresProvider, SelectedDateProvider,
+                UserProvider, BookingsProvider>(
+            create: ((context) => BookingsProvider("", "", 0, "")),
             update: (BuildContext context, sportCentresProvider,
-                selectedDateProvider, prevBookingProvider) {
+                selectedDateProvider, userProvider, prevBookingProvider) {
               return BookingsProvider(
-                  sportCentresProvider.selectedCentreId,
-                  selectedDateProvider.selectedDateInString,
-                  sportCentresProvider.selectedCourtNo);
+                sportCentresProvider.selectedCentreId,
+                selectedDateProvider.selectedDateInString,
+                sportCentresProvider.selectedCourtNo,
+                userProvider.user!.id!,
+              );
             }),
         ChangeNotifierProxyProvider3<UserProvider, SportCentresProvider,
                 SelectedDateProvider, SelectedBookingProvider>(
@@ -168,6 +171,7 @@ class MyApp extends StatelessWidget {
           ScheduleScreen.routeName: (context) => ScheduleScreen(),
           BookingSummary.routeName: (context) => BookingSummary(),
           AfterPaymentScreen.routeName: (context) => AfterPaymentScreen(),
+          MyBookingsScreen.routeName: (context) => MyBookingsScreen(),
         },
       ),
     );

@@ -86,13 +86,13 @@ class _SportCentreListScreenState extends State<SportCentreListScreen> {
         title: Consumer<UserProvider>(
             builder: ((context, value, child) =>
                 Text('Welcome ${value.user?.name ?? ''}'))),
-        actions: [
-          IconButton(
-              onPressed: (() {
-                FirebaseAuth.instance.signOut();
-              }),
-              icon: Icon(Icons.logout))
-        ],
+        // actions: [
+        //   IconButton(
+        //       onPressed: (() {
+        //         FirebaseAuth.instance.signOut();
+        //       }),
+        //       icon: Icon(Icons.logout))
+        // ],
       ),
       drawer: const AppDrawer(),
       body: Padding(

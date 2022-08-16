@@ -43,6 +43,8 @@ class UserProvider with ChangeNotifier {
   }
 
   Future<void> updateName(String name) async {
+    print("User ID => ${_user!.id}");
+    final prevUserId = _user!.id;
     final currentUser = CustomUser.User(
       phone: _user!.phone,
       email: _user!.email,
@@ -52,8 +54,17 @@ class UserProvider with ChangeNotifier {
     final docRef = FirebaseFirestore.instance.collection('users').withConverter(
         fromFirestore: CustomUser.User.fromFirestore,
         toFirestore: (CustomUser.User user, options) => user.toFirestore());
-    await docRef.doc(_user!.id).set(currentUser);
-    _user = currentUser;
+    await docRef.doc(prevUserId).set(currentUser);
+
+    _user = CustomUser.User(
+      phone: _user!.phone,
+      email: _user!.email,
+      name: name,
+      imageUrl: _user!.imageUrl,
+      id: prevUserId,
+    );
+
+    // _user.id = prevUserId;
     notifyListeners();
   }
 
