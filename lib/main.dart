@@ -145,9 +145,9 @@ class MyApp extends StatelessWidget {
                   }
                   if (snapshot.hasData) {
                     //TODO
-                    // while (Navigator.of(context).canPop()) {
-                    //   Navigator.of(context).pop();
-                    // }
+                    while (Navigator.of(context).canPop()) {
+                      Navigator.of(context).pop();
+                    }
                     print("POPO Loading Centre List");
 
                     return SportCentreListScreen();
