@@ -23,6 +23,11 @@ class CardTextStyles {
         color: Colors.white, fontSize: 18, fontWeight: FontWeight.w500);
   }
 
+  static TextStyle bookingWidgetPaymentIDStyle() {
+    return const TextStyle(
+        color: Colors.white, fontSize: 16, fontWeight: FontWeight.w500);
+  }
+
   static TextStyle bookingWidgetDateStyle() {
     return const TextStyle(
         color: Colors.white, fontSize: 20, fontWeight: FontWeight.w600);

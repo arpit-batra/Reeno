@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:reeno/providers/bookings_provider.dart';
+import 'package:reeno/providers/user_provider.dart';
 import 'package:reeno/screens/loading_screen.dart';
 import 'package:reeno/models/booking.dart';
 import 'package:reeno/widgets/cards/my_bookings_widget.dart';
@@ -11,20 +12,29 @@ class MyBookingsScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final userProvider = Provider.of<UserProvider>(context);
+    print("user => ${userProvider.user!.owner}");
     return Scaffold(
       appBar: AppBar(
-        title: Text("My Bookings"),
+        title: const Text("My Bookings"),
       ),
       body: FutureBuilder(
-          future: Provider.of<BookingsProvider>(context, listen: false)
-              .fetchCurrentUserBookings(),
+          future: userProvider.user!.owner == null ||
+                  userProvider.user!.owner == false
+              ? Provider.of<BookingsProvider>(context, listen: false)
+                  .fetchCurrentUserBookings()
+              : Provider.of<BookingsProvider>(context, listen: false)
+                  .fetchCentreBookings(userProvider.user!.centreId),
           builder: ((context, snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting) {
               return LoadingScreen();
             } else {
-              final listOfBookings =
-                  Provider.of<BookingsProvider>(context, listen: false)
-                      .currentUserBookings;
+              final listOfBookings = userProvider.user!.owner == null ||
+                      userProvider.user!.owner == false
+                  ? Provider.of<BookingsProvider>(context, listen: false)
+                      .currentUserBookings
+                  : Provider.of<BookingsProvider>(context, listen: false)
+                      .centreBookings;
               return ListView.builder(
                   itemCount: listOfBookings.length,
                   itemBuilder: ((context, index) {

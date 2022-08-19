@@ -59,6 +59,7 @@ class GoogleAuthentication {
       //   }
       // });
     } on FirebaseAuthException catch (err) {
+      print(err);
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
         content: Text('Unable to login, try again!'),
         backgroundColor: Theme.of(context).errorColor,

@@ -13,6 +13,8 @@ class UserProvider with ChangeNotifier {
       phone: _user?.phone ?? "",
       imageUrl: _user?.imageUrl ?? "",
       name: _user?.name ?? "",
+      owner: _user?.owner ?? false,
+      centreId: _user?.centreId ?? "",
     );
   }
 

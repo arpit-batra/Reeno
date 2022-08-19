@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 import 'package:razorpay_flutter/razorpay_flutter.dart';
 import 'package:http/http.dart' as http;
 import 'package:reeno/providers/selected_booking_provider.dart';
+import 'package:reeno/providers/user_provider.dart';
 import 'package:reeno/screens/payment_results/after_payment_screen.dart';
 import 'package:reeno/widgets/cards/booking_time_widget.dart';
 import 'package:reeno/widgets/cards/centre_address_widget.dart';
@@ -20,6 +21,10 @@ class BookingSummary extends StatefulWidget {
 
 class _BookingSummaryState extends State<BookingSummary> {
   bool _loadingState = false;
+  var _orderId = "";
+  var _selectedBooking;
+  static const userName = "rzp_test_rUytAswPqSZROv";
+  static const secret = "hWBWWJ9Jd1zSHbxm6AVcf62d";
   final _razorpay = Razorpay();
 
   @override
@@ -37,10 +42,44 @@ class _BookingSummaryState extends State<BookingSummary> {
     _razorpay.clear();
   }
 
-  void _handlePaymentSuccess(PaymentSuccessResponse response) {
+  void _handlePaymentSuccess(PaymentSuccessResponse response) async {
     print("success");
-    Navigator.of(context)
-        .pushNamed(AfterPaymentScreen.routeName, arguments: true);
+    print(_orderId);
+    print(response.paymentId);
+    print(response.signature);
+    print(secret);
+
+    Provider.of<SelectedBookingProvider>(context, listen: false).setPaymentInfo(
+        orderId: _orderId,
+        paymentId: response.paymentId,
+        signature: response.signature);
+    // final url = Uri.parse(
+    //     'https://us-central1-reeno-5dce8.cloudfunctions.net/function-1');
+    // final api_response = await http.post(url,
+    //     headers: <String, String>{
+    //       'content-type': 'application/json',
+    //       'orderId': _orderId,
+    //       'paymentId': response.paymentId!,
+    //       'signature': response.signature!,
+    //     },
+    //     body: json.encode(_selectedBooking));
+
+    // print(json.decode(api_response.body));
+    final api_result =
+        await Provider.of<SelectedBookingProvider>(context, listen: false)
+            .cloudFunctionCallToWriteBooking();
+    if (api_result) {
+      Navigator.of(context)
+          .pushNamed(AfterPaymentScreen.routeName, arguments: true);
+    } else {
+      Navigator.of(context)
+          .pushNamed(AfterPaymentScreen.routeName, arguments: false)
+          .then((value) {
+        setState(() {
+          _loadingState = false;
+        });
+      });
+    }
   }
 
   void _handlePaymentError(PaymentFailureResponse response) {
@@ -59,8 +98,6 @@ class _BookingSummaryState extends State<BookingSummary> {
   }
 
   Future<void> _createOrder(double amount) async {
-    const userName = "rzp_test_rUytAswPqSZROv";
-    const secret = "hWBWWJ9Jd1zSHbxm6AVcf62d";
     String basicAuth =
         'Basic ' + base64.encode(utf8.encode('$userName:$secret'));
     print(basicAuth);
@@ -75,12 +112,12 @@ class _BookingSummaryState extends State<BookingSummary> {
             {"amount": amount * 100, "currency": "INR", "receipt": "rtp"}));
 
     print(json.decode(response.body)['id']);
-    final orderId = json.decode(response.body)['id'];
+    _orderId = json.decode(response.body)['id'];
     var options = {
       'key': userName,
       'amount': amount,
       'name': 'Reeno',
-      'order_id': orderId,
+      'order_id': _orderId,
       'description': 'Slot Booking',
       'timeout': 120,
     };
@@ -90,8 +127,9 @@ class _BookingSummaryState extends State<BookingSummary> {
 
   @override
   Widget build(BuildContext context) {
-    final selectedBooking =
+    _selectedBooking =
         Provider.of<SelectedBookingProvider>(context).currBooking;
+    final userProvider = Provider.of<UserProvider>(context);
     return Scaffold(
       appBar: AppBar(title: const Text("Booking Summary")),
       body: Stack(
@@ -103,15 +141,15 @@ class _BookingSummaryState extends State<BookingSummary> {
                 Expanded(
                   child: Column(
                     children: [
-                      CentreAddressWidget(selectedBooking),
+                      CentreAddressWidget(_selectedBooking),
                       const SizedBox(
                         height: 24,
                       ),
-                      BookingTimeWidget(selectedBooking),
+                      BookingTimeWidget(_selectedBooking),
                       const SizedBox(
                         height: 24,
                       ),
-                      PaymentWidget(selectedBooking),
+                      PaymentWidget(_selectedBooking),
                     ],
                   ),
                 ),
@@ -119,11 +157,36 @@ class _BookingSummaryState extends State<BookingSummary> {
                   width: double.infinity,
                   height: 48,
                   child: ElevatedButton(
-                      onPressed: () {
+                      onPressed: () async {
                         setState(() {
                           _loadingState = true;
                         });
-                        _createOrder(selectedBooking.amount);
+                        if (userProvider.user!.owner == null ||
+                            userProvider.user!.owner == false ||
+                            userProvider.user!.centreId !=
+                                _selectedBooking.sportCentreId) {
+                          _createOrder(_selectedBooking.amount);
+                        } else {
+                          final apiResult =
+                              await Provider.of<SelectedBookingProvider>(
+                                      context,
+                                      listen: false)
+                                  .cloudFunctionCallToWriteBookingForOwner();
+                          if (apiResult) {
+                            Navigator.of(context).pushNamed(
+                                AfterPaymentScreen.routeName,
+                                arguments: true);
+                          } else {
+                            Navigator.of(context)
+                                .pushNamed(AfterPaymentScreen.routeName,
+                                    arguments: false)
+                                .then((value) {
+                              setState(() {
+                                _loadingState = false;
+                              });
+                            });
+                          }
+                        }
                       },
                       child: const Text(
                         "Proceed",

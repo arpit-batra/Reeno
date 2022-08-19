@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 
 class BookingWidget extends StatelessWidget {
   final durationHeight;
-  const BookingWidget({required this.durationHeight, Key? key})
+  final userName;
+  const BookingWidget(
+      {required this.durationHeight, required this.userName, Key? key})
       : super(key: key);
   static const double bookingWidgetPadding = 3;
   @override
@@ -34,7 +36,8 @@ class BookingWidget extends StatelessWidget {
                       borderRadius: const BorderRadius.only(
                           topLeft: Radius.circular(10),
                           bottomLeft: Radius.circular(10))),
-                )
+                ),
+                Positioned(right: 10, bottom: 10, child: Text(userName))
               ],
             ),
           ),

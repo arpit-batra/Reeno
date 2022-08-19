@@ -86,7 +86,10 @@ class MyApp extends StatelessWidget {
                 myUserName: "",
                 selectedStartTime: DateTime.now(),
                 selectedEndTime: DateTime.now(),
-                amount: 0.0)),
+                amount: 0.0,
+                orderId: "",
+                paymentId: "",
+                signature: "")),
             update: (ctx, userProvider, selectedSport, selectedDate,
                 selectedBooking) {
               return SelectedBookingProvider(
@@ -101,7 +104,10 @@ class MyApp extends StatelessWidget {
                   myUserName: userProvider.user!.name,
                   selectedStartTime: selectedBooking!.selectedStartTime,
                   selectedEndTime: selectedBooking.selectedEndTime,
-                  amount: selectedBooking.amount);
+                  amount: selectedBooking.amount,
+                  orderId: selectedBooking.orderId,
+                  paymentId: selectedBooking.paymentId,
+                  signature: selectedBooking.signature);
             })
       ],
       child: MaterialApp(

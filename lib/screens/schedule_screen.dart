@@ -46,7 +46,6 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
     return Scaffold(
       appBar: AppBar(title: Text(centreMeta.title)),
       // appBar: AppBar(title: Text("dfgf")),
-      drawer: const AppDrawer(),
       body: FutureBuilder(
         future: Provider.of<SelectedDateProvider>(context, listen: false)
             .setSelectedDateAsCurrDate(),

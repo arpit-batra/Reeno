@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:reeno/screens/my_bookings_screen.dart';
 import 'package:reeno/screens/sport_centre_list_screen.dart';
 import 'package:reeno/widgets/cards/booking_time_widget.dart';
 import 'package:reeno/widgets/cards/centre_address_widget.dart';
@@ -34,6 +35,11 @@ class AfterPaymentScreen extends StatelessWidget {
   void _goToHome(BuildContext context) {
     //TODO null all selected centres and dates
     Navigator.of(context).popUntil((route) => route.isFirst);
+  }
+
+  void _goToMyBookings(BuildContext context) {
+    _goToHome(context);
+    Navigator.of(context).pushNamed(MyBookingsScreen.routeName);
   }
 
   void _tryAgain(BuildContext context) {
@@ -143,7 +149,9 @@ class AfterPaymentScreen extends StatelessWidget {
             Row(
               children: [
                 _isPaymentSuccessful
-                    ? _getActionButton("My Bookings", 0, () {})
+                    ? _getActionButton("My Bookings", 0, () {
+                        _goToMyBookings(context);
+                      })
                     : _getActionButton("Try Again", 0, () {
                         _tryAgain(context);
                       }),

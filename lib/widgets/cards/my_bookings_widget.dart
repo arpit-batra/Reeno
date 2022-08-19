@@ -28,16 +28,42 @@ class MyBookingsWidget extends StatelessWidget {
                     style: CardTextStyles.primaryInfoStyle(),
                   ),
                   const SizedBox(
-                    height: 8,
+                    height: 10,
+                  ),
+                  Text(
+                    "Court Number ${(booking.courtNo + 1).toString()}",
+                    style: CardTextStyles.smallHeadingStyle(),
+                  ),
+                  const SizedBox(
+                    height: 10,
                   ),
                   Text(
                     "Booking Cost",
                     style: CardTextStyles.smallHeadingStyle(),
                   ),
+                  const SizedBox(
+                    height: 4,
+                  ),
                   Text(
                     "₹${booking.amount.toString()}",
                     style: CardTextStyles.bookingWidgetCostStyle(),
-                  )
+                  ),
+                  const SizedBox(
+                    height: 10,
+                  ),
+                  Text(
+                    "Payment ID",
+                    style: CardTextStyles.smallHeadingStyle(),
+                  ),
+                  const SizedBox(
+                    height: 4,
+                  ),
+                  Text(
+                    booking.paymentId == null || booking.paymentId == ""
+                        ? "-"
+                        : booking.paymentId,
+                    style: CardTextStyles.bookingWidgetPaymentIDStyle(),
+                  ),
                 ],
               ),
             ),

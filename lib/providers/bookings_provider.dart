@@ -13,6 +13,7 @@ class BookingsProvider with ChangeNotifier {
 
   List<Booking> _selectedDateSelectedCentreBookings = [];
   List<Booking> _currentUserBookings = [];
+  List<Booking> _centreBookings = [];
 
   List<Booking> get selectedDateSelectedCentreBookings {
     return [..._selectedDateSelectedCentreBookings];
@@ -20,6 +21,10 @@ class BookingsProvider with ChangeNotifier {
 
   List<Booking> get currentUserBookings {
     return [..._currentUserBookings];
+  }
+
+  List<Booking> get centreBookings {
+    return [..._centreBookings];
   }
 
   Future<void> fetchSelectedDateSelectedCentreSelectedCourtBookings() async {
@@ -35,7 +40,7 @@ class BookingsProvider with ChangeNotifier {
     final bookings = await docRef
         .where("sportCentreId", isEqualTo: selectedSportCentreId)
         .where("date", isEqualTo: selectedDate)
-        .where("courtNo", isEqualTo: selectedCourtNo.toString())
+        .where("courtNo", isEqualTo: selectedCourtNo)
         .get();
     final List<Booking> todaysBookings = [];
     for (final element in bookings.docs) {
@@ -61,6 +66,27 @@ class BookingsProvider with ChangeNotifier {
       curUserBookings.add(element.data());
     }
     print("Curr bookings $curUserBookings");
+    curUserBookings.sort(((a, b) => b.startTime.compareTo(a.startTime)));
     _currentUserBookings = curUserBookings;
+  }
+
+  Future<void> fetchCentreBookings(centreId) async {
+    print("centreId => $centreId");
+    final docRef = FirebaseFirestore.instance
+        .collection('bookings')
+        .withConverter(
+            fromFirestore: Booking.fromFirestore,
+            toFirestore: (Booking booking, _) => booking.toFirestore());
+    final bookings =
+        await docRef.where("sportCentreId", isEqualTo: centreId).get();
+    print("bookings ${bookings.docs}");
+    final List<Booking> centreBookings = [];
+    for (final element in bookings.docs) {
+      print(element.toString());
+      centreBookings.add(element.data());
+    }
+    print("Curr bookings $centreBookings");
+    centreBookings.sort(((a, b) => b.startTime.compareTo(a.startTime)));
+    _centreBookings = centreBookings;
   }
 }

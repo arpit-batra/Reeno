@@ -35,6 +35,7 @@ class SelectedDateProvider with ChangeNotifier {
   Future<DateTime> setSelectedDateAsCurrDate() async {
     _selectedDate = await NTP.now();
     _currDate = _selectedDate;
+    notifyListeners();
     return _selectedDate!;
   }
 

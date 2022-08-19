@@ -121,7 +121,7 @@ class DateHelper {
     final e1InMinutes = _convertTimeOfDayInMinutesOfDay(e1);
     final s2InMinutes = _convertTimeOfDayInMinutesOfDay(s2);
     final e2InMinutes = _convertTimeOfDayInMinutesOfDay(e2);
-    if (s2InMinutes > e1InMinutes || s1InMinutes > e2InMinutes) {
+    if (s2InMinutes >= e1InMinutes || s1InMinutes >= e2InMinutes) {
       print(
           "s1->$s1InMinutes e1->$e1InMinutes s2->$s2InMinutes e2->$e2InMinutes");
       return false;

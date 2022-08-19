@@ -8,6 +8,9 @@ class Booking {
   final String userId;
   final String userName;
   final String date;
+  String orderId;
+  String paymentId;
+  String signature;
   final int courtNo;
   DateTime startTime;
   DateTime endTime;
@@ -21,6 +24,9 @@ class Booking {
     required this.userId,
     required this.userName,
     required this.date,
+    required this.orderId,
+    required this.paymentId,
+    required this.signature,
     required this.courtNo,
     required this.startTime,
     required this.endTime,
@@ -32,6 +38,7 @@ class Booking {
     SnapshotOptions? options,
   ) {
     final data = snapshot.data();
+    print("data => $data");
     return Booking(
         id: snapshot.id,
         sportCentreId: data?['sportCentreId'],
@@ -40,10 +47,13 @@ class Booking {
         userId: data?['userId'],
         userName: data?['userName'],
         date: data?['date'],
-        courtNo: int.parse(data?['courtNo']),
+        orderId: data?['orderId'],
+        paymentId: data?['paymentId'],
+        signature: data?['signature'],
+        courtNo: data?['courtNo'],
         startTime: DateTime.parse(data?['startTime']),
         endTime: DateTime.parse(data?['endTime']),
-        amount: double.parse(data?['amount']));
+        amount: (data?['amount'] as num) as double);
   }
 
   Map<String, dynamic> toFirestore() {
@@ -54,6 +64,28 @@ class Booking {
       "userId": userId,
       "userName": userName,
       "date": date,
+      "orderId": orderId,
+      "paymentId": paymentId,
+      "signature": signature,
+      "courtNo": courtNo,
+      "startTime": startTime.toIso8601String(),
+      "endTime": endTime.toIso8601String(),
+      "amount": amount,
+    };
+  }
+
+  Map toJson() {
+    return {
+      "sportCentreId": sportCentreId,
+      "sportCentreTitle": sportCentreTitle,
+      "sportCentreAddress": sportCentreAddress,
+      "userId": userId,
+      "userName": userName,
+      "date": date,
+      "orderId": orderId,
+      "paymentId": paymentId,
+      "signature": signature,
+      "courtNo": courtNo,
       "startTime": startTime.toIso8601String(),
       "endTime": endTime.toIso8601String(),
       "amount": amount,
