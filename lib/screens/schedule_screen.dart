@@ -53,53 +53,49 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return const LoadingWidget();
           } else {
-            return Column(children: <Widget>[
-              const SizedBox(
-                height: 100,
-                width: double.infinity,
-                child: DatePicker(),
-              ),
-              const Expanded(
-                child: DaySchedule(),
-              ),
-              Container(
-                padding: const EdgeInsets.only(left: 16, right: 16, bottom: 16),
-                width: double.infinity,
-                height: 64,
-                child: Consumer<SelectedDateProvider>(
-                  builder: ((context, selectedDateProvider, child) {
-                    print(selectedDateProvider.selectedDateInDateTime);
-                    print(snapshot.data as DateTime);
-
-                    if (DateHelper.firstDateBeforeSecond(
-                        selectedDateProvider.selectedDateInDateTime,
-                        snapshot.data as DateTime)) {
-                      return const ElevatedButton(
-                          onPressed: null,
-                          child: Text(
-                            'Book my slot',
-                            style: TextStyle(
-                              fontSize: 18,
-                            ),
-                            textAlign: TextAlign.center,
-                          ));
-                    } else {
-                      return ElevatedButton(
-                          onPressed: (() {
-                            showTimePickerDialog(context);
-                          }),
-                          child: const Text(
-                            'Book my slot',
-                            style: TextStyle(
-                              fontSize: 18,
-                            ),
-                            textAlign: TextAlign.center,
-                          ));
-                    }
-                  }),
+            return Consumer<SelectedDateProvider>(
+                builder: ((context, selectedDateProvider, child) {
+              print(selectedDateProvider.selectedDateInDateTime);
+              print(snapshot.data as DateTime);
+              final isDateInPast = DateHelper.firstDateBeforeSecond(
+                  selectedDateProvider.selectedDateInDateTime,
+                  snapshot.data as DateTime);
+              return Column(children: <Widget>[
+                const SizedBox(
+                  height: 100,
+                  width: double.infinity,
+                  child: DatePicker(),
                 ),
-              )
-            ]);
+                Expanded(
+                  child: GestureDetector(
+                      onTap: isDateInPast
+                          ? null
+                          : (() {
+                              showTimePickerDialog(context);
+                            }),
+                      child: DaySchedule()),
+                ),
+                Container(
+                    padding:
+                        const EdgeInsets.only(left: 16, right: 16, bottom: 16),
+                    width: double.infinity,
+                    height: 64,
+                    child: ElevatedButton(
+                      onPressed: isDateInPast
+                          ? null
+                          : (() {
+                              showTimePickerDialog(context);
+                            }),
+                      child: const Text(
+                        'Book my slot',
+                        style: TextStyle(
+                          fontSize: 18,
+                        ),
+                        textAlign: TextAlign.center,
+                      ),
+                    ))
+              ]);
+            }));
           }
         },
       ),
