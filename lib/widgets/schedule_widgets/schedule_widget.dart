@@ -47,7 +47,7 @@ class ScheduleWidget extends StatelessWidget {
                 final heightOfWidget = DateHelper.getDurationHeight(
                     booking.startTime, booking.endTime, heightPerHour);
                 final placementFromTop = DateHelper.getPlacementFromTop(
-                    booking.startTime, heightOfWidget);
+                    booking.startTime, heightPerHour);
                 return Positioned(
                     top: placementFromTop,
                     width: MediaQuery.of(context).size.width -

@@ -104,6 +104,13 @@ class DateHelper {
 
   static double getPlacementFromTop(DateTime startTime, double heightPerHour) {
     final startOfDay = DateTime(startTime.year, startTime.month, startTime.day);
+    print(startTime);
+    print(startOfDay);
+    print(startTime.difference(startOfDay));
+    print((startTime.difference(startOfDay)).inSeconds);
+    print(heightPerHour);
+    print(((startTime.difference(startOfDay)).inSeconds) * heightPerHour);
+    print((startTime.difference(startOfDay).inSeconds * heightPerHour) / 3600);
     return (startTime.difference(startOfDay).inSeconds * heightPerHour) / 3600;
   }
 
