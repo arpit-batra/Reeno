@@ -13,14 +13,15 @@ class MyBookingsScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final userProvider = Provider.of<UserProvider>(context);
+    final isNotAnOwner =
+        userProvider.user!.owner == null || userProvider.user!.owner == false;
     print("user => ${userProvider.user!.owner}");
     return Scaffold(
       appBar: AppBar(
         title: const Text("My Bookings"),
       ),
       body: FutureBuilder(
-          future: userProvider.user!.owner == null ||
-                  userProvider.user!.owner == false
+          future: isNotAnOwner
               ? Provider.of<BookingsProvider>(context, listen: false)
                   .fetchCurrentUserBookings()
               : Provider.of<BookingsProvider>(context, listen: false)
@@ -28,6 +29,10 @@ class MyBookingsScreen extends StatelessWidget {
           builder: ((context, snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting) {
               return LoadingScreen();
+            } else if (snapshot.hasError) {
+              return Center(
+                child: Image.asset('./assets/3828556.jpg'),
+              );
             } else {
               final listOfBookings = userProvider.user!.owner == null ||
                       userProvider.user!.owner == false
@@ -41,7 +46,9 @@ class MyBookingsScreen extends StatelessWidget {
                     final booking = listOfBookings[index];
                     return Padding(
                       padding: const EdgeInsets.all(8.0),
-                      child: MyBookingsWidget(booking),
+                      child: isNotAnOwner
+                          ? MyBookingsWidget(booking, false)
+                          : MyBookingsWidget(booking, true),
                     );
                   }));
             }

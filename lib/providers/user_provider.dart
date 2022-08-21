@@ -52,10 +52,13 @@ class UserProvider with ChangeNotifier {
       email: _user!.email,
       name: name,
       imageUrl: _user!.imageUrl,
+      owner: _user!.owner ?? false,
+      centreId: _user!.centreId ?? "",
     );
     final docRef = FirebaseFirestore.instance.collection('users').withConverter(
         fromFirestore: CustomUser.User.fromFirestore,
         toFirestore: (CustomUser.User user, options) => user.toFirestore());
+
     await docRef.doc(prevUserId).set(currentUser);
 
     _user = CustomUser.User(
@@ -63,6 +66,8 @@ class UserProvider with ChangeNotifier {
       email: _user!.email,
       name: name,
       imageUrl: _user!.imageUrl,
+      owner: _user!.owner ?? false,
+      centreId: _user!.centreId ?? "",
       id: prevUserId,
     );
 
@@ -72,11 +77,12 @@ class UserProvider with ChangeNotifier {
 
   Future<void> updateImageUrl(String imageUrl) async {
     final currentUser = CustomUser.User(
-      phone: _user!.phone,
-      email: _user!.email,
-      name: _user!.name,
-      imageUrl: imageUrl,
-    );
+        phone: _user!.phone,
+        email: _user!.email,
+        name: _user!.name,
+        imageUrl: imageUrl,
+        owner: _user!.owner ?? false,
+        centreId: _user!.centreId ?? "");
     final docRef = FirebaseFirestore.instance.collection('users').withConverter(
         fromFirestore: CustomUser.User.fromFirestore,
         toFirestore: (CustomUser.User user, options) => user.toFirestore());

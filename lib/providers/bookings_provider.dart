@@ -11,12 +11,12 @@ class BookingsProvider with ChangeNotifier {
   BookingsProvider(this.selectedSportCentreId, this.selectedDate,
       this.selectedCourtNo, this.userId);
 
-  List<Booking> _selectedDateSelectedCentreBookings = [];
+  List<Booking> _selectedDateSelectedCentreSelectedCourtBookings = [];
   List<Booking> _currentUserBookings = [];
   List<Booking> _centreBookings = [];
 
-  List<Booking> get selectedDateSelectedCentreBookings {
-    return [..._selectedDateSelectedCentreBookings];
+  List<Booking> get selectedDateSelectedCentreSelectedCourtBookings {
+    return [..._selectedDateSelectedCentreSelectedCourtBookings];
   }
 
   List<Booking> get currentUserBookings {
@@ -47,7 +47,7 @@ class BookingsProvider with ChangeNotifier {
       todaysBookings.add(element.data());
     }
 
-    _selectedDateSelectedCentreBookings = todaysBookings;
+    _selectedDateSelectedCentreSelectedCourtBookings = todaysBookings;
     // notifyListeners();
   }
 

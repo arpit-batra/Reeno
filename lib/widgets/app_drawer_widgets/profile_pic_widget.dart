@@ -41,15 +41,18 @@ class _ProfilePicWidgetState extends State<ProfilePicWidget> {
           .ref()
           .child('user_image')
           .child('$currUserUid.jpg');
-
-      print("uploading");
-      await ref.putFile(_pickedImageFile);
-      print("uploaded");
-      url = await ref.getDownloadURL();
-      print("got url, uploading in user");
-      await Provider.of<UserProvider>(context, listen: false)
-          .updateImageUrl(imageUrl);
-      print("uploaded");
+      try {
+        print("uploading");
+        await ref.putFile(_pickedImageFile);
+        print("uploaded");
+        url = await ref.getDownloadURL();
+        print("got url $url, uploading in user");
+        await Provider.of<UserProvider>(context, listen: false)
+            .updateImageUrl(url);
+        print("uploaded");
+      } catch (err) {
+        print(err);
+      }
     }
   }
 
@@ -64,17 +67,35 @@ class _ProfilePicWidgetState extends State<ProfilePicWidget> {
               borderWidth: 1,
               borderColor: Colors.grey,
               child: IconButton(
-                  onPressed: () {
+                  onPressed: () async {
                     setState(() {
                       _loadingState = true;
                     });
-                    _pickAndUpload(imageType, imageUrl, context);
+                    try {
+                      final result =
+                          await InternetAddress.lookup('example.com');
+                      if (result.isNotEmpty &&
+                          result[0].rawAddress.isNotEmpty) {
+                        await _pickAndUpload(imageType, imageUrl, context);
+                      }
+                    } on SocketException catch (_) {
+                      setState(() {
+                        _loadingState = false;
+                      });
+                      print("We Reached here");
+                      Navigator.of(context).pop();
+                      Navigator.of(context).pop();
+                      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                        content: Text("Please Check your connection"),
+                        backgroundColor: Theme.of(context).errorColor,
+                      ));
+                    }
 
                     setState(() {
                       _loadingState = false;
                     });
-                    Navigator.of(context).pop();
-                    Navigator.of(context).pop();
+                    Navigator.of(context).popUntil((route) => route.isFirst);
+                    // Navigator.of(context).pop();
                   },
                   icon: imageType == ImageType.camera
                       ? Icon(
@@ -140,34 +161,43 @@ class _ProfilePicWidgetState extends State<ProfilePicWidget> {
                 child: Image.network(
                   widget.imageUrl,
                   fit: BoxFit.cover,
+                  errorBuilder: ((context, error, stackTrace) {
+                    return Container(
+                      color: Colors.white,
+                      child: Center(
+                        child: Text("Unable to Load Image"),
+                      ),
+                    );
+                  }),
                 ),
               ),
             ),
           ),
           Positioned(
-              left: (AppDrawer.appDrawerWidth / 2) + 10,
-              bottom: 0,
-              child: ClipRRect(
-                borderRadius: BorderRadius.circular(30),
-                child: Container(
-                  color: Colors.white,
-                  child: IconButton(
-                      onPressed: (() {
-                        print("Tap on prof pic");
-                        showModalBottomSheet(
-                          context: context,
-                          builder: (ctx) {
-                            return _bottomSheetBuilder(
-                                context, widget.imageUrl);
-                          },
-                        );
-                      }),
-                      icon: Icon(
-                        Icons.camera_alt,
-                        color: Colors.grey[700],
-                      )),
-                ),
-              ))
+            left: (AppDrawer.appDrawerWidth / 2) + 10,
+            bottom: 0,
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(30),
+              child: Container(
+                color: Colors.white,
+                child: IconButton(
+                    onPressed: (() {
+                      print("Tap on prof pic");
+                      showModalBottomSheet(
+                        context: context,
+                        builder: (ctx) {
+                          return _bottomSheetBuilder(context, widget.imageUrl);
+                        },
+                      );
+                    }),
+                    icon: Icon(
+                      Icons.camera_alt,
+                      color: Colors.grey[700],
+                    )),
+              ),
+            ),
+          ),
+          if (_loadingState) Center(child: CircularProgressIndicator()),
         ],
       ),
     );

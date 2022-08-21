@@ -98,31 +98,41 @@ class _BookingSummaryState extends State<BookingSummary> {
   }
 
   Future<void> _createOrder(double amount) async {
-    String basicAuth =
-        'Basic ' + base64.encode(utf8.encode('$userName:$secret'));
-    print(basicAuth);
+    try {
+      String basicAuth =
+          'Basic ' + base64.encode(utf8.encode('$userName:$secret'));
+      print(basicAuth);
 
-    final url = Uri.parse('https://api.razorpay.com/v1/orders');
-    final response = await http.post(url,
-        headers: <String, String>{
-          'authorization': basicAuth,
-          'content-type': 'application/json'
-        },
-        body: json.encode(
-            {"amount": amount * 100, "currency": "INR", "receipt": "rtp"}));
+      final url = Uri.parse('https://api.razorpay.com/v1/orders');
+      final response = await http.post(url,
+          headers: <String, String>{
+            'authorization': basicAuth,
+            'content-type': 'application/json'
+          },
+          body: json.encode(
+              {"amount": amount * 100, "currency": "INR", "receipt": "rtp"}));
 
-    print(json.decode(response.body)['id']);
-    _orderId = json.decode(response.body)['id'];
-    var options = {
-      'key': userName,
-      'amount': amount,
-      'name': 'Reeno',
-      'order_id': _orderId,
-      'description': 'Slot Booking',
-      'timeout': 120,
-    };
-    _razorpay.open(options);
-    print("Booking Summary -> completed");
+      print(json.decode(response.body)['id']);
+      _orderId = json.decode(response.body)['id'];
+      var options = {
+        'key': userName,
+        'amount': amount,
+        'name': 'Reeno',
+        'order_id': _orderId,
+        'description': 'Slot Booking',
+        'timeout': 120,
+      };
+      _razorpay.open(options);
+      print("Booking Summary -> completed");
+    } on Exception catch (err) {
+      setState(() {
+        _loadingState = false;
+      });
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        content: Text("Failed to Book, please check your connection"),
+        backgroundColor: Theme.of(context).errorColor,
+      ));
+    }
   }
 
   @override
@@ -167,24 +177,36 @@ class _BookingSummaryState extends State<BookingSummary> {
                                 _selectedBooking.sportCentreId) {
                           _createOrder(_selectedBooking.amount);
                         } else {
-                          final apiResult =
-                              await Provider.of<SelectedBookingProvider>(
-                                      context,
-                                      listen: false)
-                                  .cloudFunctionCallToWriteBookingForOwner();
-                          if (apiResult) {
-                            Navigator.of(context).pushNamed(
-                                AfterPaymentScreen.routeName,
-                                arguments: true);
-                          } else {
-                            Navigator.of(context)
-                                .pushNamed(AfterPaymentScreen.routeName,
-                                    arguments: false)
-                                .then((value) {
-                              setState(() {
-                                _loadingState = false;
+                          try {
+                            final apiResult =
+                                await Provider.of<SelectedBookingProvider>(
+                                        context,
+                                        listen: false)
+                                    .cloudFunctionCallToWriteBookingForOwner();
+
+                            if (apiResult) {
+                              Navigator.of(context).pushNamed(
+                                  AfterPaymentScreen.routeName,
+                                  arguments: true);
+                            } else {
+                              Navigator.of(context)
+                                  .pushNamed(AfterPaymentScreen.routeName,
+                                      arguments: false)
+                                  .then((value) {
+                                setState(() {
+                                  _loadingState = false;
+                                });
                               });
+                            }
+                          } on Exception catch (err) {
+                            setState(() {
+                              _loadingState = false;
                             });
+                            ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                              content: Text(
+                                  "Failed to Book, please check your connection"),
+                              backgroundColor: Theme.of(context).errorColor,
+                            ));
                           }
                         }
                       },

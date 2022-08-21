@@ -36,8 +36,9 @@ class _DayScheduleState extends State<DaySchedule> {
         if (snapshot.connectionState == ConnectionState.waiting) {
           return const LoadingWidget();
         } else if (snapshot.hasError) {
-          print("ERROR -> ${snapshot.error}");
-          return Text(snapshot.error.toString());
+          return Center(
+            child: Image.asset('./assets/3828556.jpg'),
+          );
         } else {
           return ScheduleWidget();
         }

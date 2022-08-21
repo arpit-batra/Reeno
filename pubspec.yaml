@@ -56,6 +56,13 @@ dependencies:
 dev_dependencies:
   flutter_test:
     sdk: flutter
+  flutter_launcher_icons: ^0.10.0
+
+flutter_icons:
+  android: true
+  image_path: "assets/Icon_image.jpg"
+  adaptive_icon_background: "#575dfb"
+  adaptive_icon_foreground: "assets/Icon_image.jpg"
 
   # The "flutter_lints" package below contains a set of recommended lints to
   # encourage good coding practices. The lint set provided by the package is
@@ -79,6 +86,7 @@ flutter:
   assets:
     - ./assets/google-icon.svg
     - ./assets/default_prof_pic.jpeg
+    - ./assets/3828556.jpg
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware

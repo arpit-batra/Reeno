@@ -159,18 +159,24 @@ class _CentreInfoScreenState extends State<CentreInfoScreen> {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text(
-                address.displayAddress,
-                style: _contentStyle(),
+              Flexible(
+                flex: 7,
+                child: Text(
+                  address.displayAddress,
+                  style: _contentStyle(),
+                ),
               ),
-              IconButton(
-                onPressed: () {
-                  MapsLauncher.launchCoordinates(address.coordinates.latitude,
-                      address.coordinates.longitude);
-                },
-                icon: const Icon(
-                  Icons.directions,
-                  color: Color.fromRGBO(24, 28, 123, 1),
+              Flexible(
+                flex: 1,
+                child: IconButton(
+                  onPressed: () {
+                    MapsLauncher.launchCoordinates(address.coordinates.latitude,
+                        address.coordinates.longitude);
+                  },
+                  icon: const Icon(
+                    Icons.directions,
+                    color: Color.fromRGBO(24, 28, 123, 1),
+                  ),
                 ),
               )
             ],
@@ -189,8 +195,11 @@ class _CentreInfoScreenState extends State<CentreInfoScreen> {
         if (snapshot.connectionState == ConnectionState.waiting) {
           return const LoadingScreen();
         } else if (snapshot.hasError) {
-          //TODO create error screen if data is not fetched from firebase
-          return const Scaffold();
+          return Scaffold(
+            body: Center(
+              child: Image.asset('./assets/3828556.jpg'),
+            ),
+          );
         } else {
           final centre =
               Provider.of<SportCentresProvider>(context).selectedSportCentre;

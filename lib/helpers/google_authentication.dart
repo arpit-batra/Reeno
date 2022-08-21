@@ -22,22 +22,22 @@ class GoogleAuthentication {
 
   static void signInWithGoogle(context) async {
     // Trigger the authentication flow
-    final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
-
-    print(googleUser?.displayName);
-    print(googleUser?.photoUrl);
-
-    // Obtain the auth details from the request
-    final GoogleSignInAuthentication? googleAuth =
-        await googleUser?.authentication;
-
-    // Create a new credential
-    final credential = GoogleAuthProvider.credential(
-      accessToken: googleAuth?.accessToken,
-      idToken: googleAuth?.idToken,
-    );
-
     try {
+      final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
+
+      print(googleUser?.displayName);
+      print(googleUser?.photoUrl);
+
+      // Obtain the auth details from the request
+      final GoogleSignInAuthentication? googleAuth =
+          await googleUser?.authentication;
+
+      // Create a new credential
+      final credential = GoogleAuthProvider.credential(
+        accessToken: googleAuth?.accessToken,
+        idToken: googleAuth?.idToken,
+      );
+
       // Once signed in, return the UserCredential
       final userCredentials =
           await FirebaseAuth.instance.signInWithCredential(credential);
@@ -59,6 +59,12 @@ class GoogleAuthentication {
       //   }
       // });
     } on FirebaseAuthException catch (err) {
+      print(err);
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        content: Text('Unable to login, try again!'),
+        backgroundColor: Theme.of(context).errorColor,
+      ));
+    } catch (err) {
       print(err);
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
         content: Text('Unable to login, try again!'),

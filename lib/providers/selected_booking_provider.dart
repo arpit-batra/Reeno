@@ -111,20 +111,24 @@ class SelectedBookingProvider with ChangeNotifier {
   }
 
   Future<bool> cloudFunctionCallToWriteBookingForOwner() async {
-    final url = Uri.parse(
-        'https://us-central1-reeno-5dce8.cloudfunctions.net/function-1');
-    final api_response = await http.post(url,
-        headers: <String, String>{
-          'content-type': 'application/json',
-          'user': 'owner'
-        },
-        body: json.encode(_createdBooking));
+    try {
+      final url = Uri.parse(
+          'https://us-central1-reeno-5dce8.cloudfunctions.net/function-1');
+      final api_response = await http.post(url,
+          headers: <String, String>{
+            'content-type': 'application/json',
+            'user': 'owner'
+          },
+          body: json.encode(_createdBooking));
 
-    print(api_response.statusCode);
-    if (api_response.statusCode == 200) {
-      return true;
-    } else {
-      return false;
+      print(api_response.statusCode);
+      if (api_response.statusCode == 200) {
+        return true;
+      } else {
+        return false;
+      }
+    } on Exception catch (err) {
+      throw err;
     }
   }
 }

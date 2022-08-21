@@ -15,7 +15,8 @@ class ScheduleWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final bookingsProvider = Provider.of<BookingsProvider>(context);
-    final bookingList = bookingsProvider.selectedDateSelectedCentreBookings;
+    final bookingList =
+        bookingsProvider.selectedDateSelectedCentreSelectedCourtBookings;
     final user = Provider.of<UserProvider>(context, listen: false).user;
     final selectedSportCentreId =
         Provider.of<SportCentresProvider>(context, listen: false)

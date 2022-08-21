@@ -6,94 +6,139 @@ import 'package:reeno/widgets/card_ui/customized_card.dart';
 
 class MyBookingsWidget extends StatelessWidget {
   final Booking booking;
-  const MyBookingsWidget(this.booking, {Key? key}) : super(key: key);
+  final isOwner;
+  const MyBookingsWidget(this.booking, this.isOwner, {Key? key})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return CustomizedCard(
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
+      child: Column(
         children: [
-          //Address and payment
-          Expanded(
-            flex: 5,
-            child: Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  Text(
-                    booking.sportCentreTitle,
-                    style: CardTextStyles.primaryInfoStyle(),
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              //Address and payment
+              Expanded(
+                flex: 5,
+                child: Padding(
+                  padding: const EdgeInsets.all(16.0),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      Text(
+                        booking.sportCentreTitle,
+                        style: CardTextStyles.primaryInfoStyle(),
+                      ),
+                      const SizedBox(
+                        height: 10,
+                      ),
+                      Text(
+                        "Court Number ${(booking.courtNo + 1).toString()}",
+                        style: CardTextStyles.smallHeadingStyle(),
+                      ),
+                      const SizedBox(
+                        height: 10,
+                      ),
+                      Text(
+                        "Booking Cost",
+                        style: CardTextStyles.smallHeadingStyle(),
+                      ),
+                      const SizedBox(
+                        height: 4,
+                      ),
+                      Text(
+                        "₹${booking.amount.toString()}",
+                        style: CardTextStyles.bookingWidgetCostStyle(),
+                      ),
+                      const SizedBox(
+                        height: 10,
+                      ),
+                      Text(
+                        "Payment ID",
+                        style: CardTextStyles.smallHeadingStyle(),
+                      ),
+                      const SizedBox(
+                        height: 4,
+                      ),
+                      Text(
+                        booking.paymentId == null || booking.paymentId == ""
+                            ? "-"
+                            : booking.paymentId,
+                        style: CardTextStyles.bookingWidgetPaymentIDStyle(),
+                      ),
+                    ],
                   ),
-                  const SizedBox(
-                    height: 10,
-                  ),
-                  Text(
-                    "Court Number ${(booking.courtNo + 1).toString()}",
-                    style: CardTextStyles.smallHeadingStyle(),
-                  ),
-                  const SizedBox(
-                    height: 10,
-                  ),
-                  Text(
-                    "Booking Cost",
-                    style: CardTextStyles.smallHeadingStyle(),
-                  ),
-                  const SizedBox(
-                    height: 4,
-                  ),
-                  Text(
-                    "₹${booking.amount.toString()}",
-                    style: CardTextStyles.bookingWidgetCostStyle(),
-                  ),
-                  const SizedBox(
-                    height: 10,
-                  ),
-                  Text(
-                    "Payment ID",
-                    style: CardTextStyles.smallHeadingStyle(),
-                  ),
-                  const SizedBox(
-                    height: 4,
-                  ),
-                  Text(
-                    booking.paymentId == null || booking.paymentId == ""
-                        ? "-"
-                        : booking.paymentId,
-                    style: CardTextStyles.bookingWidgetPaymentIDStyle(),
-                  ),
-                ],
+                ),
               ),
-            ),
+              //Date and Time
+              Expanded(
+                flex: 4,
+                child: Padding(
+                  padding: const EdgeInsets.all(16.0),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.end,
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      Text(
+                        DateHelper.getReadableDate(booking.date),
+                        style: CardTextStyles.bookingWidgetDateStyle(),
+                        textAlign: TextAlign.end,
+                      ),
+                      const SizedBox(
+                        height: 8,
+                      ),
+                      Text(
+                        "${DateHelper.dateTimeToTimeOfDayInString(booking.startTime)} - ${DateHelper.dateTimeToTimeOfDayInString(booking.endTime)}",
+                        style: CardTextStyles.bookingWidgetTimeStyle(),
+                        textAlign: TextAlign.end,
+                      )
+                    ],
+                  ),
+                ),
+              )
+            ],
           ),
-          //Date and Time
-          Expanded(
-            flex: 4,
-            child: Padding(
+          if (isOwner)
+            Padding(
               padding: const EdgeInsets.all(16.0),
               child: Column(
-                crossAxisAlignment: CrossAxisAlignment.end,
-                mainAxisAlignment: MainAxisAlignment.start,
                 children: [
-                  Text(
-                    DateHelper.getReadableDate(booking.date),
-                    style: CardTextStyles.bookingWidgetDateStyle(),
-                    textAlign: TextAlign.end,
+                  Row(
+                    children: [
+                      Flexible(
+                        child: Text(
+                          "Name : ",
+                          style: CardTextStyles.bookingWidgetTimeStyle(),
+                        ),
+                      ),
+                      Flexible(
+                        child: Text(
+                          booking.userName,
+                          style: CardTextStyles.bookingWidgetPaymentIDStyle(),
+                        ),
+                      )
+                    ],
                   ),
-                  const SizedBox(
-                    height: 8,
+                  SizedBox(
+                    height: 6,
                   ),
-                  Text(
-                    "${DateHelper.dateTimeToTimeOfDayInString(booking.startTime)} - ${DateHelper.dateTimeToTimeOfDayInString(booking.endTime)}",
-                    style: CardTextStyles.bookingWidgetTimeStyle(),
-                    textAlign: TextAlign.end,
+                  Row(
+                    children: [
+                      Text(
+                        "UserId : ",
+                        style: CardTextStyles.bookingWidgetTimeStyle(),
+                      ),
+                      Text(
+                        booking.userId,
+                        style: CardTextStyles.bookingWidgetPaymentIDStyle(),
+                      )
+                    ],
                   )
                 ],
               ),
-            ),
-          )
+            )
         ],
       ),
     );

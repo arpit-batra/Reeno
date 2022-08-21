@@ -103,9 +103,8 @@ class _SportCentreListScreenState extends State<SportCentreListScreen> {
             if (snapshot.connectionState == ConnectionState.waiting) {
               return const LoadingScreen();
             } else if (snapshot.hasError) {
-              //TODO create a null screen
-              return const Center(
-                child: Text("Some error occurred"),
+              return Center(
+                child: Image.asset('./assets/3828556.jpg'),
               );
             } else {
               final metas =

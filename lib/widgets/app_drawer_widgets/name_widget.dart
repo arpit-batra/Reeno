@@ -35,10 +35,12 @@ class NameWidget extends StatelessWidget {
                 Align(
                   alignment: Alignment.centerRight,
                   child: ElevatedButton(
-                    onPressed: () {
+                    onPressed: () async {
                       print(_nameTextController.text);
-                      Provider.of<UserProvider>(context, listen: false)
+
+                      await Provider.of<UserProvider>(context, listen: false)
                           .updateName(_nameTextController.text);
+
                       Navigator.of(context).pop();
                     },
                     child: const Padding(

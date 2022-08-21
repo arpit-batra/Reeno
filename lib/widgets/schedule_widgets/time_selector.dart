@@ -23,7 +23,7 @@ class _TimeSelectorState extends State<TimeSelector> {
   var _endTime = const TimeOfDay(hour: 9, minute: 0);
   static const Color darkPrimary = Color.fromRGBO(24, 28, 123, 1);
 
-  bool _validTimeRange() {
+  String _validTimeRange() {
     final selectedDateProvider = Provider.of<SelectedDateProvider>(context);
 
     final currDate = selectedDateProvider.currDateInDateTime;
@@ -31,18 +31,18 @@ class _TimeSelectorState extends State<TimeSelector> {
 
     if (DateHelper.compareDayOfDateTimes(selectedDate, currDate) &&
         DateHelper.isT1BeforeT2(_startTime, TimeOfDay.fromDateTime(currDate))) {
-      return false;
+      return "Selected slot is in the past";
     }
 
     List<Booking> bookings = Provider.of<BookingsProvider>(context)
-        .selectedDateSelectedCentreBookings;
+        .selectedDateSelectedCentreSelectedCourtBookings;
     for (var element in bookings) {
       if (DateHelper.isOverlapping(TimeOfDay.fromDateTime(element.startTime),
           TimeOfDay.fromDateTime(element.endTime), _startTime, _endTime)) {
-        return false;
+        return "Selected slot clashes with someone else";
       }
     }
-    return true;
+    return "";
   }
 
   Widget _createTimeDisplayBox(String label, TimeOfDay time) {
@@ -73,7 +73,7 @@ class _TimeSelectorState extends State<TimeSelector> {
     return Center(
       child: Container(
         width: 350,
-        height: 520,
+        height: 540,
         decoration: const BoxDecoration(
             borderRadius: BorderRadius.all(Radius.circular(10)),
             color: Colors.white),
@@ -107,7 +107,7 @@ class _TimeSelectorState extends State<TimeSelector> {
                   hideButtons: true,
                   hideTimes: true,
                   strokeColor: Theme.of(context).primaryColor.withOpacity(0.5),
-                  handlerColor: _validTimeRange()
+                  handlerColor: _validTimeRange().isEmpty
                       ? darkPrimary
                       : Theme.of(context).errorColor,
                   backgroundWidget: ClipRRect(
@@ -143,6 +143,17 @@ class _TimeSelectorState extends State<TimeSelector> {
                     });
                   },
                 ),
+                if (_validTimeRange().isNotEmpty)
+                  Align(
+                    alignment: Alignment.centerLeft,
+                    child: Text(
+                      _validTimeRange(),
+                      style: TextStyle(color: Theme.of(context).errorColor),
+                    ),
+                  ),
+                const SizedBox(
+                  height: 6,
+                ),
                 CustomizedCard(
                   child: Padding(
                     padding: const EdgeInsets.all(12.0),
@@ -168,7 +179,7 @@ class _TimeSelectorState extends State<TimeSelector> {
                           ],
                         ),
                         ElevatedButton(
-                            onPressed: _validTimeRange()
+                            onPressed: _validTimeRange().isEmpty
                                 ? () {
                                     print(_startTime);
                                     print(_endTime);

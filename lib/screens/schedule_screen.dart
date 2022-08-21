@@ -52,6 +52,10 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
         builder: (_, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return const LoadingWidget();
+          } else if (snapshot.hasError) {
+            return Center(
+              child: Image.asset('./assets/3828556.jpg'),
+            );
           } else {
             return Consumer<SelectedDateProvider>(
                 builder: ((context, selectedDateProvider, child) {

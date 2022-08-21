@@ -30,6 +30,11 @@ class _CentreImagesWidgetState extends State<CentreImagesWidget> {
                   child: Image.network(
                     widget.sportCentre.images![index],
                     fit: BoxFit.cover,
+                    errorBuilder: ((context, error, stackTrace) {
+                      return Center(
+                        child: Text("Unable to Load Image"),
+                      );
+                    }),
                   ));
             },
             itemCount: totalImages,
