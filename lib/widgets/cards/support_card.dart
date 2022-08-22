@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:reeno/widgets/app_drawer_widgets/support_widget.dart';
 import 'package:reeno/widgets/card_ui/customized_card.dart';
 
 class SupportCard extends StatelessWidget {
@@ -30,7 +31,9 @@ class SupportCard extends StatelessWidget {
                     style: TextStyle(color: Colors.white, fontSize: 24),
                   ),
                   TextButton.icon(
-                    onPressed: () {},
+                    onPressed: () {
+                      SupportWidget(context).displaySupportInfo();
+                    },
                     label: const Text(
                       'Get Support',
                       style: TextStyle(
