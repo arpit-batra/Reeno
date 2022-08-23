@@ -145,6 +145,7 @@ class _SportCentreListScreenState extends State<SportCentreListScreen> {
                     child: Container(
                       width: double.infinity,
                       height: 200,
+                      padding: EdgeInsets.only(bottom: 16),
                       child: SportCentreListTile(
                           title: metas[index].title,
                           imageUrl: metas[index].imageUrl),
