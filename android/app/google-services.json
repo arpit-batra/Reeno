@@ -22,6 +22,14 @@
           }
         },
         {
+          "client_id": "272479207698-t4ugktudf2i2c5plsri1lvbgs5fp18tb.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.arpitbatra98.reeno",
+            "certificate_hash": "525b79fc21026a33de6798c1aacdc0447dca4d1c"
+          }
+        },
+        {
           "client_id": "272479207698-fpbel2193h6tnlf747vv3ns1loijotoa.apps.googleusercontent.com",
           "client_type": 3
         }

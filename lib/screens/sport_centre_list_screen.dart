@@ -109,14 +109,31 @@ class _SportCentreListScreenState extends State<SportCentreListScreen> {
             } else {
               final metas =
                   Provider.of<SportCentresProvider>(context).sportCentreMetas;
-              return GridView.builder(
-                gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
-                  maxCrossAxisExtent: 300,
-                  childAspectRatio: 3 / 2,
-                  crossAxisSpacing: 10,
-                  mainAxisSpacing: 10,
-                ),
-                itemBuilder: (context, index) {
+              // return GridView.builder(
+              //   gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
+              //     maxCrossAxisExtent: 300,
+              //     childAspectRatio: 3 / 2,
+              //     crossAxisSpacing: 10,
+              //     mainAxisSpacing: 10,
+              //   ),
+              //   itemBuilder: (context, index) {
+              //     return GestureDetector(
+              //       onTap: (() {
+              //         Provider.of<SportCentresProvider>(context, listen: false)
+              //             .setSelectCentre(metas[index].detailsId);
+              //         Navigator.of(context).pushNamed(
+              //             CentreInfoScreen.routeName,
+              //             arguments: metas[index].detailsId);
+              //       }),
+              //       child: SportCentreListTile(
+              //           title: metas[index].title,
+              //           imageUrl: metas[index].imageUrl),
+              //     );
+              //   },
+              //   itemCount: metas.length,
+              // );
+              return ListView.builder(
+                itemBuilder: ((context, index) {
                   return GestureDetector(
                     onTap: (() {
                       Provider.of<SportCentresProvider>(context, listen: false)
@@ -125,11 +142,15 @@ class _SportCentreListScreenState extends State<SportCentreListScreen> {
                           CentreInfoScreen.routeName,
                           arguments: metas[index].detailsId);
                     }),
-                    child: SportCentreListTile(
-                        title: metas[index].title,
-                        imageUrl: metas[index].imageUrl),
+                    child: Container(
+                      width: double.infinity,
+                      height: 200,
+                      child: SportCentreListTile(
+                          title: metas[index].title,
+                          imageUrl: metas[index].imageUrl),
+                    ),
                   );
-                },
+                }),
                 itemCount: metas.length,
               );
             }
