@@ -1,7 +1,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.reeno">
+    package="com.arpitbatra98.reeno">
+   <uses-permission android:name="android.permission.INTERNET"/>
    <application
-        android:label="reeno"
+        android:label="Reeno"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         <activity
