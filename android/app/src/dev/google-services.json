@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "984207133165",
+    "project_id": "reenodev",
+    "storage_bucket": "reenodev.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:984207133165:android:bc9b0056beca6e2ad4ffe4",
+        "android_client_info": {
+          "package_name": "com.arpitbatra98.reeno.dev"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "984207133165-23fhifculuulfdbl7eg3bnla2i0lppcl.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC6jatYdpgGpcfGXe0LHt3xqwXZcb1E8ZA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "984207133165-23fhifculuulfdbl7eg3bnla2i0lppcl.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -89,9 +89,8 @@ class SelectedBookingProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  Future<bool> cloudFunctionCallToWriteBooking() async {
-    final url = Uri.parse(
-        'https://us-central1-reeno-5dce8.cloudfunctions.net/function-1');
+  Future<bool> cloudFunctionCallToWriteBooking(String cloudFunctionUrl) async {
+    final url = Uri.parse(cloudFunctionUrl);
     final api_response = await http.post(url,
         headers: <String, String>{
           'content-type': 'application/json',
@@ -110,10 +109,10 @@ class SelectedBookingProvider with ChangeNotifier {
     }
   }
 
-  Future<bool> cloudFunctionCallToWriteBookingForOwner() async {
+  Future<bool> cloudFunctionCallToWriteBookingForOwner(
+      String cloudFunctionUrl) async {
     try {
-      final url = Uri.parse(
-          'https://us-central1-reeno-5dce8.cloudfunctions.net/function-1');
+      final url = Uri.parse(cloudFunctionUrl);
       final api_response = await http.post(url,
           headers: <String, String>{
             'content-type': 'application/json',

@@ -1,8 +1,10 @@
 import 'dart:convert';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:razorpay_flutter/razorpay_flutter.dart';
 import 'package:http/http.dart' as http;
+import 'package:reeno/app_config.dart';
 import 'package:reeno/providers/selected_booking_provider.dart';
 import 'package:reeno/providers/user_provider.dart';
 import 'package:reeno/screens/payment_results/after_payment_screen.dart';
@@ -23,8 +25,10 @@ class _BookingSummaryState extends State<BookingSummary> {
   bool _loadingState = false;
   var _orderId = "";
   var _selectedBooking;
-  static const userName = "rzp_test_rUytAswPqSZROv";
-  static const secret = "hWBWWJ9Jd1zSHbxm6AVcf62d";
+  // static const userName = "rzp_test_rUytAswPqSZROv";
+  // static const secret = "hWBWWJ9Jd1zSHbxm6AVcf62d";
+  var userName = "";
+  var secret = "";
   final _razorpay = Razorpay();
 
   @override
@@ -65,9 +69,10 @@ class _BookingSummaryState extends State<BookingSummary> {
     //     body: json.encode(_selectedBooking));
 
     // print(json.decode(api_response.body));
+    final config = AppConfig.of(context)!;
     final api_result =
         await Provider.of<SelectedBookingProvider>(context, listen: false)
-            .cloudFunctionCallToWriteBooking();
+            .cloudFunctionCallToWriteBooking(config.cloudFunctionUrl);
     if (api_result) {
       Navigator.of(context)
           .pushNamed(AfterPaymentScreen.routeName, arguments: true);
@@ -99,6 +104,9 @@ class _BookingSummaryState extends State<BookingSummary> {
 
   Future<void> _createOrder(double amount) async {
     try {
+      final config = AppConfig.of(context)!;
+      userName = config.rzpUserName;
+      secret = config.rzpSecret;
       String basicAuth =
           'Basic ' + base64.encode(utf8.encode('$userName:$secret'));
       print(basicAuth);
@@ -178,11 +186,13 @@ class _BookingSummaryState extends State<BookingSummary> {
                           _createOrder(_selectedBooking.amount);
                         } else {
                           try {
+                            final config = AppConfig.of(context)!;
                             final apiResult =
                                 await Provider.of<SelectedBookingProvider>(
                                         context,
                                         listen: false)
-                                    .cloudFunctionCallToWriteBookingForOwner();
+                                    .cloudFunctionCallToWriteBookingForOwner(
+                                        config.cloudFunctionUrl);
 
                             if (apiResult) {
                               Navigator.of(context).pushNamed(

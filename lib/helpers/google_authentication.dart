@@ -23,7 +23,8 @@ class GoogleAuthentication {
   static void signInWithGoogle(context) async {
     // Trigger the authentication flow
     try {
-      final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
+      final GoogleSignInAccount? googleUser =
+          await GoogleSignIn(scopes: ['profile', 'email']).signIn();
 
       print(googleUser?.displayName);
       print(googleUser?.photoUrl);

@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:reeno/app_config.dart';
 import 'package:reeno/pickers/user_image_picker.dart';
 import 'package:provider/provider.dart';
 import 'package:reeno/providers/phone_provider.dart';
@@ -29,8 +30,9 @@ class _GetUserInfoScreenState extends State<GetUserInfoScreen> {
 
   Future<String> _uploadProfImage() async {
     //Link of default image
+    final appConfig = AppConfig.of(context)!;
     var url = await FirebaseStorage.instance
-        .refFromURL("gs://reeno-5dce8.appspot.com/default_prof_pic.jpeg")
+        .refFromURL(appConfig.defaultImageLink)
         .getDownloadURL();
     print(url);
     if (_userImageFile != null) {
