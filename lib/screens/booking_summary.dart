@@ -157,18 +157,20 @@ class _BookingSummaryState extends State<BookingSummary> {
             child: Column(
               children: [
                 Expanded(
-                  child: Column(
-                    children: [
-                      CentreAddressWidget(_selectedBooking),
-                      const SizedBox(
-                        height: 24,
-                      ),
-                      BookingTimeWidget(_selectedBooking),
-                      const SizedBox(
-                        height: 24,
-                      ),
-                      PaymentWidget(_selectedBooking),
-                    ],
+                  child: SingleChildScrollView(
+                    child: Column(
+                      children: [
+                        CentreAddressWidget(_selectedBooking),
+                        const SizedBox(
+                          height: 24,
+                        ),
+                        BookingTimeWidget(_selectedBooking),
+                        const SizedBox(
+                          height: 24,
+                        ),
+                        PaymentWidget(_selectedBooking),
+                      ],
+                    ),
                   ),
                 ),
                 SizedBox(

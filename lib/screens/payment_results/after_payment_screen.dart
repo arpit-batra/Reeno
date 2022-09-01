@@ -23,9 +23,12 @@ class AfterPaymentScreen extends StatelessWidget {
           onPressed: (() {
             onClick();
           }),
-          child: Text(
-            msg,
-            style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w500),
+          child: FittedBox(
+            fit: BoxFit.scaleDown,
+            child: Text(
+              msg,
+              style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w500),
+            ),
           ),
         ),
       ),
@@ -86,13 +89,16 @@ class AfterPaymentScreen extends StatelessWidget {
                     Expanded(
                       flex: 1,
                       child: Center(
-                        child: Text(
-                          primaryTitleMsg,
-                          style: const TextStyle(
-                              color: Colors.white,
-                              fontSize: 32,
-                              fontWeight: FontWeight.w600),
-                          textAlign: TextAlign.center,
+                        child: FittedBox(
+                          fit: BoxFit.scaleDown,
+                          child: Text(
+                            primaryTitleMsg,
+                            style: const TextStyle(
+                                color: Colors.white,
+                                fontSize: 32,
+                                fontWeight: FontWeight.w600),
+                            textAlign: TextAlign.center,
+                          ),
                         ),
                       ),
                     ),
@@ -101,11 +107,14 @@ class AfterPaymentScreen extends StatelessWidget {
                       child: Center(
                         child: Padding(
                           padding: const EdgeInsets.all(32.0),
-                          child: Text(
-                            secondaryTitleMsg,
-                            textAlign: TextAlign.center,
-                            style: const TextStyle(
-                              color: Colors.white,
+                          child: FittedBox(
+                            fit: BoxFit.scaleDown,
+                            child: Text(
+                              secondaryTitleMsg,
+                              textAlign: TextAlign.center,
+                              style: const TextStyle(
+                                color: Colors.white,
+                              ),
                             ),
                           ),
                         ),
