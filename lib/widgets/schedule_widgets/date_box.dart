@@ -54,12 +54,16 @@ class DateBox extends StatelessWidget {
             Expanded(
               flex: 3,
               child: Center(
-                child: Text(
-                  "${DateHelper.getdayOfMonth(date)}",
-                  style: TextStyle(
-                    color:
-                        isSelected ? Colors.white : Color.fromRGBO(0, 0, 0, 1),
-                    fontSize: 32,
+                child: FittedBox(
+                  fit: BoxFit.scaleDown,
+                  child: Text(
+                    "${DateHelper.getdayOfMonth(date)}",
+                    style: TextStyle(
+                      color: isSelected
+                          ? Colors.white
+                          : Color.fromRGBO(0, 0, 0, 1),
+                      fontSize: 32,
+                    ),
                   ),
                 ),
               ),

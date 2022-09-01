@@ -56,10 +56,13 @@ class _TimeSelectorState extends State<TimeSelector> {
         const SizedBox(
           height: 10,
         ),
-        Text(
-          time.format(context),
-          textAlign: TextAlign.center,
-          style: const TextStyle(color: darkPrimary, fontSize: 32),
+        FittedBox(
+          fit: BoxFit.scaleDown,
+          child: Text(
+            time.format(context),
+            textAlign: TextAlign.center,
+            style: const TextStyle(color: darkPrimary, fontSize: 32),
+          ),
         )
       ],
     );

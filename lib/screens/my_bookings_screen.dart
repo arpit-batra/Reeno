@@ -3,7 +3,6 @@ import 'package:provider/provider.dart';
 import 'package:reeno/providers/bookings_provider.dart';
 import 'package:reeno/providers/user_provider.dart';
 import 'package:reeno/screens/loading_screen.dart';
-import 'package:reeno/models/booking.dart';
 import 'package:reeno/widgets/cards/my_bookings_widget.dart';
 
 class MyBookingsScreen extends StatelessWidget {
@@ -40,17 +39,39 @@ class MyBookingsScreen extends StatelessWidget {
                       .currentUserBookings
                   : Provider.of<BookingsProvider>(context, listen: false)
                       .centreBookings;
-              return ListView.builder(
-                  itemCount: listOfBookings.length,
-                  itemBuilder: ((context, index) {
-                    final booking = listOfBookings[index];
-                    return Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: isNotAnOwner
-                          ? MyBookingsWidget(booking, false)
-                          : MyBookingsWidget(booking, true),
-                    );
-                  }));
+              if (listOfBookings.isEmpty) {
+                return Center(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Icon(
+                        Icons.receipt_long,
+                        size: 100,
+                        color: Colors.grey[600],
+                      ),
+                      SizedBox(
+                        height: 20,
+                      ),
+                      Text(
+                        "You don't have any bookings yet",
+                        style: TextStyle(fontSize: 22),
+                      )
+                    ],
+                  ),
+                );
+              } else {
+                return ListView.builder(
+                    itemCount: listOfBookings.length,
+                    itemBuilder: ((context, index) {
+                      final booking = listOfBookings[index];
+                      return Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: isNotAnOwner
+                            ? MyBookingsWidget(booking, false)
+                            : MyBookingsWidget(booking, true),
+                      );
+                    }));
+              }
             }
           })),
     );

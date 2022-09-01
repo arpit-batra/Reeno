@@ -1,14 +1,13 @@
-import 'dart:convert';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:cached_network_image/cached_network_image.dart';
+
 import 'package:reeno/providers/user_provider.dart';
 import 'package:reeno/screens/my_bookings_screen.dart';
 import 'package:reeno/widgets/app_drawer_widgets/name_widget.dart';
 import 'package:reeno/widgets/app_drawer_widgets/profile_pic_widget.dart';
 import 'package:reeno/widgets/app_drawer_widgets/support_widget.dart';
+import 'package:launch_review/launch_review.dart';
 
 class AppDrawer extends StatelessWidget {
   const AppDrawer({Key? key}) : super(key: key);
@@ -59,7 +58,9 @@ class AppDrawer extends StatelessWidget {
           // ),
           //TODO
           GestureDetector(
-            onTap: () {},
+            onTap: () async {
+              LaunchReview.launch(androidAppId: "com.arpitbatra98.reeno");
+            },
             child: const ListTile(
               leading: Icon(Icons.star),
               title: Text('Rate App'),
