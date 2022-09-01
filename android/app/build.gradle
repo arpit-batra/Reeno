@@ -61,6 +61,23 @@ android {
         multiDexEnabled true
     }
 
+    flavorDimensions "env"
+    productFlavors{
+        dev {
+            dimension "env"
+            applicationId "com.arpitbatra98.reeno.dev"
+            versionCode 1
+            versionName "1.0"
+        }
+
+        prod {
+            dimension "env"
+            applicationId "com.arpitbatra98.reeno.prod"
+            versionCode 1
+            versionName "1.0"
+        }
+    }
+
     signingConfigs {
        release {
            keyAlias keystoreProperties['keyAlias']

@@ -1,0 +1,106 @@
+{
+  "project_info": {
+    "project_number": "272479207698",
+    "project_id": "reeno-5dce8",
+    "storage_bucket": "reeno-5dce8.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:272479207698:android:f4bc0707dc20aefdc473cb",
+        "android_client_info": {
+          "package_name": "com.arpitbatra98.reeno"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "272479207698-5v4mjp9lkb6k145ftlps8r1bmhvff2jr.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.arpitbatra98.reeno",
+            "certificate_hash": "2d32bcf0c0117e2c406ad27f1a645f3c37e8eac1"
+          }
+        },
+        {
+          "client_id": "272479207698-dvpj1csjcb1bjcup6m0ocerbst46r42e.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.arpitbatra98.reeno",
+            "certificate_hash": "7ae5d2a7178d72ab9ae7fffe956403e9848020e6"
+          }
+        },
+        {
+          "client_id": "272479207698-t4ugktudf2i2c5plsri1lvbgs5fp18tb.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.arpitbatra98.reeno",
+            "certificate_hash": "525b79fc21026a33de6798c1aacdc0447dca4d1c"
+          }
+        },
+        {
+          "client_id": "272479207698-tifra58l4gki1jthjle6uk0mua3maqt2.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.arpitbatra98.reeno",
+            "certificate_hash": "2f7ceaebac283f36fe1c882f8edf9265fd748ddc"
+          }
+        },
+        {
+          "client_id": "272479207698-fpbel2193h6tnlf747vv3ns1loijotoa.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCOKev8knMGOvjlZFL8mh6nq5hHB8ZIiQA"
+        },
+        {
+          "current_key": "AIzaSyBrBMfUug0cOu-Qy4wAWUgkIDJHhGDI7lg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "272479207698-fpbel2193h6tnlf747vv3ns1loijotoa.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:272479207698:android:eb7ab65bc5a2b034c473cb",
+        "android_client_info": {
+          "package_name": "com.arpitbatra98.reeno.prod"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "272479207698-fpbel2193h6tnlf747vv3ns1loijotoa.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCOKev8knMGOvjlZFL8mh6nq5hHB8ZIiQA"
+        },
+        {
+          "current_key": "AIzaSyBrBMfUug0cOu-Qy4wAWUgkIDJHhGDI7lg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "272479207698-fpbel2193h6tnlf747vv3ns1loijotoa.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

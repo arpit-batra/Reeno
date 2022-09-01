@@ -3,6 +3,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter/services.dart';
+import 'package:reeno/app_config.dart';
 import 'package:reeno/providers/bookings_provider.dart';
 import 'package:reeno/providers/phone_provider.dart';
 import 'package:reeno/providers/selected_booking_provider.dart';
@@ -111,7 +112,8 @@ class MyApp extends StatelessWidget {
             })
       ],
       child: MaterialApp(
-        title: 'Flutter Demo',
+        // title: 'Flutter Demo',
+        title: AppConfig.of(context)!.appName,
         debugShowCheckedModeBanner: false,
         theme: ThemeData(
           primarySwatch: const MaterialColor(0xFF575DFB, themeColor),
