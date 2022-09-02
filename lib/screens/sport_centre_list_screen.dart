@@ -43,6 +43,8 @@ class _SportCentreListScreenState extends State<SportCentreListScreen> {
           if (value.size == 0) {
             Future((() =>
                 Navigator.of(context).pushNamed(GetUserInfoScreen.routeName)));
+          } else {
+            Provider.of<UserProvider>(context, listen: false).fetchUser();
           }
         }).catchError((error) {
           print(error);
@@ -63,11 +65,11 @@ class _SportCentreListScreenState extends State<SportCentreListScreen> {
                 null,
                 currUser?.photoURL,
                 currUser?.displayName);
+          } else {
+            Provider.of<UserProvider>(context, listen: false).fetchUser();
           }
         });
       }
-
-      await Provider.of<UserProvider>(context, listen: false).fetchUser();
     }
   }
 

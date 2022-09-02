@@ -73,8 +73,8 @@ android {
         prod {
             dimension "env"
             applicationId "com.arpitbatra98.reeno"
-            versionCode 1
-            versionName "1.0"
+            versionCode flutterVersionCode.toInteger()
+            versionName flutterVersionName
         }
     }
 

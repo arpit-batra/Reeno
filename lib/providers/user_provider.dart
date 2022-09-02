@@ -31,6 +31,7 @@ class UserProvider with ChangeNotifier {
   Future<void> addUser(String? id, String? email, String? phone,
       String? imageUrl, String? name) async {
     final currentUser = CustomUser.User(
+      id: id,
       phone: phone,
       email: email,
       name: name,
