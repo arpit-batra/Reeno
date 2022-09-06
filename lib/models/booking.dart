@@ -15,6 +15,9 @@ class Booking {
   DateTime startTime;
   DateTime endTime;
   double amount;
+  final int cancelPolicyDuration;
+  double cancellationCharge;
+  bool cancelled;
 
   Booking({
     this.id,
@@ -31,6 +34,9 @@ class Booking {
     required this.startTime,
     required this.endTime,
     required this.amount,
+    required this.cancelPolicyDuration,
+    required this.cancellationCharge,
+    required this.cancelled,
   });
 
   factory Booking.fromFirestore(
@@ -38,7 +44,6 @@ class Booking {
     SnapshotOptions? options,
   ) {
     final data = snapshot.data();
-    print("data => $data");
     return Booking(
         id: snapshot.id,
         sportCentreId: data?['sportCentreId'],
@@ -53,7 +58,10 @@ class Booking {
         courtNo: data?['courtNo'],
         startTime: DateTime.parse(data?['startTime']),
         endTime: DateTime.parse(data?['endTime']),
-        amount: (data?['amount'] as num) as double);
+        amount: (data?['amount'] as num) as double,
+        cancelPolicyDuration: data?['cancelPolicyDuration'],
+        cancellationCharge: (data?['cancellationCharge'] as num) as double,
+        cancelled: data?['cancelled']);
   }
 
   Map<String, dynamic> toFirestore() {
@@ -71,11 +79,15 @@ class Booking {
       "startTime": startTime.toIso8601String(),
       "endTime": endTime.toIso8601String(),
       "amount": amount,
+      "cancelPolicyDuration": cancelPolicyDuration,
+      "cancellationCharge": cancellationCharge,
+      "cancelled": cancelled,
     };
   }
 
   Map toJson() {
     return {
+      "id": id,
       "sportCentreId": sportCentreId,
       "sportCentreTitle": sportCentreTitle,
       "sportCentreAddress": sportCentreAddress,
@@ -89,6 +101,9 @@ class Booking {
       "startTime": startTime.toIso8601String(),
       "endTime": endTime.toIso8601String(),
       "amount": amount,
+      "cancelPolicyDuration": cancelPolicyDuration,
+      "cancellationCharge": cancellationCharge,
+      "cancelled": cancelled,
     };
   }
 }

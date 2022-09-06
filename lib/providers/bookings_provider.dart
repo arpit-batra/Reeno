@@ -65,7 +65,6 @@ class BookingsProvider with ChangeNotifier {
       print(element.toString());
       curUserBookings.add(element.data());
     }
-    print("Curr bookings $curUserBookings");
     curUserBookings.sort(((a, b) => b.startTime.compareTo(a.startTime)));
     _currentUserBookings = curUserBookings;
   }

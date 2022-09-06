@@ -11,6 +11,7 @@ import 'package:reeno/providers/sport_centres_provider.dart';
 import 'package:reeno/providers/user_provider.dart';
 import 'package:reeno/providers/selected_date_provider.dart';
 import 'package:reeno/screens/booking_summary.dart';
+import 'package:reeno/screens/cancellation_result_screen.dart';
 import 'package:reeno/screens/centre_info_screen.dart';
 import 'package:reeno/screens/my_bookings_screen.dart';
 import 'package:reeno/screens/payment_results/after_payment_screen.dart';
@@ -90,7 +91,10 @@ class MyApp extends StatelessWidget {
                 amount: 0.0,
                 orderId: "",
                 paymentId: "",
-                signature: "")),
+                signature: "",
+                cancelPolicyDuration: 0,
+                cancellationCharge: 0.0,
+                cancelled: false)),
             update: (ctx, userProvider, selectedSport, selectedDate,
                 selectedBooking) {
               return SelectedBookingProvider(
@@ -108,7 +112,12 @@ class MyApp extends StatelessWidget {
                   amount: selectedBooking.amount,
                   orderId: selectedBooking.orderId,
                   paymentId: selectedBooking.paymentId,
-                  signature: selectedBooking.signature);
+                  signature: selectedBooking.signature,
+                  cancelPolicyDuration:
+                      selectedSport.selectedSportCentre.cancelPolicyDuration,
+                  cancellationCharge:
+                      selectedSport.selectedSportCentre.cancellationCharge,
+                  cancelled: selectedBooking.cancelled);
             })
       ],
       child: MaterialApp(
@@ -180,6 +189,8 @@ class MyApp extends StatelessWidget {
           BookingSummary.routeName: (context) => BookingSummary(),
           AfterPaymentScreen.routeName: (context) => AfterPaymentScreen(),
           MyBookingsScreen.routeName: (context) => MyBookingsScreen(),
+          CancellationResultScreen.routeName: (context) =>
+              CancellationResultScreen(),
         },
       ),
     );

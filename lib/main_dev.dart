@@ -10,8 +10,10 @@ void main() {
     appName: 'Reeno Dev',
     flavorName: 'dev',
     defaultImageLink: "gs://reenodev.appspot.com/default_prof_pic.jpeg",
-    cloudFunctionUrl:
+    createBookingCloudFunctionUrl:
         'https://us-central1-reenodev.cloudfunctions.net/createBooking',
+    cancelBookingCloudFunctionUrl:
+        'https://us-central1-reenodev.cloudfunctions.net/cancelBooking',
     rzpUserName: "rzp_test_rUytAswPqSZROv",
     rzpSecret: "hWBWWJ9Jd1zSHbxm6AVcf62d",
     child: (MyApp()),

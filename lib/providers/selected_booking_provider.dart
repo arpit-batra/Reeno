@@ -12,6 +12,9 @@ class SelectedBookingProvider with ChangeNotifier {
   final myUserId;
   final myUserName;
   final int selectedCourtNo;
+  final int cancelPolicyDuration;
+  double cancellationCharge;
+  bool cancelled;
   DateTime selectedStartTime;
   DateTime selectedEndTime;
   double amount;
@@ -35,6 +38,9 @@ class SelectedBookingProvider with ChangeNotifier {
     required this.orderId,
     required this.paymentId,
     required this.signature,
+    required this.cancelPolicyDuration,
+    required this.cancellationCharge,
+    required this.cancelled,
   }) : _createdBooking = Booking(
           sportCentreId: selectedCentreId,
           sportCentreTitle: selectedCentreTitle,
@@ -49,6 +55,9 @@ class SelectedBookingProvider with ChangeNotifier {
           orderId: orderId,
           paymentId: paymentId,
           signature: signature,
+          cancelPolicyDuration: cancelPolicyDuration,
+          cancellationCharge: cancellationCharge,
+          cancelled: cancelled,
         );
 
   Booking get currBooking {
@@ -66,6 +75,9 @@ class SelectedBookingProvider with ChangeNotifier {
       orderId: orderId,
       paymentId: paymentId,
       signature: signature,
+      cancelPolicyDuration: _createdBooking.cancelPolicyDuration,
+      cancellationCharge: _createdBooking.cancellationCharge,
+      cancelled: _createdBooking.cancelled,
     );
   }
 

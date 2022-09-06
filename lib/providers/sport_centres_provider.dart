@@ -57,10 +57,28 @@ class SportCentresProvider with ChangeNotifier {
           openingTime: TimeOfDay(hour: 0, minute: 0),
           closingTime: TimeOfDay(hour: 0, minute: 0),
           numberOfCourts: 2,
-          amenities: ["sdff", "sdfsdf", "ehdfgh"]);
+          amenities: ["sdff", "sdfsdf", "ehdfgh"],
+          cancelPolicyDuration: 60,
+          cancellationCharge: 10);
     }
     ////////////////////////////////////////////////
-    return _selectedSportCentre!;
+    return SportCentre(
+      id: _selectedSportCentre!.id,
+      title: _selectedSportCentre!.title,
+      address: _selectedSportCentre!.address,
+      sport: _selectedSportCentre!.sport,
+      images: _selectedSportCentre!.images,
+      description: _selectedSportCentre!.description,
+      hourlyRate: _selectedSportCentre!.hourlyRate,
+      leastInterval: _selectedSportCentre!.leastInterval,
+      minimumTime: _selectedSportCentre!.minimumTime,
+      openingTime: _selectedSportCentre!.openingTime,
+      closingTime: _selectedSportCentre!.closingTime,
+      numberOfCourts: _selectedSportCentre!.numberOfCourts,
+      amenities: _selectedSportCentre!.amenities,
+      cancelPolicyDuration: _selectedSportCentre!.cancelPolicyDuration,
+      cancellationCharge: _selectedSportCentre!.cancellationCharge,
+    );
   }
 
   void setSelectCentre(String id) {
