@@ -45,6 +45,8 @@ class SportCentre {
   final TimeOfDay closingTime;
   final int numberOfCourts;
   final List<String>? amenities;
+  final int cancelPolicyDuration;
+  final double cancellationCharge;
 
   SportCentre({
     required this.id,
@@ -62,6 +64,8 @@ class SportCentre {
     required this.closingTime,
     required this.numberOfCourts,
     required this.amenities,
+    required this.cancelPolicyDuration,
+    required this.cancellationCharge,
   });
 
   factory SportCentre.fromFirestore(
@@ -82,27 +86,29 @@ class SportCentre {
     }
 
     return SportCentre(
-      id: snapshot.id,
-      title: data?['title'],
-      address: Address.fromFirestore(data?['address']),
-      sport: sport,
-      images: data?['images'] is Iterable ? List.from(data?['images']) : null,
-      description: data?['description'],
-      hourlyRate: data?['hourlyRate'].toDouble(),
-      rating: data?['rating'],
-      reviews: data?['reviews'] is Iterable
-          ? List.from(data?['reviews'])
-              .map((e) => Review.fromFirestore(e))
-              .toList()
-          : null, //
-      leastInterval: Duration(minutes: data?['leastInterval']),
-      minimumTime: Duration(minutes: data?['minimumTime']),
-      openingTime: TimeOfDay(hour: data?['openingTime'], minute: 0),
-      closingTime: TimeOfDay(hour: data?['closingTime'], minute: 0),
-      numberOfCourts: data?['numberOfCourts'],
-      amenities:
-          data?['amenities'] is Iterable ? List.from(data?['amenities']) : null,
-    );
+        id: snapshot.id,
+        title: data?['title'],
+        address: Address.fromFirestore(data?['address']),
+        sport: sport,
+        images: data?['images'] is Iterable ? List.from(data?['images']) : null,
+        description: data?['description'],
+        hourlyRate: data?['hourlyRate'].toDouble(),
+        rating: data?['rating'],
+        reviews: data?['reviews'] is Iterable
+            ? List.from(data?['reviews'])
+                .map((e) => Review.fromFirestore(e))
+                .toList()
+            : null, //
+        leastInterval: Duration(minutes: data?['leastInterval']),
+        minimumTime: Duration(minutes: data?['minimumTime']),
+        openingTime: TimeOfDay(hour: data?['openingTime'], minute: 0),
+        closingTime: TimeOfDay(hour: data?['closingTime'], minute: 0),
+        numberOfCourts: data?['numberOfCourts'],
+        amenities: data?['amenities'] is Iterable
+            ? List.from(data?['amenities'])
+            : null,
+        cancelPolicyDuration: data?['cancelPolicyDuration'],
+        cancellationCharge: (data?['cancellationCharge'] as num) as double);
   }
 
 // Not used but was required for the converter attribute. Obvio, doesnt function as reqd

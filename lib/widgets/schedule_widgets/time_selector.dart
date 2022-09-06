@@ -37,9 +37,11 @@ class _TimeSelectorState extends State<TimeSelector> {
     List<Booking> bookings = Provider.of<BookingsProvider>(context)
         .selectedDateSelectedCentreSelectedCourtBookings;
     for (var element in bookings) {
-      if (DateHelper.isOverlapping(TimeOfDay.fromDateTime(element.startTime),
-          TimeOfDay.fromDateTime(element.endTime), _startTime, _endTime)) {
-        return "Selected slot clashes with someone else";
+      if (!element.cancelled) {
+        if (DateHelper.isOverlapping(TimeOfDay.fromDateTime(element.startTime),
+            TimeOfDay.fromDateTime(element.endTime), _startTime, _endTime)) {
+          return "Selected slot clashes with someone else";
+        }
       }
     }
     return "";

@@ -71,9 +71,9 @@ class _BookingSummaryState extends State<BookingSummary> {
 
     // print(json.decode(api_response.body));
     final config = AppConfig.of(context)!;
-    final api_result =
-        await Provider.of<SelectedBookingProvider>(context, listen: false)
-            .cloudFunctionCallToWriteBooking(config.cloudFunctionUrl);
+    final api_result = await Provider.of<SelectedBookingProvider>(context,
+            listen: false)
+        .cloudFunctionCallToWriteBooking(config.createBookingCloudFunctionUrl);
     if (api_result) {
       Navigator.of(context)
           .pushNamed(AfterPaymentScreen.routeName, arguments: true);
@@ -202,7 +202,7 @@ class _BookingSummaryState extends State<BookingSummary> {
                                         context,
                                         listen: false)
                                     .cloudFunctionCallToWriteBookingForOwner(
-                                        config.cloudFunctionUrl);
+                                        config.createBookingCloudFunctionUrl);
 
                             if (apiResult) {
                               Navigator.of(context).pushNamed(

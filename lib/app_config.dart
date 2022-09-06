@@ -5,7 +5,8 @@ class AppConfig extends InheritedWidget {
     required this.appName,
     required this.flavorName,
     required this.defaultImageLink,
-    required this.cloudFunctionUrl,
+    required this.createBookingCloudFunctionUrl,
+    required this.cancelBookingCloudFunctionUrl,
     required this.rzpUserName,
     required this.rzpSecret,
     required Widget child,
@@ -14,7 +15,8 @@ class AppConfig extends InheritedWidget {
   final String appName;
   final String flavorName;
   final String defaultImageLink;
-  final String cloudFunctionUrl;
+  final String createBookingCloudFunctionUrl;
+  final String cancelBookingCloudFunctionUrl;
   final String rzpUserName;
   final String rzpSecret;
 

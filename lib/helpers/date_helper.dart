@@ -202,4 +202,12 @@ class DateHelper {
         int.parse(date.substring(3, 5)), int.parse(date.substring(0, 2)));
     return "${dateInDateTime.day} ${getMonth(dateInDateTime)}, ${dateInDateTime.year}";
   }
+
+  static bool isCancellable(
+      DateTime currTime, DateTime startTime, int cancelPolicy) {
+    if (currTime.add(Duration(minutes: cancelPolicy)).isAfter(startTime)) {
+      return false;
+    }
+    return true;
+  }
 }
