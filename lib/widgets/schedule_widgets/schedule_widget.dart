@@ -17,6 +17,7 @@ class ScheduleWidget extends StatelessWidget {
     final bookingsProvider = Provider.of<BookingsProvider>(context);
     final bookingList =
         bookingsProvider.selectedDateSelectedCentreSelectedCourtBookings;
+    bookingList.removeWhere((element) => element.cancelled == true);
     final user = Provider.of<UserProvider>(context, listen: false).user;
     final selectedSportCentreId =
         Provider.of<SportCentresProvider>(context, listen: false)
