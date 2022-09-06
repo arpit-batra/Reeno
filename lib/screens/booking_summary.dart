@@ -5,6 +5,7 @@ import 'package:provider/provider.dart';
 import 'package:razorpay_flutter/razorpay_flutter.dart';
 import 'package:http/http.dart' as http;
 import 'package:reeno/app_config.dart';
+import 'package:reeno/models/booking.dart';
 import 'package:reeno/providers/selected_booking_provider.dart';
 import 'package:reeno/providers/user_provider.dart';
 import 'package:reeno/screens/payment_results/after_payment_screen.dart';
@@ -102,7 +103,10 @@ class _BookingSummaryState extends State<BookingSummary> {
     // Do something when an external wallet is selected
   }
 
-  Future<void> _createOrder(double amount) async {
+  Future<void> _createOrder(Booking selectedBooking) async {
+    final amount = selectedBooking.amount;
+    final courtTitle = selectedBooking.sportCentreTitle;
+    final courtId = selectedBooking.sportCentreId;
     try {
       final config = AppConfig.of(context)!;
       userName = config.rzpUserName;
@@ -129,6 +133,10 @@ class _BookingSummaryState extends State<BookingSummary> {
         'order_id': _orderId,
         'description': 'Slot Booking',
         'timeout': 120,
+        'notes': {
+          'courtName': courtTitle,
+          'courtId': courtId,
+        },
       };
       _razorpay.open(options);
       print("Booking Summary -> completed");
@@ -185,7 +193,7 @@ class _BookingSummaryState extends State<BookingSummary> {
                             userProvider.user!.owner == false ||
                             userProvider.user!.centreId !=
                                 _selectedBooking.sportCentreId) {
-                          _createOrder(_selectedBooking.amount);
+                          _createOrder(_selectedBooking);
                         } else {
                           try {
                             final config = AppConfig.of(context)!;
