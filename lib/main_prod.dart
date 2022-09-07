@@ -12,8 +12,9 @@ void main() {
     flavorName: 'prod',
     defaultImageLink: "gs://reeno-5dce8.appspot.com/default_prof_pic.jpeg",
     createBookingCloudFunctionUrl:
-        'https://us-central1-reeno-5dce8.cloudfunctions.net/function-1',
-    cancelBookingCloudFunctionUrl: '',
+        'https://us-central1-reeno-5dce8.cloudfunctions.net/createBooking',
+    cancelBookingCloudFunctionUrl:
+        'https://us-central1-reeno-5dce8.cloudfunctions.net/cancelBooking',
     rzpUserName: "rzp_live_58blDm1nF7ATAo",
     rzpSecret: "OLmrqJved40lB70kD2nZQAf4",
     child: MyApp(),

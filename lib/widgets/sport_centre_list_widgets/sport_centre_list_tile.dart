@@ -23,6 +23,19 @@ class SportCentreListTile extends StatelessWidget {
               Image.network(
                 imageUrl,
                 fit: BoxFit.cover,
+                loadingBuilder: ((context, child, loadingProgress) {
+                  if (loadingProgress == null) {
+                    return child;
+                  }
+                  return Center(
+                    child: CircularProgressIndicator(
+                      value: (loadingProgress != null)
+                          ? (loadingProgress.cumulativeBytesLoaded /
+                              loadingProgress.expectedTotalBytes!)
+                          : 0,
+                    ),
+                  );
+                }),
                 errorBuilder: ((context, error, stackTrace) {
                   return Center(child: Text("Unable to Load Image"));
                 }),
