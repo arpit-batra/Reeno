@@ -58,8 +58,10 @@ class _CancellationDialogState extends State<CancellationDialog> {
       children: [
         Padding(
           padding: EdgeInsets.symmetric(horizontal: 24),
-          child: Text(
-              '${widget.booking.cancellationCharge}% will be charged as cancellation price'),
+          child: widget.booking.cancellationCharge == 0
+              ? Text("No cancellation price")
+              : Text(
+                  '${widget.booking.cancellationCharge}% will be charged as cancellation price'),
         ),
         Padding(
           padding: EdgeInsets.all(10),

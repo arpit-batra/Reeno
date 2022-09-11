@@ -60,7 +60,8 @@ class Booking {
         endTime: DateTime.parse(data?['endTime']),
         amount: (data?['amount'] as num) as double,
         cancelPolicyDuration: data?['cancelPolicyDuration'],
-        cancellationCharge: (data?['cancellationCharge'] as num) as double,
+        cancellationCharge:
+            double.parse((data?['cancellationCharge'] ?? "0.0").toString()),
         cancelled: data?['cancelled']);
   }
 

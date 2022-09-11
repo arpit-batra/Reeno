@@ -2,12 +2,14 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:package_info_plus/package_info_plus.dart';
 
 import 'package:reeno/providers/sport_centres_provider.dart';
 import 'package:reeno/screens/centre_info_screen.dart';
 import 'package:reeno/screens/loading_screen.dart';
 import 'package:reeno/screens/login/get_user_info_screen.dart';
 import 'package:reeno/widgets/app_drawer.dart';
+import 'package:reeno/widgets/sport_centre_list_widgets/force_update_dialog.dart';
 import 'package:reeno/widgets/sport_centre_list_widgets/sport_centre_list_tile.dart';
 import 'package:reeno/providers/user_provider.dart';
 
@@ -69,6 +71,22 @@ class _SportCentreListScreenState extends State<SportCentreListScreen> {
             Provider.of<UserProvider>(context, listen: false).fetchUser();
           }
         });
+      }
+
+      PackageInfo packageInfo = await PackageInfo.fromPlatform();
+      final snapshot = await FirebaseFirestore.instance
+          .collection('version')
+          .doc('buildNo')
+          .get();
+      final buildNo = int.parse(snapshot.data()?['buildNo']);
+      print("buildNo $buildNo");
+      print("this version ${packageInfo.buildNumber}");
+      if (buildNo > int.parse(packageInfo.buildNumber)) {
+        showDialog(
+            context: context,
+            builder: ((context) {
+              return ForceUpdateDialog();
+            }));
       }
     }
   }

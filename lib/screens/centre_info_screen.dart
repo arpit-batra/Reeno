@@ -187,12 +187,7 @@ class _CentreInfoScreenState extends State<CentreInfoScreen> {
   }
 
   Widget _cancellation(SportCentre centre) {
-    final cancellationDuration = centre.cancelPolicyDuration;
-    final canclHrs = (cancellationDuration / 60).floor();
-    final canclMins = cancellationDuration % 60;
-    final hrsDurationString = canclHrs == 0 ? "" : "$canclHrs hours";
-    final minsDurationString = canclMins == 0 ? "" : "$canclMins minutes";
-    final cancellationCharge = centre.cancellationCharge;
+    final _cancellationPolicy = centre.cancellationPolicy;
     return Container(
       padding: const EdgeInsets.all(16.0),
       width: double.infinity,
@@ -207,7 +202,7 @@ class _CentreInfoScreenState extends State<CentreInfoScreen> {
             height: 16,
           ),
           Text(
-            "Booking can be cancelled only ${hrsDurationString} ${minsDurationString} before the beginning of the slot. $cancellationCharge% will be deducted as Cancellation Charge for every cancellation of booking",
+            _cancellationPolicy,
             style: _contentStyle(),
           ),
         ],
@@ -239,8 +234,12 @@ class _CentreInfoScreenState extends State<CentreInfoScreen> {
                 children: <Widget>[
                   CentreImagesWidget(centre),
                   _bookingButtons(centre),
-                  _amenities(centre),
-                  _description(centre),
+                  if (centre.amenities != null && centre.amenities!.isNotEmpty)
+                    _amenities(centre),
+                  if (centre.description != null &&
+                      centre.description != "" &&
+                      centre.description.isNotEmpty)
+                    _description(centre),
                   _address(centre),
                   _cancellation(centre),
                 ],

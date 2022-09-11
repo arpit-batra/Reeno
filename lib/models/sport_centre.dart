@@ -47,6 +47,7 @@ class SportCentre {
   final List<String>? amenities;
   final int cancelPolicyDuration;
   final double cancellationCharge;
+  final String cancellationPolicy;
 
   SportCentre({
     required this.id,
@@ -66,6 +67,7 @@ class SportCentre {
     required this.amenities,
     required this.cancelPolicyDuration,
     required this.cancellationCharge,
+    required this.cancellationPolicy,
   });
 
   factory SportCentre.fromFirestore(
@@ -108,7 +110,9 @@ class SportCentre {
             ? List.from(data?['amenities'])
             : null,
         cancelPolicyDuration: data?['cancelPolicyDuration'],
-        cancellationCharge: (data?['cancellationCharge'] as num) as double);
+        cancellationCharge:
+            double.parse((data?['cancellationCharge'] ?? "0.0").toString()),
+        cancellationPolicy: data?['cancellationPolicy']);
   }
 
 // Not used but was required for the converter attribute. Obvio, doesnt function as reqd

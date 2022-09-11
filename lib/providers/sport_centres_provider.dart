@@ -59,7 +59,8 @@ class SportCentresProvider with ChangeNotifier {
           numberOfCourts: 2,
           amenities: ["sdff", "sdfsdf", "ehdfgh"],
           cancelPolicyDuration: 60,
-          cancellationCharge: 10);
+          cancellationCharge: 10,
+          cancellationPolicy: "Some Cancellation Policy");
     }
     ////////////////////////////////////////////////
     return SportCentre(
@@ -78,6 +79,7 @@ class SportCentresProvider with ChangeNotifier {
       amenities: _selectedSportCentre!.amenities,
       cancelPolicyDuration: _selectedSportCentre!.cancelPolicyDuration,
       cancellationCharge: _selectedSportCentre!.cancellationCharge,
+      cancellationPolicy: _selectedSportCentre!.cancellationPolicy,
     );
   }
 
